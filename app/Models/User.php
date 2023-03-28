@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Distributor\Distributor;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -24,6 +25,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'status',
         'created_by',
         'updated_by',
     ];
@@ -50,5 +52,10 @@ class User extends Authenticatable
     public function setPasswordAttribute($value)
     {
         $this->attributes['password'] = Hash::make($value);
+    }
+
+    public function distributor()
+    {
+        return $this->hasOne(Distributor::class);
     }
 }

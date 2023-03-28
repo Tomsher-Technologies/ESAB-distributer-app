@@ -1,11 +1,10 @@
 <?php
 
-use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateUserProfilesTable extends Migration
+class CreateDistributorsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,9 +13,14 @@ class CreateUserProfilesTable extends Migration
      */
     public function up()
     {
-        Schema::create('user_profiles', function (Blueprint $table) {
+        Schema::create('distributors', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->string('company_name')->nullable();
+            $table->string('phone')->nullable();
+            $table->tinyText('address')->nullable();
+            $table->string('country_code')->nullable();
+            $table->foreignId('manager_id')->references('id')->on('users')->onDelete('cascade');
             $table->string('distributer_code')->nullable();
             $table->timestamps();
         });
@@ -29,6 +33,6 @@ class CreateUserProfilesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('user_profiles');
+        Schema::dropIfExists('distributors');
     }
 }

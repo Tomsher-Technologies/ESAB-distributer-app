@@ -13,6 +13,7 @@ class LoginController extends Controller
     public function __construct()
     {
         $this->middleware(['guest'])->except(['logout']);
+        $this->middleware(['auth'])->only(['logout']);
     }
 
     public function loginView()
@@ -22,7 +23,6 @@ class LoginController extends Controller
 
     public function authenticate(Request $request)
     {
-
         $request->validate([
             'email' => "required|email",
             'password' => "required",
@@ -56,6 +56,8 @@ class LoginController extends Controller
 
     public function logout(Request $request)
     {
-        # code...
+        Session::flush();
+        Auth::logout();
+        return redirect()->route('admin.login');
     }
 }

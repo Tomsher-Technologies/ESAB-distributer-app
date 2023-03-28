@@ -29,29 +29,52 @@
 
     @stack('header')
 
+    <script src="{{ adminAsset('js/jquery.min.js') }}"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    @livewireStyles
+
 </head>
 
 <body class="{{ $body_class }}">
 
-    @yield('content')
 
-    <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
-            class="bi bi-arrow-up-short"></i></a>
+    @include('admin.parts.header')
+
+    @include('admin.parts.sidebar')
+    <main id="main" class="main">
+        @yield('content')
+    </main>
+
+    @include('admin.parts.footer')
+
+    @yield('modal')
+
+    <a href="#" class="back-to-top d-flex align-items-center justify-content-center">
+        <i class="bi bi-arrow-up-short"></i>
+    </a>
+
+    @livewireScripts
 
     <!-- Vendor JS Files -->
     <script src="{{ adminAsset('vendor/apexcharts/apexcharts.min.js') }}"></script>
     <script src="{{ adminAsset('vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-    <script src="{{ adminAsset('vendor/chart.js/chart.umd.js') }}"></script>
-    <script src="{{ adminAsset('vendor/echarts/echarts.min.js') }}"></script>
-    <script src="{{ adminAsset('vendor/quill/quill.min.js') }}"></script>
-    <script src="{{ adminAsset('vendor/simple-datatables/simple-datatables.js') }}"></script>
-    <script src="{{ adminAsset('vendor/tinymce/tinymce.min.js') }}"></script>
+    {{-- <script src="{{ adminAsset('vendor/chart.js/chart.umd.js') }}"></script> --}}
+    {{-- <script src="{{ adminAsset('vendor/echarts/echarts.min.js') }}"></script> --}}
+    {{-- <script src="{{ adminAsset('vendor/quill/quill.min.js') }}"></script> --}}
+    {{-- <script src="{{ adminAsset('vendor/simple-datatables/simple-datatables.js') }}"></script> --}}
+    {{-- <script src="{{ adminAsset('vendor/tinymce/tinymce.min.js') }}"></script> --}}
     <script src="{{ adminAsset('vendor/php-email-form/validate.js') }}"></script>
 
     <!-- Template Main JS File -->
     <script src="{{ adminAsset('js/main.js') }}"></script>
 
     @stack('footer')
+
+    <form class="d-none" id="logout-form" action="{{ route('admin.logout') }}" method="POST">
+        @csrf
+    </form>
 </body>
 
 </html>

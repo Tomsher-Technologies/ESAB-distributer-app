@@ -18,29 +18,36 @@ class BouncerSeeder extends Seeder
      */
     public function run()
     {
-        $admin = Bouncer::role()->firstOrCreate([
-            'name' => 'admin',
-            'title' => 'Administrator',
+        // $admin = Bouncer::role()->firstOrCreate([
+        //     'name' => 'admin',
+        //     'title' => 'Administrator',
+        // ]);
+
+        // Bouncer::allow('admin')->everything();
+
+        // // $manager = Bouncer::role()->firstOrCreate([
+        // //     'name' => 'manager',
+        // //     'title' => 'Manager',
+        // // ]);
+
+        // $distributor = Bouncer::role()->firstOrCreate([
+        //     'name' => 'distributor',
+        //     'title' => 'Distributor',
+        // ]);
+
+        // $admin_user = User::updateOrCreate([
+        //     'name' => 'Admin',
+        //     'email' => 'test@test.com',
+        // ], [
+        //     'password' => 'password',
+        // ]);
+
+        // $admin_user->assign('admin');
+
+        $ban = Bouncer::ability()->firstOrCreate([
+            'name' => 'manage-distributor',
+            'title' => 'Manage Distributor',
         ]);
 
-        Bouncer::allow('admin')->everything();
-
-        $manager = Bouncer::role()->firstOrCreate([
-            'name' => 'manager',
-            'title' => 'Manager',
-        ]);
-
-        $distributor = Bouncer::role()->firstOrCreate([
-            'name' => 'distributor',
-            'title' => 'Distributor',
-        ]);
-
-        $admin_user = User::updateOrCreate([
-            'name' => 'Admin',
-            'email' => 'test@test.com',
-        ], [
-            'password' => 'password',
-        ]);
-        $admin_user->assign('admin');
     }
 }
