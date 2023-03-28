@@ -7,6 +7,7 @@ use App\Models\Distributor\Distributor;
 use App\Http\Requests\StoreDistributorRequest;
 use App\Http\Requests\UpdateDistributorRequest;
 use App\Models\User;
+use Illuminate\Http\Request;
 
 class DistributorController extends Controller
 {

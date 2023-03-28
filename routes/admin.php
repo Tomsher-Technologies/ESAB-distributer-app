@@ -42,8 +42,15 @@ Route::group(['prefix' => env('ADMIN_PREFIX', 'admin'), 'as' => 'admin.'], funct
             Route::post('/{user}/edit', [AdminUserController::class, 'update']);
         });
 
-        Route::resource('distributor', DistributorController::class);
+        Route::resource('distributor', DistributorController::class)->only(['index', 'create', 'edit']);
 
-        Route::resource('products', ProductController::class);
+        Route::group(['prefix' => 'products', 'as' => 'products.'], function () {
+            Route::get('/import', [ProductController::class, 'importView'])->name('import');
+            Route::post('/import', [ProductController::class, 'import']);
+
+            Route::get('/history', [ProductController::class, 'history']);
+        });
+        Route::resource('products', ProductController::class)->only(['index', 'create', 'edit']);
+
     });
 });

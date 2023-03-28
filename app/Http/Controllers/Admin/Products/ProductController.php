@@ -3,8 +3,13 @@
 namespace App\Http\Controllers\Admin\Products;
 
 use App\Http\Controllers\Controller;
+use App\Imports\Admin\ProductImport;
 use App\Models\Product\Product;
+use App\Models\Upload;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ProductController extends Controller
 {
@@ -85,5 +90,47 @@ class ProductController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+
+    public function history()
+    {
+    }
+
+    public function importView()
+    {
+        return view('admin.products.import');
+    }
+
+    public function import(Request $request)
+    {
+        $request->validate([
+            'product_file' => 'required|file|mimetypes:text/csv,text/plain,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        ], [
+            'product_file.required' => "Please select a file",
+            'product_file.file' => "Please select a file",
+            'product_file.mimetypes' => "Please select a valid file format",
+        ]);
+
+        if ($request->hasFile('product_file')) {
+            $file = $request->file('product_file');
+            $name = $file->getClientOriginalName();
+            $path = "admin/products/{$name}";
+            $upload = Storage::put($path, $file);
+
+            Auth()->user()->uploads()->create([
+                'name' =>  $name,
+                'path' =>  $path,
+            ]);
+
+            Excel::import(new ProductImport, $request->product_file);
+
+            return back()->with([
+                'status' => "File Imported"
+            ]);
+        }
+        return back()->withErrors([
+            'error' => "Something went wrong, please try again."
+        ]);
     }
 }

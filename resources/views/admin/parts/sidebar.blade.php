@@ -40,7 +40,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="upload_excel.html">
+                    <a href="{{ route('admin.products.import') }}">
                         <i class="bi bi-circle"></i><span>Upload (Excel)</span>
                     </a>
                 </li>
