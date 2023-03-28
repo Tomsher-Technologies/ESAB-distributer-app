@@ -9,7 +9,6 @@ use Livewire\Component;
 
 class Create extends Component
 {
-
     public $countries;
     public $users;
     public $managers;

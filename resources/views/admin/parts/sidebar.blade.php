@@ -27,13 +27,15 @@
         <!-- End F.A.Q Page Nav -->
 
         <li class="nav-item">
-            <a class="nav-link" data-bs-target="#forms-nav1" data-bs-toggle="collapse" href="#">
+            <a class="nav-link {{ request()->routeIs('admin.products*') ? 'active' : 'collapsed' }}"
+                data-bs-target="#forms-nav1" data-bs-toggle="collapse" href="#">
                 <i class="bi bi-cloud-upload"></i><span>Uploads</span><i class="bi bi-chevron-down ms-auto"></i>
             </a>
 
-            <ul id="forms-nav1" class="nav-content collapse" data-bs-parent="#sidebar-nav1">
+            <ul id="forms-nav1" class="nav-content {{ request()->routeIs('admin.products*') ? 'active' : 'collapse' }}"
+                data-bs-parent="#sidebar-nav1">
                 <li>
-                    <a href="upload_application.html">
+                    <a href="{{ route('admin.products.create') }}">
                         <i class="bi bi-circle"></i><span>Upload (Manual)</span>
                     </a>
                 </li>
@@ -50,7 +52,7 @@
                 </li>
 
                 <li>
-                    <a href="uploaded_products.html">
+                    <a href="{{ route('admin.products.index') }}">
                         <i class="bi bi-circle"></i><span>Uploaded Products</span>
                     </a>
                 </li>
@@ -71,7 +73,7 @@
                 data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
                 <i class="bi bi-person"></i><span>Admin</span><i class="bi bi-chevron-down ms-auto"></i>
             </a>
-            <ul id="forms-nav" class="nav-content  {{ request()->routeIs('admin.users*') ? 'active' : 'collapse' }}"
+            <ul id="forms-nav" class="nav-content {{ request()->routeIs('admin.users*') ? 'active' : 'collapse' }}"
                 data-bs-parent="#sidebar-nav">
                 <li>
                     <a href="admin_roles.html">

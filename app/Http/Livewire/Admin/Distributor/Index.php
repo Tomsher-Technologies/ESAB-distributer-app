@@ -8,7 +8,6 @@ use Livewire\WithPagination;
 
 class Index extends Component
 {
-
     use WithPagination;
 
     public $search = '';
@@ -28,7 +27,7 @@ class Index extends Component
         $this->validate();
         if ($this->deleteid !== 0 || $this->deleteid !== "0") {
             $user =  User::whereIs('distributor')->where('id', $this->deleteid)->get()->first();
-            $user->distributor()->delete();
+            // $user->distributor()->delete();
             $user->delete();
             $this->dispatchBrowserEvent('deleted');
         }

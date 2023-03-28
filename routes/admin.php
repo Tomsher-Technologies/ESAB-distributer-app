@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\AdminUserController;
 use App\Http\Controllers\Admin\Auth\LoginController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\Products\ProductController;
 use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Distributor\DistributorController;
 use App\Models\Distributor\Distributor;
@@ -42,5 +43,7 @@ Route::group(['prefix' => env('ADMIN_PREFIX', 'admin'), 'as' => 'admin.'], funct
         });
 
         Route::resource('distributor', DistributorController::class);
+
+        Route::resource('products', ProductController::class);
     });
 });
