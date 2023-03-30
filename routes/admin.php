@@ -6,6 +6,8 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\Products\ProductController;
 use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Distributor\DistributorController;
+use App\Http\Livewire\Admin\AdminRequest;
+use App\Http\Livewire\Admin\Request;
 use App\Models\Distributor\Distributor;
 use Illuminate\Support\Facades\Route;
 
@@ -48,9 +50,10 @@ Route::group(['prefix' => env('ADMIN_PREFIX', 'admin'), 'as' => 'admin.'], funct
             Route::get('/import', [ProductController::class, 'importView'])->name('import');
             Route::post('/import', [ProductController::class, 'import']);
 
-            Route::get('/history', [ProductController::class, 'history']);
+            Route::get('/history', [ProductController::class, 'history'])->name('history');
         });
         Route::resource('products', ProductController::class)->only(['index', 'create', 'edit']);
 
+        Route::get('/requests', AdminRequest::class)->name('requests');
     });
 });

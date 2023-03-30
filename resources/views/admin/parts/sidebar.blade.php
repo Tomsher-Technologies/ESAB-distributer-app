@@ -46,7 +46,7 @@
                 </li>
 
                 <li>
-                    <a href="upload_history.html">
+                    <a href="{{ route('admin.products.history') }}">
                         <i class="bi bi-circle"></i><span>Upload History</span>
                     </a>
                 </li>
@@ -61,7 +61,7 @@
         <!-- End Forms Nav -->
 
         <li class="nav-item">
-            <a class="nav-link collapsed" href="requests.html">
+            <a class="nav-link {{ isActiveRoute('admin.requests*') }} collapsed" href="{{ route('admin.requests') }}">
                 <i class="bi bi-person-plus"></i>
                 <span> Requests</span>
             </a>

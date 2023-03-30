@@ -15,6 +15,10 @@ class Upload extends Model
         'path',
     ];
 
+    protected $casts = [
+        'created_at' => 'datetime',
+    ];
+
     public function user()
     {
         return $this->belongsTo(User::class);

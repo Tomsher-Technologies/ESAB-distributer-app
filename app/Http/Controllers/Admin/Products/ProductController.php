@@ -95,6 +95,7 @@ class ProductController extends Controller
 
     public function history()
     {
+        return view('admin.products.history');
     }
 
     public function importView()
@@ -115,15 +116,15 @@ class ProductController extends Controller
         if ($request->hasFile('product_file')) {
             $file = $request->file('product_file');
             $name = $file->getClientOriginalName();
-            $path = "admin/products/{$name}";
+            $path = "public/admin_uploads/products/{$name}";
             $upload = Storage::put($path, $file);
 
             Auth()->user()->uploads()->create([
                 'name' =>  $name,
-                'path' =>  $path,
+                'path' =>  str_replace('public/', 'storage/', $upload),
             ]);
 
-            Excel::import(new ProductImport, $request->product_file);
+            // Excel::import(new ProductImport, $request->product_file);
 
             return back()->with([
                 'status' => "File Imported"
