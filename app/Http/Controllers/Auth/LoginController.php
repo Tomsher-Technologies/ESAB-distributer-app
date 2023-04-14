@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin\Auth;
+namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -18,7 +18,7 @@ class LoginController extends Controller
 
     public function loginView()
     {
-        return view('admin.auth.login');
+        return view('auth.login');
     }
 
     public function authenticate(Request $request)
@@ -40,12 +40,13 @@ class LoginController extends Controller
 
         if (Auth::attempt($credentials, $request->remember_me)) {
             $request->session()->regenerate();
-            if (Auth::user()->isAn('admin') || Auth::user()->isAn('manager')) {
-                return redirect()->intended(route('admin.dashboard'));
+            if (Auth::user()->isAn('distributor')) {
+                return redirect()->intended(route('distributor.dashboard'));
             } else {
-                Session::flush();
-                Auth::logout();
-                return redirect()->route('home');
+                return redirect()->intended(route('admin.dashboard'));
+                // Session::flush();
+                // Auth::logout();
+                // return redirect()->route('home');
             }
         }
 
@@ -58,6 +59,6 @@ class LoginController extends Controller
     {
         Session::flush();
         Auth::logout();
-        return redirect()->route('admin.login');
+        return redirect()->route('login');
     }
 }

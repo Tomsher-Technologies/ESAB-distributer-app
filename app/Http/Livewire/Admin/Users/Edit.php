@@ -26,7 +26,7 @@ class Edit extends Component
     {
         return [
             'user.name' => 'required',
-            'user.email' => ['required', 'email', Rule::unique('varieties')->ignore($this->user->id)],
+            'user.email' => ['required', 'email', Rule::unique('users', 'email')->ignore($this->user->id)],
             'password' => ['nullable', 'min:8'],
             'password_confirmation' => ['required_with:password', 'same:password'],
             'user.status' => ['required'],

@@ -1,14 +1,15 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminUserController;
-use App\Http\Controllers\Admin\Auth\LoginController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\Products\ProductController;
 use App\Http\Controllers\Admin\ProfileController;
-use App\Http\Controllers\Distributor\DistributorController;
+use App\Http\Controllers\Admin\Roles\RolesController;
+use App\Http\Controllers\Admin\Distributor\DistributorController;
 use App\Http\Livewire\Admin\AdminRequest;
-use App\Http\Livewire\Admin\Request;
-use App\Models\Distributor\Distributor;
+use App\Http\Livewire\Admin\Roles\RoleCreate;
+use App\Http\Livewire\Admin\Roles\RoleEdit;
+use App\Http\Livewire\Admin\Roles\RoleIndex;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -22,18 +23,14 @@ Route::group(['prefix' => env('ADMIN_PREFIX', 'admin'), 'as' => 'admin.'], funct
     Route::get('/', function () {
         return redirect()->route('admin.dashboard');
     });
-    Route::middleware(['guest'])->group(function () {
-        Route::get('login', [LoginController::class, 'loginView'])->name('login');
-        Route::post('login', [LoginController::class, 'authenticate']);
-    });
     Route::middleware(['auth', 'auth.session', 'admin'])->group(function () {
-        Route::post('logout', [LoginController::class, 'logout'])->name('logout');
+        // Route::post('logout', [LoginController::class, 'logout'])->name('logout');
         Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-        Route::group(['prefix' => 'profile', 'as' => 'profile.'], function () {
-            Route::get('/', [ProfileController::class, 'index'])->name('profile');
-            Route::post('/', [ProfileController::class, 'update'])->name('update');
-            Route::post('/password', [ProfileController::class, 'password'])->name('password');
+        Route::group(['prefix' => 'roles', 'as' => 'roles.'], function () {
+            Route::get('/', RoleIndex::class)->name('index');
+            Route::get('/create', RoleCreate::class)->name('create');
+            Route::get('/{role}/edit', RoleEdit::class)->name('edit');
         });
 
         Route::group(['prefix' => 'users', 'as' => 'users.'], function () {
@@ -49,7 +46,6 @@ Route::group(['prefix' => env('ADMIN_PREFIX', 'admin'), 'as' => 'admin.'], funct
         Route::group(['prefix' => 'products', 'as' => 'products.'], function () {
             Route::get('/import', [ProductController::class, 'importView'])->name('import');
             Route::post('/import', [ProductController::class, 'import']);
-
             Route::get('/history', [ProductController::class, 'history'])->name('history');
         });
         Route::resource('products', ProductController::class)->only(['index', 'create', 'edit']);

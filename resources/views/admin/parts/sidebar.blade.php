@@ -69,14 +69,14 @@
         <!-- End F.A.Q Page Nav -->
 
         <li class="nav-item">
-            <a class="nav-link  {{ request()->routeIs('admin.users*') ? 'active' : 'collapsed' }}"
+            <a class="nav-link  {{ request()->routeIs('admin.users*') || request()->routeIs('admin.roles*') ? 'active' : 'collapsed' }}"
                 data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
                 <i class="bi bi-person"></i><span>Admin</span><i class="bi bi-chevron-down ms-auto"></i>
             </a>
-            <ul id="forms-nav" class="nav-content {{ request()->routeIs('admin.users*') ? 'active' : 'collapse' }}"
+            <ul id="forms-nav" class="nav-content {{ request()->routeIs('admin.users*') || request()->routeIs('admin.roles*') ? 'active' : 'collapse' }}"
                 data-bs-parent="#sidebar-nav">
                 <li>
-                    <a href="admin_roles.html">
+                    <a href="{{ route('admin.roles.index') }}">
                         <i class="bi bi-circle"></i><span>Admin Roles</span>
                     </a>
                 </li>

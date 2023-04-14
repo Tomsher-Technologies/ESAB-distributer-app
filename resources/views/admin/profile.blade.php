@@ -24,7 +24,7 @@
                             <div class="tab-pane fade profile-edit {{ old('isPassword') == 1 ? '' : 'show active'  }} pt-3" id="profile-edit">
                                 <!-- Profile Edit Form -->
                                 <x-form.success />
-                                <form method="POST" action="{{ route('admin.profile.update') }}">
+                                <form method="POST" action="{{ route('profile.update') }}">
                                     @csrf
                                     <div class="row mb-3">
                                         <div class="col-lg-4">
@@ -51,7 +51,7 @@
                             <!-- Change Password Form -->
                             <x-form.success />
                             <x-form.error name="login" />
-                            <form method="POST" action="{{ route('admin.profile.password') }}">
+                            <form method="POST" action="{{ route('profile.password') }}">
                                 @csrf
                                 <input type="hidden" name="isPassword" value="1">
                                 <div class="row mb-3">

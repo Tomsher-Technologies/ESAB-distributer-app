@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Distributor;
+namespace App\Http\Controllers\Admin\Distributor;
 
 use App\Http\Controllers\Controller;
 use App\Models\Distributor\Distributor;

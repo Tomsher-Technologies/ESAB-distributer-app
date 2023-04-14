@@ -39,7 +39,7 @@ class Edit extends Component
         return [
             'dist.distributor.company_name' => 'required',
             'dist.name' => 'required',
-            'dist.email' => ['required', 'email', Rule::unique('varieties')->ignore($this->dist->id)],
+            'dist.email' => ['required', 'email', Rule::unique('users', 'email')->ignore($this->dist->id)],
             'dist.distributor.phone' => ['required'],
             'dist.distributor.address' => ['required'],
             'dist.distributor.country_code' => ['required'],

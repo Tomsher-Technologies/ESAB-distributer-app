@@ -18,8 +18,8 @@
                                         <h5 class="card-title text-center pb-0 fs-4">Login to Your Account</h5>
                                         <p class="text-center small">Enter your username & password to login</p>
                                     </div>
-                                    <form class="row g-3 needs-validation" method="POST"
-                                        action="{{ route('admin.login') }}" novalidate>
+                                    <form class="row g-3 needs-validation" method="POST" action="{{ route('login') }}"
+                                        novalidate>
                                         @csrf
 
                                         @error('login')
@@ -29,8 +29,9 @@
                                         <div class="col-12">
                                             <label for="email" class="form-label">Email</label>
                                             <div class="input-group has-validation">
-                                                <input type="email" autocomplete="email" name="email"  value="test@test.com" value="{{ old('email') }}" class="form-control" id="email"
-                                                    required>
+                                                <input type="email" autocomplete="email" name="email"
+                                                    value="test@test.com" value="{{ old('email') }}" class="form-control"
+                                                    id="email" required>
                                                 <div class="invalid-feedback">Please enter your email.</div>
                                             </div>
                                             @error('email')
@@ -40,8 +41,8 @@
 
                                         <div class="col-12">
                                             <label for="password" class="form-label">Password</label>
-                                            <input type="password" name="password" class="form-control" value="password" id="password"
-                                                required>
+                                            <input type="password" name="password" class="form-control" value="password"
+                                                id="password" required>
                                             @error('password')
                                                 <div class="alert alert-danger mb-0 mt-1">{{ $message }}</div>
                                             @enderror

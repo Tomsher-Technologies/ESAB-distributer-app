@@ -19,8 +19,8 @@ class BouncerSeeder extends Seeder
     public function run()
     {
         // $admin = Bouncer::role()->firstOrCreate([
-        //     'name' => 'admin',
-        //     'title' => 'Administrator',
+        //     'name' => 'test',
+        //     'title' => 'Test',
         // ]);
 
         // Bouncer::allow('admin')->everything();
@@ -44,10 +44,10 @@ class BouncerSeeder extends Seeder
 
         // $admin_user->assign('admin');
 
-        $ban = Bouncer::ability()->firstOrCreate([
-            'name' => 'manage-distributor',
-            'title' => 'Manage Distributor',
-        ]);
+        // $ban = Bouncer::ability()->firstOrCreate([
+        //     'name' => 'manage-distributor',
+        //     'title' => 'Manage Distributor',
+        // ]);
 
     }
 }

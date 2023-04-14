@@ -25,7 +25,7 @@
     <link href="{{ adminAsset('vendor/quill/quill.bubble.css') }}" rel="stylesheet">
     <link href="{{ adminAsset('vendor/remixicon/remixicon.css') }}" rel="stylesheet">
     <link href="{{ adminAsset('vendor/simple-datatables/style.css') }}" rel="stylesheet">
-    <link href="{{ adminAsset('css/style.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets/style.css') }}" rel="stylesheet">
 
     @stack('header')
 
@@ -40,14 +40,14 @@
 <body class="{{ $body_class }}">
 
 
-    @include('admin.parts.header')
+    @include('distributor.parts.header')
 
-    @include('admin.parts.sidebar')
+    @include('distributor.parts.sidebar')
     <main id="main" class="main">
         @yield('content')
     </main>
 
-    @include('admin.parts.footer')
+    @include('distributor.parts.footer')
 
     @yield('modal')
 
