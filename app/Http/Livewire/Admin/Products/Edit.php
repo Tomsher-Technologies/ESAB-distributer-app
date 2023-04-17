@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Admin\Products;
 
+use App\Models\Country;
 use App\Models\Product\Product;
 use Illuminate\Validation\Rule;
 use Livewire\Component;
@@ -10,10 +11,12 @@ class Edit extends Component
 {
 
     public $product;
+    public $countries;
 
     public function mount(Product $product)
     {
         $this->product = $product;
+        $this->countries = Country::all();
     }
 
     protected function rules()
@@ -23,7 +26,8 @@ class Edit extends Component
             'product.lot_no' => 'required',
             'product.description' => 'nullable',
             'product.UOM' => ['required'],
-            'product.category' => ['required', Rule::notIn(['0']),],
+            'product.category' => ['required', Rule::notIn(['0'])],
+            'product.country_code' => ['required'],
         ];
     }
 
@@ -34,6 +38,7 @@ class Edit extends Component
         'product.category.required' => 'Please select a category',
         'product.category.not_in' => 'Please select a category',
         'product.status.required' => 'Please select a status',
+        'product.country_code.required' => 'Please select a country',
     ];
 
     public function save()

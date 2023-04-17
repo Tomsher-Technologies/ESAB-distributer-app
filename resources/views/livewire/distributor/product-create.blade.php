@@ -16,8 +16,29 @@
                             <!-- General Form Elements -->
                             @foreach ($inputs as $key => $input)
                                 @php
-                                    $cur = $lot_a = null;
-                                    $cur = $gins->find($inputs[$key]['gin']);
+                                    $cur = $cur_a = $lot_a = null;
+                                    
+                                    // $id = $inputs[$key]['gin'];
+                                    
+                                    // $cur = $gins->find($id);
+                                    // if ($cur !== null) {
+                                    //     $lot_a = $gins->where('GIN', $cur->GIN)->all();
+                                    // }
+                                    
+                                    // if ($lot_a !== null) {
+                                    //     $id = $inputs[$key]['lot'];
+                                    //     $cur_a = $gins->find($id);
+                                    
+                                    //     $inputs = $inputs->map(function ($input, $k) use ($key, $id) {
+                                    //         if ($k == $key) {
+                                    //             $input['lot'] = $id;
+                                    //         }
+                                    //         return $input;
+                                    //     });
+                                    // } else {
+                                    //     $cur_a = $cur;
+                                    // }
+                                    
                                 @endphp
 
                                 <div data-repeater-list="group-a">
@@ -25,8 +46,9 @@
                                         class="row mb-2 g-2 justify-content-center align-items-center">
                                         <div class="col">
                                             <label for="#">GIN Number</label>
-                                            <select wire:change="change" wire:model="inputs.{{ $key }}.gin"
-                                                name="gin" class="form-select form-control">
+                                            <select wire:change="changeGin({{ $key }})"
+                                                wire:model="inputs.{{ $key }}.gin" name="gin"
+                                                class="form-select form-control  @error('inputs.{{ $key }}.gin') {{ $message }} @enderror">
                                                 <option selected disabled value="0">Select</option>
                                                 @foreach ($gins as $gin)
                                                     <option value="{{ $gin->id }}">{{ $gin->GIN }}</option>
@@ -35,52 +57,66 @@
                                         </div>
                                         <div class="col-md-1">
                                             <label for="#">Lot</label>
-                                            <input wire:model.defer="inputs.{{ $key }}.lot" name="lot"
-                                                type="text" class="form-control" placeholder="Category "
-                                                value="24">
+                                            <select wire:change="changeLot({{ $key }},$event.target.value)"
+                                                wire:model="inputs.{{ $key }}.lot" name="lot"
+                                                class="form-select form-control @error('inputs.{{ $key }}.lot') {{ $message }} @enderror">
+                                                <option selected disabled value="0">Select</option>
+                                                @if (array_key_exists($key, $lots))
+                                                    @foreach ($lots[$key] as $lot)
+                                                        <option value="{{ $lot['id'] }}">{{ $lot['lot_no'] }}
+                                                        </option>
+                                                    @endforeach
+                                                @endif
+                                            </select>
                                         </div>
                                         <div class="col">
                                             <label for="#">Description</label>
                                             <input type="text" class="form-control"
                                                 placeholder="Enter Distributor Code"
-                                                value="{{ $cur !== null ? $cur->description : '' }}" disabled>
+                                                value="{{ $this->getValue($key, 'description') }}" disabled>
                                         </div>
                                         <div class="col-md-1">
                                             <label for="#">UOM</label>
                                             <input type="text" class="form-control" placeholder="Enter UOM"
-                                                value="{{ $cur !== null ? $cur->UOM : '' }}" disabled="">
+                                                value="{{ $this->getValue($key, 'UOM') }}" disabled="">
                                         </div>
                                         <div class="col-md-1">
                                             <label for="#">Category </label>
                                             <input type="text" class="form-control" placeholder="Category "
-                                                value="{{ $cur !== null ? $cur->category : '' }}" disabled="">
+                                                value="{{ $this->getValue($key, 'category') }}" disabled="">
                                         </div>
                                         <div class="col-md-1">
                                             <label for="#">Stock on Hand</label>
                                             <input wire:model="inputs.{{ $key }}.stock_hand" type="number"
-                                                class="form-control" placeholder="Enter Stock on Hand">
+                                                class="form-control <x-form.error-class name='inputs.{{ $key }}.stock_hand' />"
+                                                placeholder="Enter Stock on Hand">
+
                                         </div>
                                         <div class="col-md-1">
                                             <label for="#">Goods in Transit</label>
                                             <input wire:model="inputs.{{ $key }}.stock_transit" type="number"
-                                                class="form-control" placeholder="Enter Goods in Transit">
+                                                class="form-control <x-form.error-class name='inputs.{{ $key }}.stock_transit' />"
+                                                placeholder="Enter Goods in Transit">
                                         </div>
                                         <div class="col-md-1">
                                             <label for="#">Stock on Order</label>
                                             <input wire:model="inputs.{{ $key }}.stock_order" type="number"
-                                                class="form-control" placeholder="Enter Stock on Order">
+                                                class="form-control <x-form.error-class name='inputs.{{ $key }}.stock_order' />"
+                                                placeholder="Enter Stock on Order">
                                         </div>
                                         <div class="col">
                                             <label for="#">Avg sales/month </label>
                                             <input wire:model="inputs.{{ $key }}.avg_sale" type="number"
-                                                step=".01" class="form-control"
+                                                step=".01"
+                                                class="form-control <x-form.error-class name='inputs.{{ $key }}.avg_sale' />"
                                                 placeholder="Enter Average Sales per Month">
                                         </div>
                                         <div class="col-md-1">
                                             <label for="#">Over Stock</label>
                                             <select wire:model="inputs.{{ $key }}.over_stock"
-                                                class="form-select form-control" id="">
-                                                <option>Select</option>
+                                                class="form-select form-control <x-form.error-class name='inputs.{{ $key }}.over_stock' />"
+                                                id="">
+                                                <option selected disabled value="0">Select</option>
                                                 <option>Yes</option>
                                                 <option>No</option>
                                             </select>

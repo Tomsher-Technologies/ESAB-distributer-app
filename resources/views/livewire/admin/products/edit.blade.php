@@ -44,6 +44,16 @@
                                     </select>
                                     <x-form.l-w-error name="product.category" />
                                 </div>
+                                <div class="col-sm-4">
+                                    <label for="#">Country</label>
+                                    <select wire:model="product.country_code" class="form-select form-control">
+                                        <option value="0" disabled>Select</option>
+                                        @foreach ($countries as $country)
+                                            <option value="{{ $country->code }}">{{ $country->name }}</option>
+                                        @endforeach
+                                    </select>
+                                    <x-form.l-w-error name="category" />
+                                </div>
                                 <div class="col-sm-4 align-self-end">
                                     <button class="btn btn-secondary w-100" type="submit"> Update
                                         <i class="bi bi-file-earmark-arrow-up"></i>

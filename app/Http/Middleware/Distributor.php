@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Bouncer;
+use Illuminate\Support\Facades\Auth;
 
 class Distributor
 {
@@ -19,6 +20,8 @@ class Distributor
     {
         if (auth()->user()->isAn('distributor')) {
             return $next($request);
+        } else if (Auth::check()) {
+            return redirect()->route('admin.dashboard');
         }
         return redirect('home')->with('error', 'Permission Denied!!! You do not have administrative access.');
     }

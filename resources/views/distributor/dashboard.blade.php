@@ -16,31 +16,35 @@
                             <div class="row g-3">
                                 <div class="col-sm-3">
                                     <label for="#">Country</label>
-                                    <select class="form-select form-control" id="floatingSelect"
+                                    <select name="country" class="form-select form-control" id="floatingSelect"
                                         aria-label="Floating label select example">
-                                        <option selected="" value="0">Select</option>
+                                        <option selected="" value="all">All</option>
                                         @foreach ($countries as $country)
-                                            <option value="{{ $country->id }}">{{ $country->name }}</option>
+                                            <option {{ $request->country == $country->code ? 'selected' : '' }}
+                                                value="{{ $country->code }}">{{ $country->name }}</option>
                                         @endforeach
                                     </select>
                                 </div>
                                 <div class="col-sm-3">
                                     <label for="#">GIN Number</label>
-                                    <select class="form-select form-control" id="floatingSelect"
+                                    <select name="gin" class="form-select form-control" id="floatingSelect"
                                         aria-label="Floating label select example">
-                                        <option selected="" value="0">Select</option>
+                                        <option selected="" value="all">All</option>
                                         @foreach ($gins as $gin)
-                                            <option value="{{ $gin->GIN }}">{{ $gin->GIN }}</option>
+                                            <option {{ $request->gin == $gin->GIN ? 'selected' : '' }}
+                                                value="{{ $gin->GIN }}">{{ $gin->GIN }}</option>
                                         @endforeach
                                     </select>
                                 </div>
                                 <div class="col-sm-3">
                                     <label for="#">Category</label>
-                                    <select class="form-select form-control" id="floatingSelect"
+                                    <select name="category" class="form-select form-control" id="floatingSelect"
                                         aria-label="Floating label select example">
-                                        <option selected="">Select</option>
-                                        <option value="FM">FM</option>
-                                        <option value="Non-FM">Non-FM</option>
+                                        <option selected="all" value="all">All</option>
+                                        <option {{ $request->category == 'FM' ? 'selected' : '' }} value="FM">FM
+                                        </option>
+                                        <option {{ $request->category == 'Non-FM' ? 'selected' : '' }} value="Non-FM">Non-FM
+                                        </option>
                                     </select>
                                 </div>
                                 <div class="col-sm-3 align-self-end">
@@ -69,16 +73,31 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>UAE</td>
-                                    <td>48004040V0</td>
-                                    <td>12</td>
-                                    <td>FM</td>
-                                    <td>1200</td>
-                                    <td> <b class="clr_grn me-2">Yes</b> </td>
-                                    <td><a href="#" class="btn btn-view" data-bs-toggle="modal"
-                                            data-bs-target="#exampleModal3">Request</a></td>
-                                </tr>
+                                @foreach ($products as $pro)
+                                    <tr>
+                                        <td>{{ $pro->product->country->name }}</td>
+                                        <td>{{ $pro->product->GIN }}</td>
+                                        <td>{{ $pro->product->lot_no }}</td>
+                                        <td>{{ $pro->product->category }}</td>
+                                        <td>{{ $pro->stock_on_hand }}</td>
+                                        @if ($pro->overstocked)
+                                            <td> <b class="clr_grn me-2">Yes</b> </td>
+                                        @else
+                                            <td> <b class="clr_red me-2">No</b> </td>
+                                        @endif
+                                        <td>
+
+                                            <form action="{{ route('distributor.product.request') }}" method="POST">
+                                                @csrf
+                                                <input type="hidden" name="id" value="{{ $pro->id }}">
+                                                <input type="hidden" name="from" value="{{ $pro->user_id }}">
+                                                <button type="submit" class="btn btn-view">
+                                                    Request
+                                                </button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                @endforeach
                             </tbody>
                         </table>
                         <!-- End Bordered Table -->

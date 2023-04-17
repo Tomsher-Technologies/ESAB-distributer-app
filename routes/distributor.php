@@ -3,6 +3,8 @@
 use App\Http\Controllers\Distributor\DistributorDashboardController;
 use App\Http\Controllers\Distributor\ProductsController;
 use App\Http\Controllers\Distributor\UploadController;
+use App\Http\Livewire\Distributor\ProductHistory;
+use App\Http\Livewire\Distributor\Products;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -25,14 +27,14 @@ Route::group(['prefix' => 'distributor', 'as' => 'distributor.'], function () {
         Route::get('dashboard', [DistributorDashboardController::class, 'index'])->name('dashboard');
         Route::post('dashboard', [DistributorDashboardController::class, 'index'])->name('dashboard');
 
-        Route::get('products', [ProductsController::class, 'index'])->name('products');
+        Route::get('products', Products::class)->name('products');
+        Route::post('product/request', [DistributorDashboardController::class, 'request'])->name('product.request');
 
         Route::get('upload/manual', [UploadController::class, 'manualView'])->name('uploads.manual');
-        Route::post('upload/manual', [UploadController::class, 'manualUpload']);
 
         Route::get('upload/excel', [UploadController::class, 'excelView'])->name('uploads.excel');
         Route::post('upload/excel', [UploadController::class, 'excelUpload']);
 
-        Route::get('upload/history', [UploadController::class, 'history'])->name('uploads.history');
+        Route::get('upload/history', ProductHistory::class)->name('uploads.history');
     });
 });

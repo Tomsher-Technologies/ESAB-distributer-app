@@ -11,7 +11,7 @@
                     <div class="card-body">
                         <h5 class="card-title mb-0">Example Excel Format</h5>
                         <p>Download the excel template. Fill the data and re-upload the template</p>
-                        <a href="{{ adminAsset('samples/excel.xlsx') }}" download="" class="btn excel_temp">
+                        <a href="{{ adminAsset('samples/admin_template.xlsx') }}" download="" class="btn excel_temp">
                             <span>
                                 <img src="{{ adminAsset('img/excel.png') }}" width="30" alt="">
                             </span>

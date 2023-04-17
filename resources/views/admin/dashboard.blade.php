@@ -17,10 +17,10 @@
                                 <div class="col-sm-3">
                                     <label for="#">Country</label>
                                     <select class="form-select form-control">
-                                        <option selected="">Select</option>
-                                        <option value="1">UAE</option>
-                                        <option value="2">KSA</option>
-                                        <option value="3">Nigeria</option>
+                                        <option selected="" value="all">All</option>
+                                        @foreach ($countries as $country)
+                                            <option value="{{ $country->code }}">{{ $country->name }}</option>
+                                        @endforeach
                                     </select>
                                 </div>
 

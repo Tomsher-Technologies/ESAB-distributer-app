@@ -51,7 +51,7 @@ class Index extends Component
             'products' => $products
         ]);
 
-        return view('livewire.admin.products.index');
+        // return view('livewire.admin.products.index');
     }
 
     public function updatingSearch()

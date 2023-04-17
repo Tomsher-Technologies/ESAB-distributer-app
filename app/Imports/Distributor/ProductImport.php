@@ -1,59 +1,66 @@
 <?php
 
-namespace App\Imports\Admin;
+namespace App\Imports\Distributor;
 
-use App\Models\Country;
+use App\Models\Product\DistributorProduct;
 use App\Models\Product\Product;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\ToCollection;
 // use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithBatchInserts;
-// use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithStartRow;
-use Maatwebsite\Excel\Concerns\WithUpserts;
 
-class ProductImport implements ToCollection, WithStartRow, WithBatchInserts, WithUpserts
+class ProductImport implements ToCollection, WithStartRow, WithBatchInserts
 {
 
     public $user;
-    public $countries;
 
     public function  __construct($user)
     {
         $this->user = $user;
-        $this->countries = Country::all();
     }
+
 
     public function collection(Collection $rows)
     {
-        foreach ($rows as $row) {
 
+        // dd($rows);
+
+        foreach ($rows as $row) {
             if (
                 isset($row[0]) &&
                 isset($row[1]) &&
+                isset($row[2]) &&
                 isset($row[3]) &&
                 isset($row[4]) &&
-                isset($row[5])
+                isset($row[5]) &&
+                isset($row[6])
             ) {
 
-                if ($this->countries->where('code', $row[5])->first()) {
-                    $country = $row[5];
-                } else {
-                    $country = 'AE';
-                }
-
-                Product::updateOrCreate([
+                $product = Product::where([
                     'GIN' => $row[0],
                     'lot_no' => $row[1],
-                ], [
-                    'description' => $row[2],
-                    'UOM' => $row[3],
-                    'category' => $row[4],
-                    'country_code' => $country,
-                    'status' => 1,
-                    'created_by' => $this->user->id,
-                    'updated_by' => $this->user->id,
-                ]);
+                ])->first();
+
+                if ($product) {
+
+                    $oversocked = 0;
+
+                    if ($row[6] == 'yes' || $row[6] == 'Yes') {
+                        $oversocked = 1;
+                    }
+
+                    DistributorProduct::updateOrCreate([
+                        'user_id' => $this->user->id,
+                        'product_id' => $product->id,
+                    ], [
+                        'stock_on_hand' => $row[2],
+                        'goods_in_transit' => $row[3],
+                        'stock_on_order' => $row[4],
+                        'avg_sales' => $row[5],
+                        'overstocked' => $oversocked,
+                    ]);
+                }
             }
         }
     }
@@ -81,15 +88,8 @@ class ProductImport implements ToCollection, WithStartRow, WithBatchInserts, Wit
     //         'UOM' => $row[3],
     //         'category' => $row[4],
     //         'status' => 1,
-    //         'created_by' => $this->user->id,
-    //         'updated_by' => $this->user->id,
     //     ]);
     // }
-
-    public function uniqueBy()
-    {
-        return 'email';
-    }
 
     public function startRow(): int
     {

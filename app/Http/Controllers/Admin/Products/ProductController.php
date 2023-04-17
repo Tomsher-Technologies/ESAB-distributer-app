@@ -116,7 +116,7 @@ class ProductController extends Controller
         if ($request->hasFile('product_file')) {
             $file = $request->file('product_file');
             $name = $file->getClientOriginalName();
-            $path = "public/admin_uploads/products/{$name}";
+            $path = "public/admin_uploads/products";
             $upload = Storage::put($path, $file);
 
             Auth()->user()->uploads()->create([
@@ -124,7 +124,7 @@ class ProductController extends Controller
                 'path' =>  str_replace('public/', 'storage/', $upload),
             ]);
 
-            // Excel::import(new ProductImport, $request->product_file);
+            Excel::import(new ProductImport(Auth()->user()), $request->product_file);
 
             return back()->with([
                 'status' => "File Imported"

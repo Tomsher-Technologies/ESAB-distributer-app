@@ -2,6 +2,7 @@
 
 namespace App\Models\Product;
 
+use App\Models\Country;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -18,5 +19,18 @@ class Product extends Model
         'UOM',
         'category',
         'status',
+        'country_code',
+        'created_by',
+        'updated_by',
     ];
+
+    public function disProduct()
+    {
+        return $this->hasMany(DistributorProduct::class);
+    }
+
+    public function country()
+    {
+        return $this->belongsTo(Country::class, 'country_code', 'code');
+    }
 }
