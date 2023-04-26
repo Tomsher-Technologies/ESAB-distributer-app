@@ -15,6 +15,12 @@ class CreateProductsTable extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
+            $table->string('GIN');
+            $table->text('description')->nullable();
+            $table->string('UOM')->nullable();
+            $table->string('category');
+            // $table->string('country_code');
+            $table->boolean('status')->default(1);
             $table->timestamps();
         });
     }

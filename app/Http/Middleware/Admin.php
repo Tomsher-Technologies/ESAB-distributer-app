@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Bouncer;
+use Illuminate\Support\Facades\Auth;
 
 class Admin
 {
@@ -17,8 +18,10 @@ class Admin
      */
     public function handle(Request $request, Closure $next)
     {
-        if (auth()->user()->isAn('admin') || auth()->user()->isAn('manager')) {
+        if (!auth()->user()->isAn('distributor')) {
             return $next($request);
+        } else if (Auth::check()) {
+            return redirect()->route('distributor.dashboard');
         }
         return redirect('home')->with('error', 'Permission Denied!!! You do not have administrative access.');
     }

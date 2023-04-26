@@ -20,12 +20,14 @@ class Authenticate extends Middleware
 
             $prefix = explode('.', $prefix)[0];
 
-            if ($prefix == 'distributor') {
-                return route('distributor.login');
-            }
-            if ($prefix == 'admin' || $prefix == 'manager') {
-                return route('admin.login');
-            }
+            return route('login');
+
+            // if ($prefix == 'distributor') {
+                
+            // }
+            // if ($prefix == 'admin' || $prefix == 'manager') {
+            //     return route('login');
+            // }
         }
     }
 }
