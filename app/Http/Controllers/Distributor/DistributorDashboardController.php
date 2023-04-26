@@ -7,12 +7,13 @@ use App\Models\Country;
 use App\Models\Product\DistributorProduct;
 use App\Models\Product\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class DistributorDashboardController extends Controller
 {
     public function index(Request $request)
     {
-        $query = DistributorProduct::where('overstocked', 1)->latest();
+        $query = DistributorProduct::where('overstocked', 1)->where('user_id', '!=', Auth()->user()->id)->latest();
 
         if ($request->search) {
             if ($request->category !== 'all') {

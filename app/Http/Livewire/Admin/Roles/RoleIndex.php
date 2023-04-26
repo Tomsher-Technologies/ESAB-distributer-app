@@ -4,7 +4,7 @@ namespace App\Http\Livewire\Admin\Roles;
 
 use Livewire\Component;
 use Silber\Bouncer\Database\Role;
-
+use Bouncer;
 class RoleIndex extends Component
 {
     public $deleteid;
@@ -24,6 +24,9 @@ class RoleIndex extends Component
             $user->delete();
             $this->dispatchBrowserEvent('deleted');
         }
+
+        Bouncer::refresh();
+
         $this->reset('deleteid');
     }
 

@@ -51,6 +51,8 @@ class RoleCreate extends Component
         $this->reset('name');
         $this->reset('selectpermission');
 
+        Bouncer::refresh();
+
         $this->dispatchBrowserEvent('created');
     }
 

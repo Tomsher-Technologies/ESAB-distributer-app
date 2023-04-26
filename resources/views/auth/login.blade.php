@@ -29,7 +29,7 @@
                                         <div class="col-12">
                                             <label for="email" class="form-label">Email</label>
                                             <div class="input-group has-validation">
-                                                <input type="email" autocomplete="email" name="email"
+                                                <input autofocus type="email" autocomplete="email" name="email"
                                                     value="test@test.com" value="{{ old('email') }}" class="form-control"
                                                     id="email" required>
                                                 <div class="invalid-feedback">Please enter your email.</div>

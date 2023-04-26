@@ -44,10 +44,72 @@ class BouncerSeeder extends Seeder
 
         // $admin_user->assign('admin');
 
-        // $ban = Bouncer::ability()->firstOrCreate([
-        //     'name' => 'manage-distributor',
-        //     'title' => 'Manage Distributor',
-        // ]);
+        $ban = Bouncer::ability()->firstOrCreate([
+            'name' => 'manage-distributor',
+            'title' => 'Manage Distributor',
+        ]);
+        $ban = Bouncer::ability()->firstOrCreate([
+            'name' => 'view-distributor',
+            'title' => 'View Distributor',
+        ]);
+        $ban = Bouncer::ability()->firstOrCreate([
+            'name' => 'create-distributor',
+            'title' => 'Create Distributor',
+        ]);
+        $ban = Bouncer::ability()->firstOrCreate([
+            'name' => 'edit-distributor',
+            'title' => 'Edit Distributor',
+        ]);
+        $ban = Bouncer::ability()->firstOrCreate([
+            'name' => 'delete-distributor',
+            'title' => 'Delete Distributor',
+        ]);
+
+
+        $ban = Bouncer::ability()->firstOrCreate([
+            'name' => 'view-request',
+            'title' => 'View Request',
+        ]);
+        $ban = Bouncer::ability()->firstOrCreate([
+            'name' => 'manage-request',
+            'title' => 'Manage Request',
+        ]);
+
+        $ban = Bouncer::ability()->firstOrCreate([
+            'name' => 'manage-roles',
+            'title' => 'Manage Roles',
+        ]);
+
+        $ban = Bouncer::ability()->firstOrCreate([
+            'name' => 'manage-users',
+            'title' => 'Manage Users',
+        ]);
+
+
+        $ban = Bouncer::ability()->firstOrCreate([
+            'name' => 'view-products',
+            'title' => 'View Products',
+        ]);
+        $ban = Bouncer::ability()->firstOrCreate([
+            'name' => 'create-products',
+            'title' => 'Create Products',
+        ]);
+        $ban = Bouncer::ability()->firstOrCreate([
+            'name' => 'edit-products',
+            'title' => 'Edit Products',
+        ]);
+        $ban = Bouncer::ability()->firstOrCreate([
+            'name' => 'delete-products',
+            'title' => 'Delete Products',
+        ]);
+        $ban = Bouncer::ability()->firstOrCreate([
+            'name' => 'upload-products',
+            'title' => 'Upload Products',
+        ]);
+        $ban = Bouncer::ability()->firstOrCreate([
+            'name' => 'view-upload-history',
+            'title' => 'View Upload History',
+        ]);
 
     }
 }

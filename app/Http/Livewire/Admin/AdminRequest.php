@@ -18,7 +18,9 @@ class AdminRequest extends Component
     public $from = 0;
     public $to = 0;
     public $gin = 0;
-    public $status = 0;
+    public $status = 'all';
+
+    public $showReset = 0;
 
     public function mount()
     {
@@ -32,16 +34,22 @@ class AdminRequest extends Component
         $this->dispatchBrowserEvent('created');
     }
 
+    public function markRejected($id)
+    {
+        Request::whereId($id)->update(['status' => 3]);
+        $this->dispatchBrowserEvent('created');
+    }
+
     public function render()
     {
         $query = Request::latest();
-
-        // dd($this->date);
 
         if ($this->date !== '' && $this->date !== null) {
             $start = Carbon::parse($this->date)->startOfDay();
             $end = Carbon::parse($this->date)->endOfDay();
             $query->whereBetween('created_at', [$start, $end]);
+
+            $this->showReset = 1;
         }
 
         if ($this->from !== '0' && $this->from !== 0) {
@@ -49,6 +57,7 @@ class AdminRequest extends Component
             $query->whereHas('fromDistributor', function ($q) use ($from) {
                 return $q->where('id', $from);
             });
+            $this->showReset = 1;
         }
 
         if ($this->to !== '0' && $this->to !== 0) {
@@ -56,6 +65,7 @@ class AdminRequest extends Component
             $query->whereHas('toDistributor', function ($q) use ($to) {
                 return $q->where('id', $to);
             });
+            $this->showReset = 1;
         }
 
         if ($this->gin !== '0' && $this->gin !== 0) {
@@ -63,10 +73,12 @@ class AdminRequest extends Component
             $query->whereHas('product', function ($q) use ($gin) {
                 return $q->where('id', $gin);
             });
+            $this->showReset = 1;
         }
 
-        if ($this->status !== '0' && $this->status !== 0) {
+        if ($this->status !== 'all') {
             $query->where('status', $this->status);
+            $this->showReset = 1;
         }
 
         $requests =  $query->with([
@@ -81,5 +93,17 @@ class AdminRequest extends Component
             ->with([
                 'requests' => $requests
             ]);
+    }
+
+    public function resetForm()
+    {
+        $this->reset([
+            'date',
+            'from',
+            'to',
+            'gin',
+            'status',
+            'showReset',
+        ]);
     }
 }

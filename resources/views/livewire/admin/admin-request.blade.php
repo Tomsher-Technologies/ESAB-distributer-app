@@ -47,13 +47,21 @@
                                     <label for="#">Status</label>
                                     <select wire:model.lazy="status" class="form-select form-control"
                                         id="floatingSelect" aria-label="Floating label select example">
-                                        <option selected="" value="0">All</option>
+                                        <option selected="" value="all">All</option>
                                         <option value="1">Pending</option>
+                                        <option value="3">Rejected</option>
                                         <option value="2">Completed</option>
-                                        {{-- <option value="3">Rejected</option> --}}
                                     </select>
                                 </div>
-
+                                @if ($showReset)
+                                    <div class="col-sm-3">
+                                        <label for="#">&nbsp;</label>
+                                        <button wire:click="resetForm()" type="button" value="1"
+                                            class="btn btn-primary w-100">
+                                            Clear
+                                        </button>
+                                    </div>
+                                @endif
                             </div>
                         </form><!-- End General Form Elements -->
                     </div>
@@ -91,11 +99,20 @@
                                         <td>{{ $request->created_at->format('d-m-Y') }}</td>
                                         <td>
                                             @if ($request->status == 1)
-                                                <button class="btn btn-view" wire:click="markCompleted({{ $request->id }})">
+                                                <button class="btn btn-view"
+                                                    wire:click="markCompleted({{ $request->id }})">
                                                     <i class="bi bi-check-all"></i> Mark as Completed
                                                 </button>
+                                                <button class="btn btn-delete"
+                                                    wire:click="markRejected({{ $request->id }})">
+                                                    Reject
+                                                </button>
                                             @else
-                                                <b class="clr_grn">Completed</b>
+                                                @if ($request->status == 2)
+                                                    <b class="clr_grn">Completed</b>
+                                                @else
+                                                    <b class="clr_red">Rejected</b>
+                                                @endif
                                             @endif
                                         </td>
                                     </tr>

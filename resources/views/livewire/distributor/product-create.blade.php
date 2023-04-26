@@ -48,7 +48,7 @@
                                             <label for="#">GIN Number</label>
                                             <select wire:change="changeGin({{ $key }})"
                                                 wire:model="inputs.{{ $key }}.gin" name="gin"
-                                                class="form-select form-control  @error('inputs.{{ $key }}.gin') {{ $message }} @enderror">
+                                                class="form-select form-control <x-form.error-class name='inputs.{{ $key }}.gin' />">
                                                 <option selected disabled value="0">Select</option>
                                                 @foreach ($gins as $gin)
                                                     <option value="{{ $gin->id }}">{{ $gin->GIN }}</option>
@@ -59,13 +59,15 @@
                                             <label for="#">Lot</label>
                                             <select wire:change="changeLot({{ $key }},$event.target.value)"
                                                 wire:model="inputs.{{ $key }}.lot" name="lot"
-                                                class="form-select form-control @error('inputs.{{ $key }}.lot') {{ $message }} @enderror">
-                                                <option selected disabled value="0">Select</option>
+                                                class="form-select form-control <x-form.error-class name='inputs.{{ $key }}.lot' />">
+
                                                 @if (array_key_exists($key, $lots))
                                                     @foreach ($lots[$key] as $lot)
                                                         <option value="{{ $lot['id'] }}">{{ $lot['lot_no'] }}
                                                         </option>
                                                     @endforeach
+                                                @else
+                                                    <option selected value="0">Select</option>
                                                 @endif
                                             </select>
                                         </div>
@@ -116,9 +118,9 @@
                                             <select wire:model="inputs.{{ $key }}.over_stock"
                                                 class="form-select form-control <x-form.error-class name='inputs.{{ $key }}.over_stock' />"
                                                 id="">
-                                                <option selected disabled value="0">Select</option>
-                                                <option>Yes</option>
-                                                <option>No</option>
+                                                <option selected disabled value="3">Select</option>
+                                                <option value="1">Yes</option>
+                                                <option value="0">No</option>
                                             </select>
                                         </div>
                                         <div class="col-md-1 w-auto align-self-center align-items-center">
@@ -143,4 +145,14 @@
             </div>
         </section>
     </form>
+
+    <script>
+        window.addEventListener('created', event => {
+            Swal.fire({
+                title: 'Products added successfully!',
+                icon: 'success'
+            });
+        })
+    </script>
+
 </div>

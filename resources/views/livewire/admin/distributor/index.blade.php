@@ -17,9 +17,11 @@
                             </div> --}}
                         </div>
                     </form>
-                    <a class="btn btn-secondary ms-3 py-2" href="{{ route('admin.distributor.create') }}"> ADD
-                        <i class="bi bi-plus-lg"></i>
-                    </a>
+                    @if (auth()->user()->can('create-distributor'))
+                        <a class="btn btn-secondary ms-3 py-2" href="{{ route('admin.distributor.create') }}"> ADD
+                            <i class="bi bi-plus-lg"></i>
+                        </a>
+                    @endif
                 </div>
                 <div class="card">
                     <div class="card-body">
@@ -52,14 +54,14 @@
                                         <td>
                                             <span>
                                                 <a href="{{ route('admin.distributor.edit', $distributor->id) }}"
-                                                    class="text-dark pe-2">
+                                                    class="btn btn-view">
                                                     <i class="bi bi-pencil-square"></i>
                                                 </a>
                                             </span>
                                             <span>
                                                 <a href="#" data-id="{{ $distributor->id }}"
                                                     data-bs-toggle="modal" data-bs-target="#exampleModal"
-                                                    class="text-danger">
+                                                    class="btn btn-delete">
                                                     <i class="bi bi-trash3-fill"></i>
                                                 </a>
                                             </span>

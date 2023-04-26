@@ -6,6 +6,8 @@ use Illuminate\Validation\Rule;
 use Livewire\Component;
 use Silber\Bouncer\Database\Ability;
 use Silber\Bouncer\Database\Role;
+use Bouncer;
+use Illuminate\Support\Facades\DB;
 
 class RoleEdit extends Component
 {
@@ -42,8 +44,27 @@ class RoleEdit extends Component
     {
         $this->validate();
 
+        $abilities = Ability::all();;
 
+        DB::table('permissions')->where('entity_id', $this->role->id)->delete();
+
+        foreach ($this->selectpermission as $selectpermission) {
+
+            Bouncer::allow($this->role)->to($selectpermission);
+
+            // $id = $abilities->where('name', $selectpermission)->first()->id;
+            // if ($id) {
+            //     DB::table('permissions')->insert([
+            //         'ability_id' => $id,
+            //         'entity_id' => $this->role->id,
+            //         'entity_type' => 'role',
+            //         'forbidden' => 0,
+            //         'scope' => null
+            //     ]);
+            // }
+        }
         $this->role->save();
+        Bouncer::refresh();
         $this->dispatchBrowserEvent('updated');
     }
 

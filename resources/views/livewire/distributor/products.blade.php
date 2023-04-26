@@ -52,8 +52,8 @@
                                             Clear Search
                                         </button>
                                     @endif
-                                    {{-- <a class="btn btn-secondary align-self-end" href="#"> <i
-                                            class="bi bi-download"></i> Download</a> --}}
+                                    <a class="btn btn-secondary align-self-end" href="#"> <i
+                                            class="bi bi-download"></i> Download</a>
                                 </div>
                             </div>
                         </div>

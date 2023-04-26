@@ -21,11 +21,18 @@ use Illuminate\Support\Facades\Route;
 
 Route::group(['prefix' => env('ADMIN_PREFIX', 'admin'), 'as' => 'admin.'], function () {
     Route::get('/', function () {
+        // dd( auth()->user()->can('manage-distributor') );
         return redirect()->route('admin.dashboard');
     });
     Route::middleware(['auth', 'auth.session', 'admin'])->group(function () {
         // Route::post('logout', [LoginController::class, 'logout'])->name('logout');
         Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
+        Route::post('dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+        Route::get('dashboard/download', function(){
+            return redirect()->route('admin.dashboard');
+        })->name('dashboard.download');
+        Route::post('dashboard/download', [DashboardController::class, 'download'])->name('dashboard.download');
 
         Route::group(['prefix' => 'roles', 'as' => 'roles.'], function () {
             Route::get('/', RoleIndex::class)->name('index');

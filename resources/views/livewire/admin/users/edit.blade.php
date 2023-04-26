@@ -39,9 +39,9 @@
 
                                 <div class="col-sm-4">
                                     <label for="#">Role</label>
-                                    <select wire:model="user.role" name="role" class="form-select form-control">
+                                    <select wire:model="role" name="role" class="form-select form-control">
                                         @foreach ($roles as $_role)
-                                            <option value="{{ $_role->name }}">{{ $_role->title }}</option>
+                                            <option {{ $_role->name == $role ? "selected" : "" }} value="{{ $_role->name }}">{{ $_role->title }}</option>
                                         @endforeach
                                     </select>
                                     <x-form.l-w-error name="role" />

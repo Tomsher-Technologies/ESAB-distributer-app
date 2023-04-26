@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Validation\Rule;
 use Livewire\Component;
 use Silber\Bouncer\Database\Role;
+use Bouncer;
 
 class Edit extends Component
 {
@@ -13,6 +14,7 @@ class Edit extends Component
     public $user;
     public $roles;
     public $role;
+    public $user_role;
     public $password;
     public $password_confirmation;
 
@@ -20,6 +22,8 @@ class Edit extends Component
     {
         $this->user = $user;
         $this->roles = Role::where('name', '!=', 'distributor')->get();
+        $this->user_role = $user->getRoles();
+        $this->role = $this->user_role[0];
     }
 
     protected function rules()
@@ -30,6 +34,7 @@ class Edit extends Component
             'password' => ['nullable', 'min:8'],
             'password_confirmation' => ['required_with:password', 'same:password'],
             'user.status' => ['required'],
+            'role' => ['required'],
         ];
     }
 
@@ -46,12 +51,20 @@ class Edit extends Component
     {
         $this->validate();
 
-        if ($this->password !== "") {
+        if ($this->password !== null) {
             $this->user->password = $this->password;
             $this->reset([
                 'password_confirmation',
                 'password'
             ]);
+        }
+
+        if (!in_array($this->role, $this->user_role->toArray())) {
+            foreach ($this->user_role as $role) {
+                $this->user->retract($role);
+            }
+            $this->user->assign($this->role);
+            Bouncer::refresh();
         }
 
         $this->user->save();

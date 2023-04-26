@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Admin\Users;
 use App\Models\User;
 use Livewire\Component;
 use Silber\Bouncer\Database\Role;
+use Bouncer;
 
 class Create extends Component
 {
@@ -23,7 +24,7 @@ class Create extends Component
     {
         return [
             'name' => 'required',
-            'email' => ['required', 'email', 'unique'],
+            'email' => ['required', 'email', 'unique:users'],
             'password' => ['required', 'min:8'],
             'password_confirmation' => ['required_with:password', 'same:password'],
             'status' => ['required'],
@@ -65,6 +66,8 @@ class Create extends Component
             'password_confirmation',
             'status',
         ]);
+
+        Bouncer::refresh();
 
         $this->dispatchBrowserEvent('created');
     }

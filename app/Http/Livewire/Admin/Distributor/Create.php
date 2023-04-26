@@ -39,7 +39,7 @@ class Create extends Component
         return [
             'company_name' => 'required',
             'name' => 'required',
-            'email' => ['required', 'email', 'unique'],
+            'email' => ['required', 'email', 'unique:users'],
             'phone' => ['required'],
             'address' => ['required'],
             'country' => ['required'],

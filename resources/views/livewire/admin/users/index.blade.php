@@ -40,7 +40,7 @@
                                         <td>{{ $loop->iteration }}</td>
                                         <td>{{ $user->name }}</td>
                                         <td>{{ $user->email }}</td>
-                                        <td>{{ $user->name }}</td>
+                                        <td>{{ $user->roles->first()->title }}</td>
                                         <td>
                                             <span>
                                                 <a href="{{ route('admin.users.edit', $user->id) }}"

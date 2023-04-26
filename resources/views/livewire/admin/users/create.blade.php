@@ -32,8 +32,8 @@
                                 </div>
                                 <div class="col-sm-4">
                                     <label for="#">Confirm Password </label>
-                                    <input type="password" wire:model.debounce.500ms="password_confirmation" class="form-control"
-                                        placeholder="Enter Confirm Password ">
+                                    <input type="password" wire:model.debounce.500ms="password_confirmation"
+                                        class="form-control" placeholder="Enter Confirm Password ">
                                     <x-form.l-w-error name="password_confirmation" />
                                 </div>
 
