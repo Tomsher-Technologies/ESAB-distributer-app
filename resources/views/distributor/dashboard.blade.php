@@ -56,7 +56,12 @@
                         </form><!-- End General Form Elements -->
                     </div>
                 </div>
-
+                <x-form.success />
+                @if (session('error'))
+                    <div class="alert alert-danger">
+                        {{ session('error') }}
+                    </div>
+                @endif
                 <div class="card">
                     <div class="card-body">
                         <!-- Bordered Table -->
@@ -86,15 +91,27 @@
                                             <td> <b class="clr_red me-2">No</b> </td>
                                         @endif
                                         <td>
-
-                                            <form action="{{ route('distributor.product.request') }}" method="POST">
-                                                @csrf
-                                                <input type="hidden" name="id" value="{{ $pro->id }}">
-                                                <input type="hidden" name="from" value="{{ $pro->user_id }}">
-                                                <button type="submit" class="btn btn-view">
-                                                    Request
-                                                </button>
-                                            </form>
+                                            @if ( $pro->product->request->where('from_distributor', auth()->user()->id)->count() )
+                                                Already requested
+                                            @else
+                                                <form class="form-inline"
+                                                    action="{{ route('distributor.product.request') }}" method="POST">
+                                                    @csrf
+                                                    <input type="hidden" name="id" value="{{ $pro->product->id }}">
+                                                    <input type="hidden" name="to" value="{{ $pro->user_id }}">
+                                                    <div class="row">
+                                                        <div class="col-9">
+                                                            <input type="number" required max="{{ $pro->stock_on_hand }}"
+                                                                class="form-control" name="quantity" placeholder="Quantity">
+                                                        </div>
+                                                        <div class="col-3">
+                                                            <button type="submit" class="btn btn-view h-100 w-100">
+                                                                Request
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            @endif
                                         </td>
                                     </tr>
                                 @endforeach

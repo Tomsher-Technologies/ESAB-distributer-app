@@ -30,8 +30,8 @@
                                             <label for="email" class="form-label">Email</label>
                                             <div class="input-group has-validation">
                                                 <input autofocus type="email" autocomplete="email" name="email"
-                                                    value="test@test.com" value="{{ old('email') }}" class="form-control"
-                                                    id="email" required>
+                                                    value="{{ old('email') }}" class="form-control" id="email"
+                                                    required>
                                                 <div class="invalid-feedback">Please enter your email.</div>
                                             </div>
                                             @error('email')
@@ -41,8 +41,8 @@
 
                                         <div class="col-12">
                                             <label for="password" class="form-label">Password</label>
-                                            <input type="password" name="password" class="form-control" value="password"
-                                                id="password" required>
+                                            <input type="password" name="password" class="form-control" id="password"
+                                                required>
                                             @error('password')
                                                 <div class="alert alert-danger mb-0 mt-1">{{ $message }}</div>
                                             @enderror
