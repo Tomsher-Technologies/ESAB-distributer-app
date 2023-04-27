@@ -12,8 +12,8 @@
                             <div class="row g-3">
                                 <div class="col-sm-4">
                                     <label for="#">Company Name</label>
-                                    <input type="text" wire:model="dist.distributor.company_name" class="form-control"
-                                        placeholder="Enter Company Name">
+                                    <input type="text" wire:model="dist.distributor.company_name"
+                                        class="form-control" placeholder="Enter Company Name">
                                     <x-form.l-w-error name="company_name" />
                                 </div>
                                 <div class="col-sm-4">
@@ -30,8 +30,8 @@
                                 </div>
                                 <div class="col-sm-4">
                                     <label for="#">Phone</label>
-                                    <input type="number" class="form-control" wire:model="dist.distributor.phone"
-                                        placeholder="Enter Phone">
+                                    <input type="text" id="validateNumber" class="form-control"
+                                        wire:model="dist.distributor.phone" placeholder="Enter Phone">
                                     <x-form.l-w-error name="phone" />
                                 </div>
                                 <div class="col-sm-4">
@@ -42,7 +42,8 @@
                                 </div>
                                 <div class="col-sm-4">
                                     <label for="#">Country</label>
-                                    <select name="country" wire:model="dist.distributor.country_code" class="form-select form-control">
+                                    <select name="country" wire:model="dist.distributor.country_code"
+                                        class="form-select form-control">
                                         @foreach ($countries as $country)
                                             <option value="{{ $country->code }}">{{ $country->name }}</option>
                                         @endforeach
@@ -51,20 +52,20 @@
                                 </div>
                                 <div class="col-sm-4">
                                     <label for="#">Password</label>
-                                    <input type="password" wire:model="password" class="form-control"
+                                    <input type="password" wire:model.lazy="password" class="form-control"
                                         placeholder="Enter Password">
                                     <x-form.l-w-error name="password" />
                                 </div>
                                 <div class="col-sm-4">
                                     <label for="#">Confirm Password </label>
-                                    <input type="password" wire:model="password_confirmation" class="form-control"
+                                    <input type="password" wire:model.lazy="password_confirmation" class="form-control"
                                         placeholder="Enter Confirm Password ">
                                     <x-form.l-w-error name="password_confirmation" />
                                 </div>
                                 <div class="col-sm-4">
                                     <label for="#">Status</label>
-                                    <select wire:model="dist.status" class="form-select form-control" id="floatingSelect"
-                                        aria-label="Floating label select example">
+                                    <select wire:model="dist.status" class="form-select form-control"
+                                        id="floatingSelect" aria-label="Floating label select example">
                                         <option value="1">Enabled</option>
                                         <option value="0">Disabled</option>
                                     </select>
@@ -72,7 +73,8 @@
                                 </div>
                                 <div class="col-sm-4">
                                     <label for="#">Manager</label>
-                                    <select wire:model="dist.distributor.manager_id" name="manager" class="form-select form-control">
+                                    <select wire:model="dist.distributor.manager_id" name="manager"
+                                        class="form-select form-control">
                                         @foreach ($managers as $manager)
                                             <option value="{{ $manager->id }}">{{ $manager->name }}</option>
                                         @endforeach
@@ -99,5 +101,12 @@
                 icon: 'success'
             });
         })
+
+        jQuery('#validateNumber').keypress(function(e) {
+            var charCode = (e.which) ? e.which : event.keyCode
+            console.log(charCode)
+            if (String.fromCharCode(charCode).match(/[^0-9]/g))
+                return false;
+        });
     </script>
 </div>

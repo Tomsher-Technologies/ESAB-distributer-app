@@ -15,7 +15,7 @@
                             </div>
                             <div class="col-sm-6">
                                 <label for="#">To</label>
-                                <input wire:model="form_end_date" type="date" class="form-control border-0">
+                                <input wire:model="form_end_date" min="{{ $form_start_date }}" type="date" class="form-control border-0">
                             </div>
                         </div>
                     </div>

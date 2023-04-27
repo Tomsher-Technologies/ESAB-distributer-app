@@ -125,4 +125,14 @@ class DashboardController extends Controller
 
         return Excel::download(new DashboardExport($products), $file_name);
     }
+
+    public function settingsView()
+    {
+        return view('admin.settings');
+    }
+
+    public function settings(Request $request)
+    {
+        // return view('admin.settings');
+    }
 }

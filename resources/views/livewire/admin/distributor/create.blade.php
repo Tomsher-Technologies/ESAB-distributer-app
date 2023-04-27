@@ -30,7 +30,7 @@
                                 </div>
                                 <div class="col-sm-4">
                                     <label for="#">Phone</label>
-                                    <input type="number" class="form-control" wire:model="phone"
+                                    <input type="text" id="validateNumber" class="form-control" wire:model="phone"
                                         placeholder="Enter Phone">
                                     <x-form.l-w-error name="phone" />
                                 </div>
@@ -51,13 +51,13 @@
                                 </div>
                                 <div class="col-sm-4">
                                     <label for="#">Password</label>
-                                    <input type="password" wire:model="password" class="form-control"
+                                    <input type="password" wire:model.lazy="password" class="form-control"
                                         placeholder="Enter Password">
                                     <x-form.l-w-error name="password" />
                                 </div>
                                 <div class="col-sm-4">
                                     <label for="#">Confirm Password </label>
-                                    <input type="password" wire:model="password_confirmation" class="form-control"
+                                    <input type="password" wire:model.lazy="password_confirmation" class="form-control"
                                         placeholder="Enter Confirm Password ">
                                     <x-form.l-w-error name="password_confirmation" />
                                 </div>
@@ -99,5 +99,12 @@
                 icon: 'success'
             });
         })
+
+        jQuery('#validateNumber').keypress(function(e) {
+            var charCode = (e.which) ? e.which : event.keyCode
+            console.log(charCode)
+            if (String.fromCharCode(charCode).match(/[^0-9]/g))
+                return false;
+        });
     </script>
 </div>

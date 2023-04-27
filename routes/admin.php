@@ -29,10 +29,13 @@ Route::group(['prefix' => env('ADMIN_PREFIX', 'admin'), 'as' => 'admin.'], funct
         Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
         Route::post('dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-        Route::get('dashboard/download', function(){
+        Route::get('dashboard/download', function () {
             return redirect()->route('admin.dashboard');
         })->name('dashboard.download');
         Route::post('dashboard/download', [DashboardController::class, 'download'])->name('dashboard.download');
+
+        Route::get('settings', [DashboardController::class, 'settingsView'])->name('settings');
+        Route::post('settings', [DashboardController::class, 'settings'])->name('settings ');
 
         Route::group(['prefix' => 'roles', 'as' => 'roles.'], function () {
             Route::get('/', RoleIndex::class)->name('index');

@@ -9,7 +9,7 @@
 
     <!-- Favicons -->
     <link href="{{ adminAsset('img/favicon.png') }}" rel="icon">
-    <link href="{{ adminAsset('img/apple-touch-icon.png') }}" rel="apple-touch-icon">
+    <link href="{{ adminAsset('img/favicon.png') }}" rel="apple-touch-icon">
 
     <!-- Google Fonts -->
     <link href="https://fonts.gstatic.com" rel="preconnect">
