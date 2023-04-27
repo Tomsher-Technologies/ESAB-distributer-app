@@ -3,12 +3,15 @@
 namespace App\Http\Controllers\Distributor;
 
 use App\Http\Controllers\Controller;
+use App\Mail\NewRequest;
 use App\Models\Country;
 use App\Models\Product\DistributorProduct;
 use App\Models\Product\Product;
 use App\Models\Product\Request as ProductRequest;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 class DistributorDashboardController extends Controller
 {
@@ -54,6 +57,12 @@ class DistributorDashboardController extends Controller
                 'quantity' => $request->quantity,
                 'status' => 1
             ]);
+
+            $manager =  User::find(Auth::user()->distributor->manager_id);
+
+            Mail::to($request->user())
+                ->cc($manager)
+                ->send(new NewRequest($request));
 
             return back()->with([
                 'status' => "Request has been sent to admin"

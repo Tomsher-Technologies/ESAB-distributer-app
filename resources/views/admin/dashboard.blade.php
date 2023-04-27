@@ -187,7 +187,7 @@
                     <div class="col-xxl-3 col-xl-12">
                         <div class="card info-card customers-card overstock-card">
                             <div class="card-body">
-                                <h5 class="card-title">No. of Distributor</h5>
+                                <h5 class="card-title">No. of Distributor with Stock</h5>
                                 <div class="d-flex align-items-center">
                                     <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
                                         <i class="bi bi-shop-window"></i>

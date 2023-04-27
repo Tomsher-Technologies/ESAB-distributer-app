@@ -5,6 +5,9 @@ use App\Http\Controllers\Distributor\ProductsController;
 use App\Http\Controllers\Distributor\UploadController;
 use App\Http\Livewire\Distributor\ProductHistory;
 use App\Http\Livewire\Distributor\Products;
+use App\Models\Product\Request;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -21,6 +24,9 @@ use Illuminate\Support\Facades\Route;
 
 Route::group(['prefix' => 'distributor', 'as' => 'distributor.'], function () {
     Route::get('/', function () {
+        // $request = Request::with(['fromDistributor', 'toDistributor', 'product'])->find(6);
+        // return new App\Mail\NewRequest($request);
+
         return redirect()->route('distributor.dashboard');
     });
     Route::middleware(['auth', 'auth.session', 'distributor'])->group(function () {
