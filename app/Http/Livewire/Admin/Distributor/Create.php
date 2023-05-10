@@ -20,7 +20,7 @@ class Create extends Component
     public $email;
     public $phone;
     public $address;
-    public $country = 0;
+    public $country = 'AE';
     public $password;
     public $password_confirmation;
     public $status = 1;
@@ -29,7 +29,7 @@ class Create extends Component
     public function mount()
     {
         $this->countries = Country::all();
-        $this->country = $this->countries->first()->id;
+        // $this->country = $this->countries->first()->id;
 
         $this->users = User::WhereIsNot('distributor')->get();
     }

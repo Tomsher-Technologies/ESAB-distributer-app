@@ -58,11 +58,11 @@ class DistributorDashboardController extends Controller
                 'status' => 1
             ]);
 
-            $manager =  User::find(Auth::user()->distributor->manager_id);
+            // $manager =  User::find(Auth::user()->distributor->manager_id);
 
-            Mail::to($request->user())
-                ->cc($manager)
-                ->send(new NewRequest($request));
+            // Mail::to($request->user())
+            //     ->cc($manager)
+            //     ->send(new NewRequest($request));
 
             return back()->with([
                 'status' => "Request has been sent to admin"
