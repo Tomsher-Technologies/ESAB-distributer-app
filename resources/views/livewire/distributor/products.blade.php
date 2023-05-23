@@ -11,35 +11,41 @@
                         <div class="row g-3">
                             <div class="col-sm-4">
                                 <label for="#">GIN Number</label>
-                                <select wire:model="selected_gin" class="form-select form-control" id="floatingSelect"
-                                    aria-label="Floating label select example">
-                                    <option value="all" selected="0">All</option>
-                                    @foreach ($gins as $gin)
-                                        <option value="{{ $gin->product->id }}">{{ $gin->product->GIN }}</option>
-                                    @endforeach
-                                </select>
+                                <div wire:ignore>
+                                    <select wire:model="selected_gin" class="form-select form-control select2Picker2"
+                                        data-model="selected_gin" multiple>
+                                        <option value="all" selected="0">All</option>
+                                        @foreach ($gins as $gin)
+                                            <option value="{{ $gin->product->id }}">{{ $gin->product->GIN }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
                             </div>
                             <div class="col-sm-4">
                                 <label for="#">Category</label>
-                                <select wire:model="category" class="form-select form-control" id="floatingSelect"
-                                    aria-label="Floating label select example">
-                                    <option selected="" value="all">All</option>
-                                    <option value="FM">FM</option>
-                                    <option value="Non-FM">Non-FM</option>
-                                </select>
+                                <div wire:ignore>
+                                    <select wire:model="category" class="form-select form-control select2Picker2"
+                                        data-model="category">
+                                        <option selected="" value="all">All</option>
+                                        <option value="FM">FM</option>
+                                        <option value="Non-FM">Non-FM</option>
+                                    </select>
+                                </div>
                             </div>
                             <div class="col-sm-4">
                                 <label for="#">Overstocked</label>
-                                <select wire:model="overstocked" class="form-select form-control" id="floatingSelect"
-                                    aria-label="Floating label select example">
-                                    <option selected="" value="all">All</option>
-                                    <option value="1">Yes</option>
-                                    <option value="0">No </option>
-                                </select>
+                                <div wire:ignore>
+                                    <select wire:model="overstocked" class="form-select form-control select2Picker2"
+                                        data-model="overstocked">
+                                        <option selected="" value="all">All</option>
+                                        <option value="1">Yes</option>
+                                        <option value="0">No </option>
+                                    </select>
+                                </div>
                             </div>
                             <div class="col-sm-4">
                                 <label for="#">From</label>
-                                <input wire:model="start_date" type="date" class="form-control">
+                                <input wire:model="start_date" type="date" class="form-control ">
                             </div>
                             <div class="col-sm-4">
                                 <label for="#">To</label>
@@ -109,5 +115,42 @@
             </div>
         </div>
     </section>
+
+    <script>
+        window.loadContactDeviceSelect2 = () => {
+            $('.select2Picker2').select2({
+                placeholder: 'Select an option',
+                disabled: $(this).data('disabled') ?? false,
+                maximumSelectionLength: $(this).data('max') ?? 0,
+            }).on('select2:select', function(e) {
+                var data = e.params.data;
+                if (data.id == 'all') {
+                    $(this).val('all').change();
+                } else {
+                    var wanted_option = $(this).find('option[value="all"]');
+                    wanted_option.prop('selected', false);
+                    $(this).trigger('change.select2');
+                }
+
+                var model = $(this).data('model')
+                var data = $(this).select2("val");
+                @this.set(model, data);
+            }).on('change', function() {
+                var count = $(this).select2('data').length
+                console.log(count);
+                if (count == 0) {
+                    $(this).val('all').change();
+                }
+
+                var model = $(this).data('model')
+                var data = $(this).select2("val");
+                @this.set(model, data);
+            });
+        }
+        loadContactDeviceSelect2();
+        window.livewire.on('loadContactDeviceSelect2', () => {
+            loadContactDeviceSelect2();
+        });
+    </script>
 
 </div>
