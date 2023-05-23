@@ -44,7 +44,17 @@ class  UploadController extends Controller
                 'path' =>  str_replace('public/', 'storage/', $upload),
             ]);
 
-            Excel::import(new ProductImport(Auth()->user()), $request->product_file);
+            $import = new ProductImport(Auth()->user());
+            Excel::import($import, $request->product_file);
+
+            // dd($import->errors);
+
+            if ($import->errors) {
+                return back()->with([
+                    'error_msg' => "There was errors in the excel, please see below.",
+                    'err_array' => $import->errors
+                ]);
+            }
 
             return back()->with([
                 'status' => "File Imported"

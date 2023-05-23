@@ -6,6 +6,7 @@ use App\Models\Product\Product;
 use App\Models\Product\Request;
 use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
 class AdminRequest extends Component
@@ -15,10 +16,10 @@ class AdminRequest extends Component
 
     // Form variables
     public $date;
-    public $from = 0;
-    public $to = 0;
-    public $gin = 0;
-    public $status = 'all';
+    public $from = array('all');
+    public $to = array('all');
+    public $gin = array('all');
+    public $status = array('all');
 
     public $showReset = 0;
 
@@ -44,6 +45,12 @@ class AdminRequest extends Component
     {
         $query = Request::latest();
 
+        if (!Auth::user()->isAn('admin')) {
+            $query->whereHas('fromDistributor.distributor', function ($q) {
+                return $q->where('manager_id', Auth::user()->id);
+            });
+        }
+
         if ($this->date !== '' && $this->date !== null) {
             $start = Carbon::parse($this->date)->startOfDay();
             $end = Carbon::parse($this->date)->endOfDay();
@@ -52,7 +59,7 @@ class AdminRequest extends Component
             $this->showReset = 1;
         }
 
-        if ($this->from !== '0' && $this->from !== 0) {
+        if (!in_array('all', $this->from)) {
             $from = $this->from;
             $query->whereHas('fromDistributor', function ($q) use ($from) {
                 return $q->where('id', $from);
@@ -60,7 +67,7 @@ class AdminRequest extends Component
             $this->showReset = 1;
         }
 
-        if ($this->to !== '0' && $this->to !== 0) {
+        if (!in_array('all', $this->to)) {
             $to = $this->to;
             $query->whereHas('toDistributor', function ($q) use ($to) {
                 return $q->where('id', $to);
@@ -68,7 +75,7 @@ class AdminRequest extends Component
             $this->showReset = 1;
         }
 
-        if ($this->gin !== '0' && $this->gin !== 0) {
+        if (!in_array('all', $this->gin)) {
             $gin = $this->gin;
             $query->whereHas('product', function ($q) use ($gin) {
                 return $q->where('id', $gin);
@@ -76,7 +83,7 @@ class AdminRequest extends Component
             $this->showReset = 1;
         }
 
-        if ($this->status !== 'all') {
+        if (!in_array('all', $this->status)) {
             $query->where('status', $this->status);
             $this->showReset = 1;
         }

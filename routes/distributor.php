@@ -35,6 +35,7 @@ Route::group(['prefix' => 'distributor', 'as' => 'distributor.'], function () {
 
         Route::get('products', Products::class)->name('products');
         Route::post('product/request', [DistributorDashboardController::class, 'request'])->name('product.request');
+        Route::get('product/getLot', [DistributorDashboardController::class, 'getLots'])->name('product.getLot');
 
         Route::get('upload/manual', [UploadController::class, 'manualView'])->name('uploads.manual');
 

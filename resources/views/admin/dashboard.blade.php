@@ -17,10 +17,10 @@
                             <div class="row g-3">
                                 <div class="col-sm-3">
                                     <label for="#">Country</label>
-                                    <select name="country" class="form-select form-control">
-                                        <option selected="" value="all">All</option>
+                                    <select name="country[]" class="form-select form-control select2Picker" multiple>
+                                        <option {{ optionSelected($old_request->country) }} value="all">All</option>
                                         @foreach ($countries as $country)
-                                            <option {{ $old_request->country == $country->code ? 'selected' : '' }}
+                                            <option {{ optionSelected($old_request->country, $country->code) }}
                                                 value="{{ $country->code }}">{{ $country->name }}</option>
                                         @endforeach
                                     </select>
@@ -28,10 +28,11 @@
 
                                 <div class="col-sm-3">
                                     <label for="#">Distributor</label>
-                                    <select name="distributor" class="form-select form-control">
-                                        <option selected="" value="all">All</option>
+                                    <select name="distributor[]" class="form-select form-control select2Picker"
+                                        data-live-search="true" multiple>
+                                        <option {{ optionSelected($old_request->distributor) }} value="all">All</option>
                                         @foreach ($distributors as $distributor)
-                                            <option {{ $old_request->distributor == $distributor->id ? 'selected' : '' }}
+                                            <option {{ optionSelected($old_request->distributor, $distributor->id) }}
                                                 value="{{ $distributor->id }}">{{ $distributor->name }}</option>
                                         @endforeach
                                     </select>
@@ -39,10 +40,11 @@
 
                                 <div class="col-sm-3">
                                     <label for="#">GIN Number</label>
-                                    <select name="gin" class="form-select form-control">
-                                        <option selected="" value="all">All</option>
+                                    <select name="gin[]" class="form-select form-control select2Picker"
+                                        data-live-search="true" multiple>
+                                        <option {{ optionSelected($old_request->gin) }} value="all">All</option>
                                         @foreach ($gins as $gin)
-                                            <option {{ $old_request->gin == $gin->id ? 'selected' : '' }}
+                                            <option {{ optionSelected($old_request->gin, $gin->id) }}
                                                 value="{{ $gin->id }}">{{ $gin->GIN }}</option>
                                         @endforeach
                                     </select>
@@ -50,7 +52,7 @@
 
                                 <div class="col-sm-3">
                                     <label for="#">Category</label>
-                                    <select name="category" class="form-select form-control" id="floatingSelect"
+                                    <select name="category" class="form-select form-control select2Picker"
                                         aria-label="Floating label select example">
                                         <option selected="" value="all">All</option>
                                         <option {{ $old_request->category == 'FM' ? 'selected' : '' }} value="FM">FM
@@ -61,7 +63,8 @@
                                 </div>
                                 <div class="col-sm-3">
                                     <label for="#">Overstocked</label>
-                                    <select name="overstock" class="form-select form-control" id="floatingSelect"
+                                    <select name="overstock" class="form-select form-control select2Picker"
+                                        data-live-search="true" id="floatingSelect"
                                         aria-label="Floating label select example">
                                         <option selected="" value="all">All</option>
                                         <option {{ $old_request->overstock == '1' ? 'selected' : '' }} value="1">Yes
@@ -107,9 +110,12 @@
 
                         <form method="POST" action="{{ route('admin.dashboard.download') }}">
                             @csrf
-                            <input type="hidden" name="d_country" value="{{ $old_request->country ?? 'all' }}">
-                            <input type="hidden" name="d_distributor" value="{{ $old_request->distributor ?? 'all' }}">
-                            <input type="hidden" name="d_gin" value="{{ $old_request->gin ?? 'all' }}">
+                            <input type="hidden" name="d_country"
+                                value="{{ $old_request->country ? implode(',', $old_request->country) : 'all' }}">
+                            <input type="hidden" name="d_distributor"
+                                value="{{ $old_request->distributor ? implode(',', $old_request->distributor) : 'all' }}">
+                            <input type="hidden" name="d_gin"
+                                value="{{ $old_request->gin ? implode(',', $old_request->gin) : 'all' }}">
                             <input type="hidden" name="d_category" value="{{ $old_request->category ?? 'all' }}">
                             <input type="hidden" name="d_overstock" value="{{ $old_request->overstock ?? 'all' }}">
                             <input type="hidden" name="d_from_date" value="{{ $old_request->from_date }}">
@@ -315,6 +321,38 @@
             $('#quick-view').modal('show');
         })
     </script>
+
+    {{-- <script>
+        // $(document).ready(function() {
+        //     console.log("a");
+        //     $('.selectpicker').each(function() {
+        //         $(this).on('select2:select', function(e) {
+        //             console.log("a");
+        //         })
+        //     });
+        // })
+
+        $('.selectpicker').on('changed.bs.select', function(e, clickedIndex, isSelected, previousValue) {
+            console.log(clickedIndex);
+            console.log(isSelected);
+            if (clickedIndex == 0) {
+                console.log("a");
+                $(this).selectpicker('deselectAll');
+                $(this).selectpicker('val', 'all');
+
+            } else {
+                // console.log("b");
+                // values = $(this).val();
+                // var arr = Object.keys(values).map(function(key) {
+                //     if (values[key] !== 'all') {
+                //         return values[key];
+                //     }
+                // });
+                // console.log(arr);
+                // $(this).selectpicker('val', arr);
+            }
+        });
+    </script> --}}
 
 @endsection
 

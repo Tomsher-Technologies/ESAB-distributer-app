@@ -11,6 +11,7 @@ use App\Models\Product\Request as ProductRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 
 class DistributorDashboardController extends Controller
@@ -19,58 +20,80 @@ class DistributorDashboardController extends Controller
     {
         $query = DistributorProduct::where('overstocked', 1)->where('user_id', '!=', Auth()->user()->id)->latest();
 
+        $old_lots = array();
+
         if ($request->search) {
             if ($request->category !== 'all') {
                 $query->whereRelation('product', 'category', $request->category);
             }
-            if ($request->country !== 'all') {
-                $query->whereRelation('product', 'country_code', $request->country);
+            if (!in_array('all', $request->country)) {
+                $country =  $request->country;
+                $query->whereHas('product', function ($q) use ($country) {
+                    return $q->where('country_code', $country);
+                });
+                // $query->whereRelation('product', 'country_code', $request->country);
             }
-            if ($request->gin !== 'all') {
-                $query->whereRelation('product', 'GIN', $request->gin);
+            if (!in_array('all', $request->gin)) {
+                $gin =  $request->gin;
+                $query->whereHas('product', function ($q) use ($gin) {
+                    return $q->where('id', $gin);
+                });
+                // $query->whereRelation('product', 'GIN', $request->gin);
             }
+
+            if (!in_array('all', $request->lot)) {
+                $lot =  $request->lot;
+                $query->whereHas('product', function ($q) use ($lot) {
+                    return $q->where('id', $lot);
+                });
+                // $query->whereRelation('product', 'GIN', $request->gin);
+            }
+
+            $gins = Product::whereStatus(true)->select('GIN')->whereIn('id', $request->gin)->get();
+            $r_gins = [];
+            foreach ($gins as $gin) {
+                $r_gins[] = $gin->GIN;
+            }
+
+            $old_lots = Product::whereIn('GIN', $r_gins)->select('id', 'lot_no')->get()->toArray();
         }
 
         $countries = Country::all();
         $products = $query->with(['product', 'product.country', 'product.request'])->get();
 
-        $gins = Product::whereStatus(true)->select('GIN')->latest()->get();
+        $gins = Product::whereStatus(true)->select('id', 'GIN')->latest()->get();
 
-        return view('distributor.dashboard', compact('countries', 'gins', 'products', 'request'));
+        return view('distributor.dashboard', compact('countries', 'gins', 'products', 'request', 'old_lots'));
     }
 
     public function request(Request $request)
     {
-        $old_request = ProductRequest::where([
+        $request = ProductRequest::create([
             'from_distributor' => Auth::user()->id,
             'to_distributor' => $request->to,
             'gin_no' => $request->id,
-        ])->count();
+            'quantity' => $request->quantity,
+            'status' => 1,
+        ]);
 
+        $tracking_number = 'REQ-' . Auth::user()->id . $request->to . $request->id . '-' . $request->id;
+        $request->tracking_number = $tracking_number;
+        $request->save();
 
-        if ($old_request <= 0) {
-            $request = ProductRequest::updateOrCreate([
-                'from_distributor' => Auth::user()->id,
-                'to_distributor' => $request->to,
-                'gin_no' => $request->id,
-            ], [
-                'quantity' => $request->quantity,
-                'status' => 1
-            ]);
+        // $manager =  User::find(Auth::user()->distributor->manager_id);
 
-            // $manager =  User::find(Auth::user()->distributor->manager_id);
-
-            // Mail::to($request->user())
-            //     ->cc($manager)
-            //     ->send(new NewRequest($request));
-
-            return back()->with([
-                'status' => "Request has been sent to admin"
-            ]);
-        }
+        // Mail::to($request->user())
+        //     ->cc($manager)
+        //     ->send(new NewRequest($request));
 
         return back()->with([
-            'error' => "You have already request for this GIN"
+            'status' => "Request has been sent to admin"
         ]);
+    }
+
+    public function getLots(Request $request)
+    {
+        $lots = Product::whereIn('GIN', $request->selectedGins)->select('id', 'lot_no')->get();
+        return json_encode($lots);
     }
 }

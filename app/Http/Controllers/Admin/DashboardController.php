@@ -27,16 +27,24 @@ class DashboardController extends Controller
         if ($request->search) {
             $query = DistributorProduct::latest();
 
-            if ($request->country !== 'all') {
-                $query->whereRelation('product', 'country_code', $request->country);
+            if (!in_array('all', $request->country)) {
+                $cnt = $request->country;
+                // $query->whereRelation('product', 'country_code', $request->country);
+                $query->whereRelation('product', function ($q) use ($cnt) {
+                    return $q->whereIn('country_code', $cnt);
+                });
             }
 
-            if ($request->distributor !== 'all') {
-                $query->where('user_id', $request->distributor);
+            if (!in_array('all', $request->distributor)) {
+                $query->whereIn('user_id', $request->distributor);
             }
 
-            if ($request->gin !== 'all') {
-                $query->whereRelation('product', 'id', $request->gin);
+            if (!in_array('all', $request->gin)) {
+                // $query->whereRelation('product', 'id', $request->gin);
+                $sgin = $request->gin;
+                $query->whereRelation('product', function ($q) use ($sgin) {
+                    return $q->whereIn('id', $sgin);
+                });
             }
 
             if ($request->category !== 'all') {
@@ -87,18 +95,32 @@ class DashboardController extends Controller
 
     public function download(Request $request)
     {
+
+        // dd($request);
+
+        $d_country = explode(',', $request->d_country);
+        $d_distributor = explode(',', $request->d_distributor);
+        $d_gin = explode(',', $request->d_gin);
+
         $query = DistributorProduct::latest();
 
-        if ($request->d_country !== 'all') {
-            $query->whereRelation('product', 'country_code', $request->d_country);
+        if (!in_array('all', $d_country)) {
+            $query->whereRelation('product', function ($q) use ($d_country) {
+                return $q->whereIn('country_code', $d_country);
+            });
+            // $query->whereRelation('product', 'country_code', $request->d_country);
         }
 
-        if ($request->d_distributor !== 'all') {
-            $query->where('user_id', $request->d_distributor);
+        if (!in_array('all', $d_distributor)) {
+            $query->whereIn('user_id', $d_distributor);
         }
 
-        if ($request->d_gin !== 'all') {
-            $query->whereRelation('product', 'id', $request->d_gin);
+
+        if (!in_array('all', $d_gin)) {
+            // $query->whereRelation('product', 'id', $request->d_gin);
+            $query->whereRelation('product', function ($q) use ($d_gin) {
+                return $q->whereIn('id', $d_gin);
+            });
         }
 
         if ($request->d_category !== 'all') {

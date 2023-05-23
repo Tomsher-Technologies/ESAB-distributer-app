@@ -1,4 +1,11 @@
 <div>
+
+    <style>
+        .loopelements .loopitem:not(:first-of-type) label{
+            display: none;
+        }
+    </style>
+
     <form class="repeater" wire:submit.prevent="save()">
         <div class="d-flex align-items-center justify-content-between mb-3">
             <div class="pagetitle">
@@ -12,36 +19,14 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="card">
-                        <div class="card-body">
+                        <div class="card-body loopelements">
                             <!-- General Form Elements -->
                             @foreach ($inputs as $key => $input)
                                 @php
                                     $cur = $cur_a = $lot_a = null;
-                                    
-                                    // $id = $inputs[$key]['gin'];
-                                    
-                                    // $cur = $gins->find($id);
-                                    // if ($cur !== null) {
-                                    //     $lot_a = $gins->where('GIN', $cur->GIN)->all();
-                                    // }
-                                    
-                                    // if ($lot_a !== null) {
-                                    //     $id = $inputs[$key]['lot'];
-                                    //     $cur_a = $gins->find($id);
-                                    
-                                    //     $inputs = $inputs->map(function ($input, $k) use ($key, $id) {
-                                    //         if ($k == $key) {
-                                    //             $input['lot'] = $id;
-                                    //         }
-                                    //         return $input;
-                                    //     });
-                                    // } else {
-                                    //     $cur_a = $cur;
-                                    // }
-                                    
                                 @endphp
 
-                                <div data-repeater-list="group-a">
+                                <div class="loopitem" data-repeater-list="group-a">
                                     <div data-repeater-item=""
                                         class="row mb-2 g-2 justify-content-center align-items-center">
                                         <div class="col">

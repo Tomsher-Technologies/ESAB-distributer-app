@@ -26,7 +26,7 @@
     <link href="{{ adminAsset('vendor/remixicon/remixicon.css') }}" rel="stylesheet">
     <link href="{{ adminAsset('vendor/simple-datatables/style.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/style.css') }}" rel="stylesheet">
-
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     @stack('header')
 
     <script src="{{ adminAsset('js/jquery.min.js') }}"></script>
@@ -34,6 +34,8 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     @livewireStyles
+    
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
 </head>
 
@@ -58,14 +60,12 @@
     @livewireScripts
 
     <!-- Vendor JS Files -->
-    <script src="{{ adminAsset('vendor/apexcharts/apexcharts.min.js') }}"></script>
     <script src="{{ adminAsset('vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
     {{-- <script src="{{ adminAsset('vendor/chart.js/chart.umd.js') }}"></script> --}}
     {{-- <script src="{{ adminAsset('vendor/echarts/echarts.min.js') }}"></script> --}}
     {{-- <script src="{{ adminAsset('vendor/quill/quill.min.js') }}"></script> --}}
     {{-- <script src="{{ adminAsset('vendor/simple-datatables/simple-datatables.js') }}"></script> --}}
     {{-- <script src="{{ adminAsset('vendor/tinymce/tinymce.min.js') }}"></script> --}}
-    <script src="{{ adminAsset('vendor/php-email-form/validate.js') }}"></script>
 
     <!-- Template Main JS File -->
     <script src="{{ adminAsset('js/main.js') }}"></script>
@@ -75,6 +75,31 @@
     <form class="d-none" id="logout-form" action="{{ route('logout') }}" method="POST">
         @csrf
     </form>
+
+    <script>
+        $(document).ready(function() {
+
+            $('.select2Picker').select2({
+                placeholder: 'Select an option',
+                disabled: $(this).data('disabled') ?? false,
+                maximumSelectionLength: $(this).data('max') ?? 0,
+            }).on('select2:select', function(e) {
+                var data = e.params.data;
+                if (data.id == 'all') {
+                    $(this).val('all').change();
+                } else {
+                    var wanted_option = $(this).find('option[value="all"]');
+                    wanted_option.prop('selected', false);
+                    $(this).trigger('change.select2');
+                }
+            }).on('change', function() {
+                var count = $(this).select2('data').length
+                if (count == 0) {
+                    $(this).val('all').change();
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>

@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Admin\Distributor;
 use App\Models\Country;
 use App\Models\User;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 use Livewire\Component;
 
 class Create extends Component
@@ -64,6 +65,11 @@ class Create extends Component
     {
         $this->validate();
 
+        $code = [];
+        $code[] = $this->country;
+        $code[] = getInitials($this->name, 2) . getInitials($this->company_name, 2);
+        $code[] = Str::padLeft(rand(1, 9999), 4, 0);
+
         $user = User::create([
             'name' => $this->name,
             'email' => $this->email,
@@ -79,7 +85,7 @@ class Create extends Component
             'address' => $this->address,
             'country_code' => $this->country,
             'manager_id' => $this->manager,
-            'distributer_code' => "asd",
+            'distributer_code' => implode('-', $code),
         ]);
 
         $this->reset([

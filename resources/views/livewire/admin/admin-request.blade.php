@@ -16,42 +16,57 @@
                                 </div>
                                 <div class="col-sm-3">
                                     <label for="#">From Distributor</label>
-                                    <select wire:model.lazy="from" class="form-select form-control">
-                                        <option selected="" value="0">All</option>
-                                        @foreach ($distributors as $distributor)
-                                            <option value="{{ $distributor->id }}">{{ $distributor->name }}</option>
-                                        @endforeach
-                                    </select>
+                                    <div wire:ignore>
+                                        <select wire:model="from" data-model="from"
+                                            class="form-select form-control select2Picker2" data-live-search="true"
+                                            multiple>
+                                            <option selected="" value="all">All</option>
+                                            @foreach ($distributors as $distributor)
+                                                <option value="{{ $distributor->id }}">{{ $distributor->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
                                 </div>
 
                                 <div class="col-sm-3">
                                     <label for="#">To Distributor</label>
-                                    <select wire:model.lazy="to" class="form-select form-control">
-                                        <option selected="" value="0">All</option>
-                                        @foreach ($distributors as $distributor)
-                                            <option value="{{ $distributor->id }}">{{ $distributor->name }}</option>
-                                        @endforeach
-                                    </select>
+                                    <div wire:ignore>
+                                        <select wire:model="to" data-model="to" name="to[]"
+                                            class="form-select form-control select2Picker2" data-live-search="true"
+                                            multiple>
+                                            <option selected="" value="all">All</option>
+                                            @foreach ($distributors as $distributor)
+                                                <option value="{{ $distributor->id }}">{{ $distributor->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
                                 </div>
 
                                 <div class="col-sm-3">
                                     <label for="#">GIN Number</label>
-                                    <select wire:model.lazy="gin" class="form-select form-control">
-                                        <option selected="" value="0">All</option>
-                                        @foreach ($gins as $products)
-                                            <option value="{{ $products->id }}">{{ $products->GIN }}</option>
-                                        @endforeach
-                                    </select>
+                                    <div wire:ignore>
+                                        <select wire:model="gin" data-model="gin"
+                                            class="form-select form-control select2Picker2" data-live-search="true"
+                                            multiple>
+                                            <option selected="" value="all">All</option>
+                                            @foreach ($gins as $products)
+                                                <option value="{{ $products->id }}">{{ $products->GIN }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
                                 </div>
                                 <div class="col-sm-3">
                                     <label for="#">Status</label>
-                                    <select wire:model.lazy="status" class="form-select form-control"
-                                        id="floatingSelect" aria-label="Floating label select example">
-                                        <option selected="" value="all">All</option>
-                                        <option value="1">Pending</option>
-                                        <option value="3">Rejected</option>
-                                        <option value="2">Completed</option>
-                                    </select>
+                                    <div wire:ignore>
+                                        <select wire:model="status" data-model="status"
+                                            class="form-select form-control select2Picker2" data-live-search="true"
+                                            multiple id="floatingSelect" aria-label="Floating label select example">
+                                            <option selected="" value="all">All</option>
+                                            <option value="1">Pending</option>
+                                            <option value="3">Rejected</option>
+                                            <option value="2">Completed</option>
+                                        </select>
+                                    </div>
                                 </div>
                                 @if ($showReset)
                                     <div class="col-sm-3">
@@ -83,6 +98,7 @@
                                     <th class="table_bg" scope="col">GIN Number</th>
                                     <th class="table_bg" scope="col">Lot</th>
                                     <th class="table_bg" scope="col">Quantity</th>
+                                    <th class="table_bg" scope="col">Tracking Number</th>
                                     <th class="table_bg" scope="col">Date</th>
                                     <th class="table_bg" scope="col">Status</th>
                                 </tr>
@@ -96,6 +112,7 @@
                                         <td>{{ $request->product->GIN }}</td>
                                         <td>{{ $request->product->lot_no }}</td>
                                         <td>{{ $request->quantity }}</td>
+                                        <td>{{ $request->tracking_number }}</td>
                                         <td>{{ $request->created_at->format('d-m-Y') }}</td>
                                         <td>
                                             @if ($request->status == 1)
@@ -133,4 +150,43 @@
             });
         })
     </script>
+
+    <script>
+        window.loadContactDeviceSelect2 = () => {
+            $('.select2Picker2').select2({
+                placeholder: 'Select an option',
+                disabled: $(this).data('disabled') ?? false,
+                maximumSelectionLength: $(this).data('max') ?? 0,
+            }).on('select2:select', function(e) {
+                var data = e.params.data;
+                if (data.id == 'all') {
+                    $(this).val('all').change();
+                } else {
+                    var wanted_option = $(this).find('option[value="all"]');
+                    wanted_option.prop('selected', false);
+                    $(this).trigger('change.select2');
+                }
+
+                var model = $(this).data('model')
+                var data = $(this).select2("val");
+                @this.set(model, data);
+            }).on('change', function() {
+
+                var count = $(this).select2('data').length
+                console.log(count);
+                if (count == 0) {
+                    $(this).val('all').change();
+                }
+
+                var model = $(this).data('model')
+                var data = $(this).select2("val");
+                @this.set(model, data);
+            });
+        }
+        loadContactDeviceSelect2();
+        window.livewire.on('loadContactDeviceSelect2', () => {
+            loadContactDeviceSelect2();
+        });
+    </script>
+
 </div>
