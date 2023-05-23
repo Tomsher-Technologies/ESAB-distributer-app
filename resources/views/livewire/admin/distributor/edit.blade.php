@@ -42,12 +42,14 @@
                                 </div>
                                 <div class="col-sm-4">
                                     <label for="#">Country</label>
-                                    <select name="country" wire:model="dist.distributor.country_code"
-                                        class="form-select form-control">
-                                        @foreach ($countries as $country)
-                                            <option value="{{ $country->code }}">{{ $country->name }}</option>
-                                        @endforeach
-                                    </select>
+                                    <div wire:ignore>
+                                        <select name="country" wire:model="dist.distributor.country_code"
+                                            class="form-select form-control selectpicker" data-live-search="true">
+                                            @foreach ($countries as $country)
+                                                <option value="{{ $country->code }}">{{ $country->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
                                     <x-form.l-w-error name="country" />
                                 </div>
                                 <div class="col-sm-4">
@@ -64,21 +66,26 @@
                                 </div>
                                 <div class="col-sm-4">
                                     <label for="#">Status</label>
-                                    <select wire:model="dist.status" class="form-select form-control"
-                                        id="floatingSelect" aria-label="Floating label select example">
-                                        <option value="1">Enabled</option>
-                                        <option value="0">Disabled</option>
-                                    </select>
+                                    <div wire:ignore>
+                                        <select wire:model="dist.status" class="form-select form-control selectpicker"
+                                            data-live-search="false" id="floatingSelect"
+                                            aria-label="Floating label select example">
+                                            <option value="1">Enabled</option>
+                                            <option value="0">Disabled</option>
+                                        </select>
+                                    </div>
                                     <x-form.l-w-error name="status" />
                                 </div>
                                 <div class="col-sm-4">
                                     <label for="#">Manager</label>
-                                    <select wire:model="dist.distributor.manager_id" name="manager"
-                                        class="form-select form-control">
-                                        @foreach ($managers as $manager)
-                                            <option value="{{ $manager->id }}">{{ $manager->name }}</option>
-                                        @endforeach
-                                    </select>
+                                    <div wire:ignore>
+                                        <select wire:model="dist.distributor.manager_id" name="manager"
+                                            class="form-select form-control selectpicker" data-live-search="true">
+                                            @foreach ($managers as $manager)
+                                                <option value="{{ $manager->id }}">{{ $manager->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
                                     <x-form.l-w-error name="manager" />
                                     {{-- <input type="text" class="form-control" placeholder="Enter Manager Name"> --}}
                                 </div>

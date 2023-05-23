@@ -36,22 +36,26 @@
                                 </div>
                                 <div class="col-sm-4">
                                     <label for="#">Category</label>
-                                    <select wire:model="product.category" class="form-select form-control"
-                                        id="floatingSelect">
-                                        <option value="0" disabled selected="">Select</option>
-                                        <option value="FM">FM</option>
-                                        <option value="Non-FM">Non-FM</option>
-                                    </select>
+                                    <div wire:ignore>
+                                        <select wire:model="product.category"
+                                            class="form-select form-control selectpicker" id="floatingSelect">
+                                            <option value="0" disabled selected="">Select</option>
+                                            <option value="FM">FM</option>
+                                            <option value="Non-FM">Non-FM</option>
+                                        </select>
+                                    </div>
                                     <x-form.l-w-error name="product.category" />
                                 </div>
                                 <div class="col-sm-4">
                                     <label for="#">Country</label>
-                                    <select wire:model="product.country_code" class="form-select form-control">
-                                        <option value="0" disabled>Select</option>
-                                        @foreach ($countries as $country)
-                                            <option value="{{ $country->code }}">{{ $country->name }}</option>
-                                        @endforeach
-                                    </select>
+                                    <div wire:ignore>
+                                        <select wire:model="product.country_code" class="form-select form-control selectpicker" data-live-search="true">
+                                            <option value="0" disabled>Select</option>
+                                            @foreach ($countries as $country)
+                                                <option value="{{ $country->code }}">{{ $country->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
                                     <x-form.l-w-error name="category" />
                                 </div>
                                 <div class="col-sm-4 align-self-end">

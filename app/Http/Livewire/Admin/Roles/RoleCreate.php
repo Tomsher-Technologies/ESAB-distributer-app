@@ -12,7 +12,7 @@ class RoleCreate extends Component
 {
 
     public $name;
-    public $selectpermission;
+    public $selectpermission = array();
 
     public $permissions;
 
@@ -64,6 +64,6 @@ class RoleCreate extends Component
 
     public function updated($propertyName)
     {
-        $this->validateOnly($propertyName);
+        // $this->validateOnly($propertyName);
     }
 }

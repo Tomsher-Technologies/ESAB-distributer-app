@@ -16,34 +16,49 @@
                             <div class="row g-3">
                                 <div class="col-sm-3">
                                     <label for="#">Country</label>
-                                    <select name="country" class="form-select form-control" id="floatingSelect"
-                                        aria-label="Floating label select example">
-                                        <option selected="" value="all">All</option>
+                                    <select name="country[]" class="form-select form-control select2Picker" multiple>
+                                        <option {{ optionSelected($request->country, 'all') }} value="all">All</option>
                                         @foreach ($countries as $country)
-                                            <option {{ $request->country == $country->code ? 'selected' : '' }}
+                                            <option {{ optionSelected($request->country, $country->code) }}
                                                 value="{{ $country->code }}">{{ $country->name }}</option>
                                         @endforeach
                                     </select>
                                 </div>
                                 <div class="col-sm-3">
                                     <label for="#">GIN Number</label>
-                                    <select name="gin" class="form-select form-control" id="floatingSelect"
-                                        aria-label="Floating label select example">
-                                        <option selected="" value="all">All</option>
+                                    <select name="gin[]" class="form-select form-control select2Picker" id="gin"
+                                        multiple>
+                                        <option {{ optionSelected($request->gin, 'all') }} value="all">All</option>
                                         @foreach ($gins as $gin)
-                                            <option {{ $request->gin == $gin->GIN ? 'selected' : '' }}
-                                                value="{{ $gin->GIN }}">{{ $gin->GIN }}</option>
+                                            <option {{ optionSelected($request->gin, $gin->id) }}
+                                                value="{{ $gin->id }}">{{ $gin->GIN }}</option>
                                         @endforeach
                                     </select>
                                 </div>
                                 <div class="col-sm-3">
+                                    <label for="#">Lot</label>
+                                    <select name="lot[]" class="form-select form-control select2Picker" id="lot"
+                                        multiple>
+                                        <option {{ optionSelected($request->lot, 'all') }} value="all">All</option>
+                                        @if (count($old_lots) > 0)
+                                            @foreach ($old_lots as $old_lot)
+                                                <option {{ optionSelected($request->lot, $old_lot['id']) }}
+                                                    value="{{ $old_lot['id'] }}">
+                                                    {{ $old_lot['lot_no'] }}
+                                                </option>
+                                            @endforeach
+                                        @endif
+
+                                    </select>
+                                </div>
+                                <div class="col-sm-3">
                                     <label for="#">Category</label>
-                                    <select name="category" class="form-select form-control" id="floatingSelect"
-                                        aria-label="Floating label select example">
+                                    <select name="category" class="form-select form-control select2Picker">
                                         <option selected="all" value="all">All</option>
                                         <option {{ $request->category == 'FM' ? 'selected' : '' }} value="FM">FM
                                         </option>
-                                        <option {{ $request->category == 'Non-FM' ? 'selected' : '' }} value="Non-FM">Non-FM
+                                        <option {{ $request->category == 'Non-FM' ? 'selected' : '' }} value="Non-FM">
+                                            Non-FM
                                         </option>
                                     </select>
                                 </div>
@@ -74,26 +89,55 @@
                                     <th class="table_bg" scope="col">Category</th>
                                     <th class="table_bg" scope="col">Stock on Hand</th>
                                     <th class="table_bg" scope="col">Overstocked</th>
+                                    <th class="table_bg" scope="col">Status</th>
                                     <th class="table_bg" scope="col">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach ($products as $pro)
                                     <tr>
+
+                                        @php
+                                            $show_form = 1;
+                                            $status = '';
+                                            $request = $pro->product->request->where('from_distributor', auth()->user()->id)->last();
+                                            if ($request) {
+                                                if ($request->status == 1) {
+                                                    $show_form = 0;
+                                                }
+                                            }
+                                        @endphp
+
                                         <td>{{ $pro->product->country->name }}</td>
                                         <td>{{ $pro->product->GIN }}</td>
                                         <td>{{ $pro->product->lot_no }}</td>
                                         <td>{{ $pro->product->category }}</td>
                                         <td>{{ $pro->stock_on_hand }}</td>
-                                        @if ($pro->overstocked)
-                                            <td> <b class="clr_grn me-2">Yes</b> </td>
-                                        @else
-                                            <td> <b class="clr_red me-2">No</b> </td>
-                                        @endif
                                         <td>
-                                            @if ( $pro->product->request->where('from_distributor', auth()->user()->id)->count() )
-                                                Already requested
+                                            @if ($pro->overstocked)
+                                                <b class="clr_grn me-2">Yes</b>
                                             @else
+                                                <b class="clr_red me-2">No</b>
+                                            @endif
+                                        </td>
+                                        <td>
+                                            @if ($request)
+                                                @switch($request->status)
+                                                    @case(1)
+                                                        <b class="clr_yellow me-2">Pending</b>
+                                                    @break
+                                                    @case(2)
+                                                        <b class="clr_grn me-2">Completed</b>
+                                                    @break
+                                                    @case(2)
+                                                        <b class="clr_red me-2">Rejected</b>
+                                                    @break
+                                                @endswitch
+                                                <br>Tracking Number: <b>{{ $request->tracking_number }}</b>
+                                            @endif
+                                        </td>
+                                        <td>
+                                            @if ($show_form)
                                                 <form class="form-inline"
                                                     action="{{ route('distributor.product.request') }}" method="POST">
                                                     @csrf
@@ -124,3 +168,57 @@
         </div>
     </section>
 @endsection
+
+@push('header')
+    <style>
+        .clr_yellow{
+            color: #ffc30d
+        }
+    </style>
+@endpush
+
+@push('footer')
+    <script>
+        $('#gin').on('change', function() {
+            var gins = $(this).select2('data');
+            var selectedGins = [];
+            $.each(gins, function(key, value) {
+                selectedGins.push(value.text);
+            });
+            if (selectedGins.length > 1 && jQuery.inArray("All", selectedGins) !== -1) {
+                selectedGins.splice(selectedGins.indexOf('All'), 1);
+            }
+
+            appendDefault()
+
+            $.ajax({
+                url: "{{ route('distributor.product.getLot') }}",
+                type: 'GET',
+                data: {
+                    'selectedGins': selectedGins
+                },
+                dataType: 'json', // added data type
+                success: function(res) {
+                    if (res.length > 0) {
+                        $.each(res, function(key, value) {
+                            $('#lot')
+                                .append($("<option></option>")
+                                    .attr("value", value.id)
+                                    .text(value.lot_no));
+                        });
+                    }
+                }
+            });
+
+        });
+
+        function appendDefault() {
+            $('#lot')
+                .empty()
+                .append($("<option></option>")
+                    .attr("value", 'all')
+                    .attr("selected", true)
+                    .text('All'));
+        }
+    </script>
+@endpush

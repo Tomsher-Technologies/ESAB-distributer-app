@@ -14,7 +14,7 @@ class RoleEdit extends Component
 
     public $role;
 
-    public $selectpermission;
+    public $selectpermission = array();
 
     public $permissions;
     public $abilities;
@@ -38,6 +38,7 @@ class RoleEdit extends Component
         $this->permissions = Ability::where('title', '!=', 'All simple abilities')->get();
         $this->role = $role;
         $this->selectpermission = $this->role->abilities->pluck('name')->toArray();
+        // dd($this->selectpermission);
     }
 
     public function save()

@@ -1,6 +1,6 @@
 <div>
     <div class="pagetitle mb-4">
-        <h1>All Products</h1>
+        <h1>My Products</h1>
     </div>
     <section class="section">
         <div class="row">
@@ -74,8 +74,9 @@
                                     <th class="table_bg" scope="col">Goods in Transit</th>
                                     <th class="table_bg" scope="col">Stock on Order</th>
                                     <th class="table_bg" scope="col">Avg Sales/Month</th>
-                                    <th class="table_bg">Created Date</th>
                                     <th class="table_bg" scope="col">Overstocked</th>
+                                    <th class="table_bg" scope="col">Created At</th>
+                                    <th class="table_bg" scope="col">Last Updated At</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -91,12 +92,13 @@
                                         <td>{{ number_format($pro->goods_in_transit) }}</td>
                                         <td>{{ number_format($pro->stock_on_order) }}</td>
                                         <td>{{ number_format($pro->avg_sales, 2) }}</td>
-                                        <td>{{ $pro->created_at->format('d-m-Y') }}</td>
                                         @if ($pro->overstocked)
                                             <td><b class="clr_grn me-2">Yes</b></td>
                                         @else
                                             <td><b class="clr_red me-2">No </b></td>
                                         @endif
+                                        <td>{{ $pro->created_at ? $pro->created_at->format('d-m-Y') : '--' }}</td>
+                                        <td>{{ $pro->updated_at ? $pro->updated_at->format('d-m-Y') : '--' }}</td>
                                     </tr>
                                 @endforeach
                             </tbody>

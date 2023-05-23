@@ -11,7 +11,7 @@
                     <div class="card-body">
                         <h5 class="card-title mb-0">Example Excel Format</h5>
                         <p>Download the excel template. Fill the data and re-upload the template</p>
-                        <a href="{{ asset('assets/sample/distributor_template.xlsx') }}" class="btn excel_temp">
+                        <a href="{{ asset('assets/sample/ESAB_product_import_template.xlsx') }}" class="btn excel_temp">
                             <span>
                                 <img src="{{ adminAsset('img/excel.png') }}" width="30" alt="">
                             </span>
@@ -29,12 +29,28 @@
                             @csrf
                             <x-form.error name="error" />
                             <x-form.success />
+
+                            @if (session('error_msg'))
+                                <div class="alert alert-danger">
+                                    {{ session('error_msg') }}
+                                    <br>
+                                    <ul>
+                                        @foreach (session('err_array') as $key => $err_item)
+                                            @foreach ($err_item as $item)
+                                                <li>{{ $item }} </li>
+                                            @endforeach
+                                        @endforeach
+                                    </ul>
+
+                                </div>
+                            @endif
+
                             <div class="row mb-3 g-3">
                                 <div class="col-sm-8">
                                     <label for="inputNumber" class="col-form-label">Choose File</label>
                                     <input name="product_file" class="form-control" type="file" id="formFile"
-                                        accept=".csv,.xlsx,.xls">
-                                    
+                                        accept=".csv,.xlsx,.xls" required>
+
                                 </div>
                                 <div class="col-sm-4 align-self-end">
                                     <button class="btn btn-secondary px-4">

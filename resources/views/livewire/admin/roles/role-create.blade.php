@@ -19,8 +19,8 @@
                                 <div class="col-sm-4">
                                     <label for="#">Permissions</label>
                                     <div wire:ignore>
-                                        <select wire:model="selectpermission" name="permission"
-                                            class="selectpicker form-select form-control" data-live-search="true"
+                                        <select wire:model="selectpermission" data-model="selectpermission" name="permission"
+                                            class="select2Picker2 form-select form-control" data-live-search="true"
                                             multiple>
                                             @foreach ($permissions as $permission)
                                                 <option value="{{ $permission->name }}">{{ $permission->title }}
@@ -50,17 +50,43 @@
             });
         })
     </script>
-</div>
-@push('header')
-    <link rel='stylesheet'
-        href='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.14.0-beta2/css/bootstrap-select.min.css'>
-@endpush
-@push('footer')
-    <script src='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.14.0-beta2/js/bootstrap-select.min.js'></script>
 
     <script>
-        $('.selectpicker').on('change', function(e) {
-            @this.set('selectpermission', $('.selectpicker').val())
+        window.loadContactDeviceSelect2 = () => {
+            $('.select2Picker2').select2({
+                placeholder: 'Select an option',
+                disabled: $(this).data('disabled') ?? false,
+                maximumSelectionLength: $(this).data('max') ?? 0,
+            }).on('select2:select', function(e) {
+                var data = e.params.data;
+                if (data.id == 'all') {
+                    $(this).val('all').change();
+                } else {
+                    var wanted_option = $(this).find('option[value="all"]');
+                    wanted_option.prop('selected', false);
+                    $(this).trigger('change.select2');
+                }
+
+                var model = $(this).data('model')
+                var data = $(this).select2("val");
+                @this.set(model, data);
+            }).on('change', function() {
+
+                var count = $(this).select2('data').length
+                console.log(count);
+                if (count == 0) {
+                    $(this).val('all').change();
+                }
+
+                var model = $(this).data('model')
+                var data = $(this).select2("val");
+                @this.set(model, data);
+            });
+        }
+        loadContactDeviceSelect2();
+        window.livewire.on('loadContactDeviceSelect2', () => {
+            loadContactDeviceSelect2();
         });
     </script>
-@endpush
+
+</div>
