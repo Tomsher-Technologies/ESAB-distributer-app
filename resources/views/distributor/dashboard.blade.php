@@ -129,7 +129,7 @@
                                                     @case(2)
                                                         <b class="clr_grn me-2">Completed</b>
                                                     @break
-                                                    @case(2)
+                                                    @case(3)
                                                         <b class="clr_red me-2">Rejected</b>
                                                     @break
                                                 @endswitch

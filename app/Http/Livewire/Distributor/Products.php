@@ -12,7 +12,7 @@ class Products extends Component
 {
     use WithPagination;
 
-    public $selected_gin = 'all';
+    public $selected_gin =  array('all');
     public $category = 'all';
     public $overstocked = 'all';
     public $start_date;
@@ -35,8 +35,15 @@ class Products extends Component
 
         $this->show_clear = 0;
 
-        if ($this->selected_gin !== 'all') {
-            $query->whereRelation('product', 'id', $this->selected_gin);
+        if (!in_array('all', $this->selected_gin)) {
+            // dd($this->selected_gin);
+
+            $selected_gin = $this->selected_gin;
+            $query->whereHas('product', function ($q) use ($selected_gin) {
+                return $q->whereIn('id', $selected_gin);
+            });
+
+            // $query->whereRelation('product', 'id', $this->selected_gin);
             $this->show_clear = 1;
         }
 
@@ -61,6 +68,7 @@ class Products extends Component
             $this->show_clear = 1;
         }
 
+        
 
         $products = $query->with('product')->paginate(15);
 
