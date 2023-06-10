@@ -1,7 +1,7 @@
 <div>
 
     <style>
-        .loopelements .loopitem:not(:first-of-type) label{
+        .loopelements .loopitem:not(:first-of-type) label {
             display: none;
         }
     </style>
@@ -22,16 +22,16 @@
                         <div class="card-body loopelements">
                             <!-- General Form Elements -->
                             @foreach ($inputs as $key => $input)
-                                @php
-                                    $cur = $cur_a = $lot_a = null;
-                                @endphp
+                                {{-- @php
+                                    // $cur = $cur_a = $lot_a = null;
+                                @endphp --}}
 
                                 <div class="loopitem" data-repeater-list="group-a">
                                     <div data-repeater-item=""
                                         class="row mb-2 g-2 justify-content-center align-items-center">
                                         <div class="col">
                                             <label for="#">GIN Number</label>
-                                            <select wire:change="changeGin({{ $key }})"
+                                            <select wire:change="changeLot({{ $key }},$event.target.value)"
                                                 wire:model="inputs.{{ $key }}.gin" name="gin"
                                                 class="form-select form-control <x-form.error-class name='inputs.{{ $key }}.gin' />">
                                                 <option selected disabled value="0">Select</option>
@@ -42,7 +42,12 @@
                                         </div>
                                         <div class="col-md-1">
                                             <label for="#">Lot</label>
-                                            <select wire:change="changeLot({{ $key }},$event.target.value)"
+                                            <input type="text"
+                                                class="form-control <x-form.error-class name='inputs.{{ $key }}.lot' />"
+                                                placeholder="Enter Lot Number"
+                                                wire:model="inputs.{{ $key }}.lot" name="lot"
+                                                value="{{ $this->getValue($key, 'description') }}">
+                                            {{-- <select wire:change="changeLot({{ $key }},$event.target.value)"
                                                 wire:model="inputs.{{ $key }}.lot" name="lot"
                                                 class="form-select form-control <x-form.error-class name='inputs.{{ $key }}.lot' />">
 
@@ -54,7 +59,7 @@
                                                 @else
                                                     <option selected value="0">Select</option>
                                                 @endif
-                                            </select>
+                                            </select> --}}
                                         </div>
                                         <div class="col">
                                             <label for="#">Description</label>

@@ -10,29 +10,29 @@
                         <!-- General Form Elements -->
                         <form wire:submit.prevent="save">
                             <div class="row g-3">
-                                <div class="col-sm-4">
+                                <div class="col-sm-6">
                                     <label for="#">GIN</label>
                                     <input type="text" wire:model="gin" class="form-control" placeholder="Enter GIN">
                                     <x-form.l-w-error name="gin" />
                                 </div>
-                                <div class="col-sm-4">
+                                {{-- <div class="col-sm-4">
                                     <label for="#">Lot</label>
                                     <input type="text" wire:model="lot_no" class="form-control"
                                         placeholder="Enter Lot">
                                     <x-form.l-w-error name="lot_no" />
-                                </div>
-                                <div class="col-sm-4">
+                                </div> --}}
+                                <div class="col-sm-6">
                                     <label for="#">Description</label>
                                     <input type="text" wire:model="description" class="form-control"
                                         placeholder="Enter Description">
                                     <x-form.l-w-error name="description" />
                                 </div>
-                                <div class="col-sm-4">
+                                <div class="col-sm-6">
                                     <label for="#">UOM</label>
                                     <input type="text" wire:model="uom" class="form-control" placeholder="Enter UOM">
                                     <x-form.l-w-error name="uom" />
                                 </div>
-                                <div class="col-sm-4">
+                                <div class="col-sm-6">
                                     <label for="#">Category</label>
                                     <div wire:ignore>
                                         <select wire:model="category" class="form-select form-control select2Picker">
@@ -44,7 +44,7 @@
 
                                     <x-form.l-w-error name="category" />
                                 </div>
-                                <div class="col-sm-4">
+                                {{-- <div class="col-sm-6">
                                     <label for="#">Country</label>
                                     <div wire:ignore>
                                         <select wire:model="country" class="form-select form-control select2Picker"
@@ -56,7 +56,7 @@
                                         </select>
                                     </div>
                                     <x-form.l-w-error name="category" />
-                                </div>
+                                </div> --}}
                                 <div class="col-sm-4 align-self-end">
                                     <button class="btn btn-secondary w-100" type="submit"> Add Now <i
                                             class="bi bi-plus-lg ps-2"></i></button>

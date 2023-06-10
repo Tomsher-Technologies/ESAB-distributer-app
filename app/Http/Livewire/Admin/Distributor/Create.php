@@ -31,7 +31,6 @@ class Create extends Component
     {
         $this->countries = Country::all();
         // $this->country = $this->countries->first()->id;
-
         $this->users = User::WhereIsNot('distributor')->get();
     }
 
@@ -114,7 +113,7 @@ class Create extends Component
             }
         }
 
-        $this->manager = $this->managers->first()->id;
+        // $this->manager = $this->managers->first()->id;
 
         return view('livewire.admin.distributor.create');
     }

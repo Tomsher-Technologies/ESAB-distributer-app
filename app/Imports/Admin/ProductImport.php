@@ -17,44 +17,59 @@ class ProductImport implements ToCollection, WithStartRow, WithBatchInserts, Wit
 
     public $user;
     public $countries;
+    public $errors;
 
     public function  __construct($user)
     {
         $this->user = $user;
-        $this->countries = Country::all();
     }
 
     public function collection(Collection $rows)
     {
+        $r_count = 2;
         foreach ($rows as $row) {
+            $errors = array();
 
-            if (
-                isset($row[0]) &&
-                isset($row[1]) &&
-                isset($row[3]) &&
-                isset($row[4]) &&
-                isset($row[5])
-            ) {
+            if (!isset($row[0])) {
+                $errors[] =  $this->missing('GIN', $r_count);
+            }
+            if (!isset($row[1])) {
+                $errors[] =  $this->missing('Description', $r_count);
+            }
+            if (!isset($row[2])) {
+                $errors[] =  $this->missing('UOM', $r_count);
+            }
+            if (!isset($row[3])) {
+                $errors[] =  $this->missing('Category', $r_count);
+            } else {
+                $cat = strtolower($row[3]);
 
-                if ($this->countries->where('code', $row[5])->first()) {
-                    $country = $row[5];
-                } else {
-                    $country = 'AE';
+                if ($cat !== 'fm' && $cat !== 'non-fm') {
+                    $errors[] = 'Invalid Category "' .  $row[3] . '" in row ' . $r_count;
                 }
 
+                $cat = ($cat == 'fm') ? "FM" : "Non-FM";
+            }
+
+
+            if (count($errors)) {
+                $this->errors[] = $errors;
+            }
+
+            if (empty($errors)) {
                 Product::updateOrCreate([
                     'GIN' => $row[0],
-                    'lot_no' => $row[1],
                 ], [
-                    'description' => $row[2],
-                    'UOM' => $row[3],
-                    'category' => $row[4],
-                    'country_code' => $country,
+                    'description' => $row[1],
+                    'UOM' => $row[2],
+                    'category' => $cat,
                     'status' => 1,
                     'created_by' => $this->user->id,
                     'updated_by' => $this->user->id,
                 ]);
             }
+
+            $r_count++;
         }
     }
 
@@ -99,5 +114,15 @@ class ProductImport implements ToCollection, WithStartRow, WithBatchInserts, Wit
     public function batchSize(): int
     {
         return 1000;
+    }
+
+    public function cleanString($str)
+    {
+        return trim($str);
+    }
+
+    public function missing($str, $row)
+    {
+        return "Missing $str in row $row";
     }
 }

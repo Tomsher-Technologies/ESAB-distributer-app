@@ -14,6 +14,7 @@ class DistributorProduct extends Model
         'user_id',
         'product_id',
         'stock_on_hand',
+        'lot_number',
         'goods_in_transit',
         'stock_on_order',
         'avg_sales',
@@ -22,7 +23,7 @@ class DistributorProduct extends Model
 
     public function distributor()
     {
-        return $this->belongsTo(User::class,'user_id');
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     public function product()

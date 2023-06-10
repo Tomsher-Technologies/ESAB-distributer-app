@@ -27,6 +27,22 @@
                             @csrf
                             <x-form.error name="error" />
                             <x-form.success />
+
+                            @if (session('error_msg'))
+                                <div class="alert alert-danger">
+                                    {{ session('error_msg') }}
+                                    <br>
+                                    <ul>
+                                        @foreach (session('err_array') as $key => $err_item)
+                                            @foreach ($err_item as $item)
+                                                <li>{{ $item }} </li>
+                                            @endforeach
+                                        @endforeach
+                                    </ul>
+
+                                </div>
+                            @endif
+
                             <div class="row mb-3 g-3">
                                 <div class="col-sm-8">
                                     <label for="inputNumber" class="col-form-label mb-0">Choose File</label>

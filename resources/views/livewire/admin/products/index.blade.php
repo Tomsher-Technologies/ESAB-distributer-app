@@ -26,7 +26,7 @@
                                 <tr>
                                     <th class="table_bg" scope="col">#</th>
                                     <th class="table_bg" scope="col">GIN</th>
-                                    <th class="table_bg" scope="col">Lot</th>
+                                    {{-- <th class="table_bg" scope="col">Lot</th> --}}
                                     <th class="table_bg" scope="col">Description</th>
                                     <th class="table_bg" scope="col">UOM</th>
                                     <th class="table_bg" scope="col">Category</th>
@@ -38,7 +38,7 @@
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
                                         <td>{{ $product->GIN }}</td>
-                                        <td>{{ $product->lot_no }}</td>
+                                        {{-- <td>{{ $product->lot_no }}</td> --}}
                                         <td>{{ $product->description }}</td>
                                         <td>{{ $product->UOM }}</td>
                                         <td>{{ $product->category }}</td>

@@ -12,38 +12,38 @@
                             <div class="row g-3">
                                 <div class="col-sm-4">
                                     <label for="#">Company Name</label>
-                                    <input type="text" wire:model="company_name" class="form-control"
+                                    <input type="text" wire:model.lazy="company_name" class="form-control"
                                         placeholder="Enter Company Name">
                                     <x-form.l-w-error name="company_name" />
                                 </div>
                                 <div class="col-sm-4">
                                     <label for="#">Name</label>
-                                    <input type="text" class="form-control" wire:model="name"
+                                    <input type="text" class="form-control" wire:model.lazy="name"
                                         placeholder="Enter Name">
                                     <x-form.l-w-error name="name" />
                                 </div>
                                 <div class="col-sm-4">
                                     <label for="#">Email</label>
-                                    <input type="email" class="form-control" wire:model="email"
+                                    <input type="email" class="form-control" wire:model.lazy="email"
                                         placeholder="Enter Email">
                                     <x-form.l-w-error name="email" />
                                 </div>
                                 <div class="col-sm-4">
                                     <label for="#">Phone</label>
-                                    <input type="text" id="validateNumber" class="form-control" wire:model="phone"
+                                    <input type="text" id="validateNumber" class="form-control" wire:model.lazy="phone"
                                         placeholder="Enter Phone">
                                     <x-form.l-w-error name="phone" />
                                 </div>
                                 <div class="col-sm-4">
                                     <label for="#">Address</label>
-                                    <input type="text" class="form-control" wire:model="address"
+                                    <input type="text" class="form-control" wire:model.lazy="address"
                                         placeholder="Enter Address">
                                     <x-form.l-w-error name="address" />
                                 </div>
                                 <div class="col-sm-4">
                                     <label for="#">Country</label>
                                     <div wire:ignore>
-                                        <select name="country" wire:model="country"
+                                        <select name="country" wire:model.lazy="country"
                                             class="form-select form-control selectpicker" data-live-search="true">
                                             @foreach ($countries as $country)
                                                 <option value="{{ $country->code }}">{{ $country->name }}</option>
@@ -67,7 +67,7 @@
                                 <div class="col-sm-4">
                                     <label for="#">Status</label>
                                     <div wire:ignore>
-                                        <select wire:model="status" class="form-select form-control selectpicker"
+                                        <select wire:model.lazy="status" class="form-select form-control selectpicker"
                                             data-live-search="false" id="floatingSelect"
                                             aria-label="Floating label select example">
                                             <option value="1">Enabled</option>
@@ -79,7 +79,7 @@
                                 <div class="col-sm-4">
                                     <label for="#">Manager</label>
                                     <div wire:ignore>
-                                        <select wire:model="manager" name="manager"
+                                        <select wire:model.lazy="manager" name="manager"
                                             class="form-select form-control selectpicker" data-live-search="true">
                                             @foreach ($managers as $manager)
                                                 <option value="{{ $manager->id }}">{{ $manager->name }}</option>

@@ -10,31 +10,31 @@
                         <!-- General Form Elements -->
                         <form wire:submit.prevent="save">
                             <div class="row g-3">
-                                <div class="col-sm-4">
+                                <div class="col-sm-6">
                                     <label for="#">GIN</label>
                                     <input type="text" wire:model="product.GIN" class="form-control"
                                         placeholder="Enter GIN">
                                     <x-form.l-w-error name="product.GIN" />
                                 </div>
-                                <div class="col-sm-4">
+                                {{-- <div class="col-sm-4">
                                     <label for="#">Lot</label>
                                     <input type="text" wire:model="product.lot_no" class="form-control"
                                         placeholder="Enter Lot">
                                     <x-form.l-w-error name="product.lot_no" />
-                                </div>
-                                <div class="col-sm-4">
+                                </div> --}}
+                                <div class="col-sm-6">
                                     <label for="#">Description</label>
                                     <input type="text" wire:model="product.description" class="form-control"
                                         placeholder="Enter Description">
                                     <x-form.l-w-error name="product.description" />
                                 </div>
-                                <div class="col-sm-4">
+                                <div class="col-sm-6">
                                     <label for="#">UOM</label>
                                     <input type="text" wire:model="product.UOM" class="form-control"
                                         placeholder="Enter UOM">
                                     <x-form.l-w-error name="product.UOM" />
                                 </div>
-                                <div class="col-sm-4">
+                                <div class="col-sm-6">
                                     <label for="#">Category</label>
                                     <div wire:ignore>
                                         <select wire:model="product.category"
@@ -46,7 +46,7 @@
                                     </div>
                                     <x-form.l-w-error name="product.category" />
                                 </div>
-                                <div class="col-sm-4">
+                                {{-- <div class="col-sm-4">
                                     <label for="#">Country</label>
                                     <div wire:ignore>
                                         <select wire:model="product.country_code" class="form-select form-control selectpicker" data-live-search="true">
@@ -57,7 +57,7 @@
                                         </select>
                                     </div>
                                     <x-form.l-w-error name="category" />
-                                </div>
+                                </div> --}}
                                 <div class="col-sm-4 align-self-end">
                                     <button class="btn btn-secondary w-100" type="submit"> Update
                                         <i class="bi bi-file-earmark-arrow-up"></i>
