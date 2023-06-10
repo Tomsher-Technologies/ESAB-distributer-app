@@ -11,22 +11,22 @@ class Create extends Component
 {
 
     public $gin;
-    public $lot_no;
+    // public $lot_no;
     public $description;
     public $uom;
     public $category = 0;
-    public $country = 'AE';
+    // public $country = 'AE';
 
-    public $countries;
+    // public $countries;
 
     protected function rules()
     {
         return [
             'gin' => 'required',
-            'lot_no' => 'required',
+            // 'lot_no' => 'required',
             'description' => 'nullable',
             'uom' => ['required'],
-            'country' => ['required'],
+            // 'country' => ['required'],
             'category' => ['required', Rule::notIn(['0']),],
         ];
     }
@@ -41,9 +41,9 @@ class Create extends Component
         'status.required' => 'Please select a status',
     ];
 
-    public function mount(){
-        $this->countries = Country::all();
-    }
+    // public function mount(){
+    //     $this->countries = Country::all();
+    // }
 
     public function save()
     {
@@ -51,20 +51,20 @@ class Create extends Component
 
         $product = Product::create([
             'GIN' => $this->gin,
-            'lot_no' => $this->lot_no,
+            'lot_no' => null,
             'description' => $this->description,
             'UOM' => $this->uom,
-            'country_code' => $this->country,
+            'country_code' => null,
             'category' => $this->category,
             'status' => 1,
         ]);
 
         $this->reset([
             'gin',
-            'lot_no',
+            // 'lot_no',
             'description',
             'uom',
-            'country',
+            // 'country',
             'category',
         ]);
 

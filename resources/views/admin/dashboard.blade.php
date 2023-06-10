@@ -17,11 +17,16 @@
                             <div class="row g-3">
                                 <div class="col-sm-3">
                                     <label for="#">Country</label>
-                                    <select name="country[]" class="form-select form-control select2Picker" multiple>
+                                    <select name="country[]" class="form-select form-control select2PickerCountry" multiple>
                                         <option {{ optionSelected($old_request->country) }} value="all">All</option>
-                                        @foreach ($countries as $country)
-                                            <option {{ optionSelected($old_request->country, $country->code) }}
-                                                value="{{ $country->code }}">{{ $country->name }}</option>
+
+                                        @foreach ($countries as $key => $c_group)
+                                            <optgroup label="{{ $key }}">
+                                                @foreach ($countries[$key] as $country)
+                                                    <option {{ optionSelected($old_request->country, $country->code) }}
+                                                        value="{{ $country->code }}">{{ $country->name }}</option>
+                                                @endforeach
+                                            </optgroup>
                                         @endforeach
                                     </select>
                                 </div>
@@ -132,7 +137,7 @@
             </div>
 
             <!-- Left side columns -->
-            <div class="col-lg-12">
+            {{-- <div class="col-lg-12">
                 <div class="row">
                     <!-- Sales Card -->
                     <div class="col-xxl-3 col-md-6">
@@ -290,7 +295,7 @@
 
 
                 </div>
-            </div>
+            </div> --}}
             <!-- End Left side columns -->
         </div>
     </section>
@@ -353,7 +358,6 @@
             }
         });
     </script> --}}
-
 @endsection
 
 

@@ -16,11 +16,15 @@
                             <div class="row g-3">
                                 <div class="col-sm-3">
                                     <label for="#">Country</label>
-                                    <select name="country[]" class="form-select form-control select2Picker" multiple>
+                                    <select name="country[]" class="form-select form-control select2PickerCountry" multiple>
                                         <option {{ optionSelected($request->country, 'all') }} value="all">All</option>
-                                        @foreach ($countries as $country)
-                                            <option {{ optionSelected($request->country, $country->code) }}
-                                                value="{{ $country->code }}">{{ $country->name }}</option>
+                                        @foreach ($countries as $key => $c_group)
+                                            <optgroup label="{{ $key }}">
+                                                @foreach ($countries[$key] as $country)
+                                                    <option {{ optionSelected($request->country, $country->code) }}
+                                                        value="{{ $country->code }}">{{ $country->name }}</option>
+                                                @endforeach
+                                            </optgroup>
                                         @endforeach
                                     </select>
                                 </div>
@@ -110,7 +114,7 @@
 
                                         <td>{{ $pro->product->country->name }}</td>
                                         <td>{{ $pro->product->GIN }}</td>
-                                        <td>{{ $pro->product->lot_no }}</td>
+                                        <td>{{ $pro->lot_number }}</td>
                                         <td>{{ $pro->product->category }}</td>
                                         <td>{{ $pro->stock_on_hand }}</td>
                                         <td>
@@ -126,9 +130,11 @@
                                                     @case(1)
                                                         <b class="clr_yellow me-2">Pending</b>
                                                     @break
+
                                                     @case(2)
                                                         <b class="clr_grn me-2">Completed</b>
                                                     @break
+
                                                     @case(3)
                                                         <b class="clr_red me-2">Rejected</b>
                                                     @break
@@ -171,7 +177,7 @@
 
 @push('header')
     <style>
-        .clr_yellow{
+        .clr_yellow {
             color: #ffc30d
         }
     </style>
@@ -183,7 +189,7 @@
             var gins = $(this).select2('data');
             var selectedGins = [];
             $.each(gins, function(key, value) {
-                selectedGins.push(value.text);
+                selectedGins.push(value.id);
             });
             if (selectedGins.length > 1 && jQuery.inArray("All", selectedGins) !== -1) {
                 selectedGins.splice(selectedGins.indexOf('All'), 1);

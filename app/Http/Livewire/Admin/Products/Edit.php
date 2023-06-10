@@ -16,18 +16,18 @@ class Edit extends Component
     public function mount(Product $product)
     {
         $this->product = $product;
-        $this->countries = Country::all();
+        // $this->countries = Country::all();
     }
 
     protected function rules()
     {
         return [
             'product.GIN' => 'required',
-            'product.lot_no' => 'required',
+            // 'product.lot_no' => 'required',
             'product.description' => 'nullable',
             'product.UOM' => ['required'],
             'product.category' => ['required', Rule::notIn(['0'])],
-            'product.country_code' => ['required'],
+            // 'product.country_code' => ['required'],
         ];
     }
 

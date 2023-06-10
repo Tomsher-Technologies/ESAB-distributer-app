@@ -34,7 +34,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     @livewireStyles
-    
+
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
 </head>
@@ -79,25 +79,71 @@
     <script>
         $(document).ready(function() {
 
-            $('.select2Picker').select2({
-                placeholder: 'Select an option',
-                disabled: $(this).data('disabled') ?? false,
-                maximumSelectionLength: $(this).data('max') ?? 0,
-            }).on('select2:select', function(e) {
-                var data = e.params.data;
-                if (data.id == 'all') {
-                    $(this).val('all').change();
-                } else {
-                    var wanted_option = $(this).find('option[value="all"]');
-                    wanted_option.prop('selected', false);
+            if ($('.select2Picker').length > 0) {
+                $('.select2Picker').select2({
+                    placeholder: 'Select an option',
+                    disabled: $(this).data('disabled') ?? false,
+                    maximumSelectionLength: $(this).data('max') ?? 0,
+                }).on('select2:select', function(e) {
+                    var data = e.params.data;
+                    if (data.id == 'all') {
+                        $(this).val('all').change();
+                    } else {
+                        var wanted_option = $(this).find('option[value="all"]');
+                        wanted_option.prop('selected', false);
+                        $(this).trigger('change.select2');
+                    }
+                }).on('change', function() {
+                    var count = $(this).select2('data').length
+                    if (count == 0) {
+                        $(this).val('all').change();
+                    }
+                });
+            }
+
+            if ($('.select2PickerCountry').length > 0) {
+                $('.select2PickerCountry').select2({
+                    placeholder: 'Select an option',
+                    disabled: $(this).data('disabled') ?? false,
+                    maximumSelectionLength: $(this).data('max') ?? 0,
+                    matcher(params, data) {
+                        const originalMatcher = $.fn.select2.defaults.defaults.matcher;
+                        const result = originalMatcher(params, data);
+
+                        if (
+                            result &&
+                            data.children &&
+                            result.children &&
+                            data.children.length
+                        ) {
+                            if (
+                                data.children.length !== result.children.length &&
+                                data.text.toLowerCase().includes(params.term.toLowerCase())
+                            ) {
+                                result.children = data.children;
+                            }
+                            return result;
+                        }
+
+                        return null;
+                    },
+                }).on('select2:select', function(e) {
+                    var data = e.params.data;
+                    if (data.id == 'all') {
+                        $(this).val('all').change();
+                    } else {
+                        var wanted_option = $(this).find('option[value="all"]');
+                        wanted_option.prop('selected', false);
+                    }
                     $(this).trigger('change.select2');
-                }
-            }).on('change', function() {
-                var count = $(this).select2('data').length
-                if (count == 0) {
-                    $(this).val('all').change();
-                }
-            });
+                }).on('change', function() {
+                    var count = $(this).select2('data').length
+                    if (count == 0) {
+                        $(this).val('all').change();
+                    }
+                });
+            }
+
         });
     </script>
 </body>

@@ -68,8 +68,6 @@ class Products extends Component
             $this->show_clear = 1;
         }
 
-        
-
         $products = $query->with('product')->paginate(15);
 
         return view('livewire.distributor.products')

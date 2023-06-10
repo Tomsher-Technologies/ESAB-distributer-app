@@ -22,6 +22,8 @@ class DistributorDashboardController extends Controller
 
         $old_lots = array();
 
+        // dd($request);
+
         if ($request->search) {
             if ($request->category !== 'all') {
                 $query->whereRelation('product', 'category', $request->category);
@@ -42,23 +44,25 @@ class DistributorDashboardController extends Controller
             }
 
             if (!in_array('all', $request->lot)) {
-                $lot =  $request->lot;
-                $query->whereHas('product', function ($q) use ($lot) {
-                    return $q->where('id', $lot);
-                });
+                $query->whereIn('id', $request->lot);
+                // $lot =  $request->lot;
+                // $query->whereHas('product', function ($q) use ($lot) {
+                //     return $q->where('id', $lot);
+                // });
                 // $query->whereRelation('product', 'GIN', $request->gin);
             }
 
             $gins = Product::whereStatus(true)->select('GIN')->whereIn('id', $request->gin)->get();
-            $r_gins = [];
             foreach ($gins as $gin) {
                 $r_gins[] = $gin->GIN;
             }
 
-            $old_lots = Product::whereIn('GIN', $r_gins)->select('id', 'lot_no')->get()->toArray();
+            $old_lots = DistributorProduct::whereIn('product_id', $request->gin)->where('lot_number', '!=', '')->select('id', 'lot_number as lot_no')->get();
+            // $old_lots = Product::whereIn('GIN', $r_gins)->select('id', 'lot_no')->get()->toArray();
         }
 
-        $countries = Country::all();
+        $countries = Country::all()->groupBy('region');
+        // dd($countries);
         $products = $query->with(['product', 'product.country', 'product.request'])->get();
 
         $gins = Product::whereStatus(true)->select('id', 'GIN')->latest()->get();
@@ -93,7 +97,7 @@ class DistributorDashboardController extends Controller
 
     public function getLots(Request $request)
     {
-        $lots = Product::whereIn('GIN', $request->selectedGins)->select('id', 'lot_no')->get();
+        $lots = DistributorProduct::whereIn('product_id', $request->selectedGins)->where('lot_number', '!=', '')->select('id', 'lot_number as lot_no')->get();
         return json_encode($lots);
     }
 }

@@ -14,7 +14,7 @@ class ProductCreate extends Component
     public $gins;
 
     public Collection $inputs;
-    public $lots = [];
+    // public $lots = [];
     public $cur_lot = [];
 
     protected function rules()
@@ -24,9 +24,9 @@ class ProductCreate extends Component
                 'required',
                 Rule::notIn(['0'])
             ],
-            'inputs.*.lot' => [
-                Rule::notIn(['0'])
-            ],
+            // 'inputs.*.lot' => [
+            //     Rule::notIn(['0'])
+            // ],
             'inputs.*.avg_sale' => 'required',
             'inputs.*.over_stock' => [
                 'required',
@@ -94,7 +94,8 @@ class ProductCreate extends Component
         foreach ($this->inputs as $inputs) {
             DistributorProduct::updateOrCreate([
                 'user_id' => $user_id,
-                'product_id' => $inputs['lot'],
+                'lot_number' => $inputs['lot'],
+                'product_id' => $inputs['gin'],
             ], [
                 'stock_on_hand' => $inputs['stock_hand'],
                 'goods_in_transit' => $inputs['stock_transit'],
@@ -104,7 +105,7 @@ class ProductCreate extends Component
             ]);
         }
 
-        $this->reset(['lots', 'cur_lot']);
+        // $this->reset(['lots', 'cur_lot']);
         foreach ($this->inputs as $key => $inputs) {
             $this->removeInput($key);
         }
@@ -131,29 +132,29 @@ class ProductCreate extends Component
         return view('livewire.distributor.product-create');
     }
 
-    public function changeGin($key)
-    {
-        $this->lots[$key] = [];
-        $id = $this->inputs[$key]['gin'];
-        $cur = $this->gins->find($id);
-        $lot = $this->gins->where('GIN', $cur->GIN)->all();
-        $index = 0;
-        foreach ($lot as  $l) {
-            if ($index == 0) {
-                $this->cur_lot[$key] = $l;
-                // $this->inputs[$key]['lot'] = $l;
-            }
-            $this->lots[$key][] = $l;
-            $index++;
-        }
+    // public function changeGin($key)
+    // {
+    //     $this->lots[$key] = [];
+    //     $id = $this->inputs[$key]['gin'];
+    //     $cur = $this->gins->find($id);
+    //     $lot = $this->gins->where('GIN', $cur->GIN)->all();
+    //     $index = 0;
+    //     foreach ($lot as  $l) {
+    //         if ($index == 0) {
+    //             $this->cur_lot[$key] = $l;
+    //             // $this->inputs[$key]['lot'] = $l;
+    //         }
+    //         $this->lots[$key][] = $l;
+    //         $index++;
+    //     }
 
-        $this->inputs = $this->inputs->map(function ($object, $index) use ($key, $l) {
-            if ($index == $key) {
-                $object['lot'] = $this->cur_lot[$key]->id;
-            }
-            return $object;
-        });
-    }
+    //     $this->inputs = $this->inputs->map(function ($object, $index) use ($key, $l) {
+    //         if ($index == $key) {
+    //             $object['lot'] = $this->cur_lot[$key]->id;
+    //         }
+    //         return $object;
+    //     });
+    // }
 
     public function changeLot($key, $value)
     {

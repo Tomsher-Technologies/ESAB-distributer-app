@@ -90,7 +90,7 @@
                                 @foreach ($products as $pro)
                                     <tr>
                                         <td>{{ $pro->product->GIN }}</td>
-                                        <td>{{ $pro->product->lot_no }}</td>
+                                        <td>{{ $pro->lot_number }}</td>
                                         <td>{{ $pro->product->description }}</td>
                                         <td>{{ $pro->product->UOM }}</td>
                                         <td>{{ $pro->product->category }}</td>
