@@ -21,7 +21,7 @@ Route::get('/', function () {
 
 Route::middleware(['guest'])->group(function () {
     Route::get('login', [LoginController::class, 'loginView'])->name('login');
-    Route::post('login', [LoginController::class, 'authenticate']);
+    Route::post('login', [LoginController::class, 'authenticate'])->middleware(['throttle:5,1']);
 });
 
 Route::middleware(['auth', 'auth.session'])->group(function () {

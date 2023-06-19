@@ -54,7 +54,11 @@
                                         @endforeach
                                     </select>
                                 </div>
-
+                                <div class="col-sm-3 align-self-end">
+                                    <label for="#">Lot Number</label>
+                                    <input type="text" name="lot_number" value="{{ $old_request->lot_number }}"
+                                        class="form-control" />
+                                </div>
                                 <div class="col-sm-3">
                                     <label for="#">Category</label>
                                     <select name="category" class="form-select form-control select2Picker"
@@ -88,25 +92,18 @@
                                     <input value="{{ $old_request->to_date }}" name="to_date" type="date"
                                         class="form-control" />
                                 </div>
-                                <div class="col-sm-3 align-self-end">
 
-                                    @if ($old_request->search)
-                                        <div class="d-flex gap-2">
-                                            <button name="search" value="1" class="btn btn-primary w-100"
-                                                type="submit">
-                                                Search <i class="bi bi-search ps-2"></i>
-                                            </button>
-                                            <button id="formClear" class="btn btn-secondary w-100" type="button">
-                                                Clear </i>
-                                            </button>
-                                        </div>
-                                    @else
+                                <div class="col-3">
+                                    <div class="d-flex gap-2">
                                         <button name="search" value="1" class="btn btn-primary w-100" type="submit">
                                             Search <i class="bi bi-search ps-2"></i>
                                         </button>
-                                    @endif
-
-
+                                        @if ($old_request->search)
+                                            <button id="formClear" class="btn btn-secondary w-100" type="button">
+                                                Clear </i>
+                                            </button>
+                                        @endif
+                                    </div>
                                 </div>
                             </div>
                         </form>
@@ -121,6 +118,7 @@
                                 value="{{ $old_request->distributor ? implode(',', $old_request->distributor) : 'all' }}">
                             <input type="hidden" name="d_gin"
                                 value="{{ $old_request->gin ? implode(',', $old_request->gin) : 'all' }}">
+                            <input type="hidden" name="d_lot_number" value="{{ $old_request->lot_number }}">
                             <input type="hidden" name="d_category" value="{{ $old_request->category ?? 'all' }}">
                             <input type="hidden" name="d_overstock" value="{{ $old_request->overstock ?? 'all' }}">
                             <input type="hidden" name="d_from_date" value="{{ $old_request->from_date }}">
@@ -131,7 +129,6 @@
                                 </button>
                             </div>
                         </form>
-
                     </div>
                 </div>
             </div>
@@ -210,93 +207,90 @@
                             </div>
                         </div>
                     </div>
+--}}
 
-                    <!-- End Customers Card -->
-                    <!-- Reports -->
-
-                    @if ($products !== null)
-                        <div class="col-lg-12">
-                            <div class="card">
-                                <div class="card-body">
-                                    @if ($products->count())
-                                        <!-- Bordered Table -->
-                                        <table class="table table-bordered">
-                                            <thead>
-                                                <tr>
-                                                    <th class="table_bg" scope="col">Country</th>
-                                                    <th class="table_bg" scope="col">Distributor</th>
-                                                    <th class="table_bg" scope="col">GIN Number</th>
-                                                    <th class="table_bg" scope="col">Lot</th>
-                                                    <th class="table_bg" scope="col">Category</th>
-                                                    <th class="table_bg" scope="col">Stock on Hand</th>
-                                                    <th class="table_bg" scope="col">Overstocked</th>
-                                                    <th class="table_bg" scope="col">Action</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                @foreach ($products as $pro)
-                                                    @php
-                                                        $p_product = $gins->where('id', $pro->product_id)->first();
-                                                    @endphp
-
-                                                    <tr>
-                                                        <td id='country-{{ $pro->id }}'>
-                                                            {{ $countries->where('code', $p_product->country_code)->first()->name }}
-                                                        </td>
-                                                        <td id='distributor-{{ $pro->id }}'>
-                                                            {{ $distributors->where('id', $pro->user_id)->first()->name }}
-                                                        </td>
-                                                        <td id='GIN-{{ $pro->id }}'>{{ $p_product->GIN }}</td>
-                                                        <td id='lot_no-{{ $pro->id }}'>{{ $p_product->lot_no }}</td>
-                                                        <td id='category-{{ $pro->id }}'>
-                                                            {{ $p_product->category }}
-                                                        </td>
-                                                        <td id='stock_on_hand-{{ $pro->id }}'>
-                                                            {{ number_format($pro->stock_on_hand, 0) }}</td>
-                                                        <td id='overstocked-{{ $pro->id }}'>
-                                                            @if ($pro->overstocked)
-                                                                <b class="clr_grn me-2">Yes</b>
-                                                            @else
-                                                                <b class="clr_red me-2">No</b>
-                                                            @endif
-                                                        </td>
-                                                        <input type="hidden" id='disc-{{ $pro->id }}'
-                                                            value="{{ $p_product->description }}">
-                                                        <input type="hidden" id='uom-{{ $pro->id }}'
-                                                            value="{{ $p_product->UOM }}">
-                                                        <input type="hidden" id='goods_in_transit-{{ $pro->id }}'
-                                                            value="{{ number_format($pro->goods_in_transit, 0) }}">
-                                                        <input type="hidden" id='stock_on_order-{{ $pro->id }}'
-                                                            value="{{ number_format($pro->stock_on_order, 0) }}">
-                                                        <input type="hidden" id='avg_sales-{{ $pro->id }}'
-                                                            value="{{ number_format($pro->avg_sales, 2) }}">
-                                                        <input type="hidden" id='date-{{ $pro->id }}'
-                                                            value="{{ $pro->created_at->format('d/m/Y') }}">
-                                                        <td>
-                                                            <span>
-                                                                <a href="#" data-id={{ $pro->id }}
-                                                                    class="btn btn-view modal-toggle">
-                                                                    <i class="bi bi-binoculars"></i> Quick View</a>
-                                                            </span>
-                                                        </td>
-                                                    </tr>
-                                                @endforeach
-                                            </tbody>
-                                        </table>
-                                        <!-- End Bordered Table -->
-                                    @else
-                                        <h4 class="text-center">No Result Found</h4>
-                                    @endif
-                                </div>
-                            </div>
+            @if ($products !== null)
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-body">
+                            @if ($products->count())
+                                <!-- Bordered Table -->
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th class="table_bg" scope="col">Country</th>
+                                            <th class="table_bg" scope="col">Distributor</th>
+                                            <th class="table_bg" scope="col">GIN Number</th>
+                                            <th class="table_bg" scope="col">Lot</th>
+                                            <th class="table_bg" scope="col">Category</th>
+                                            <th class="table_bg" scope="col">Stock on Hand</th>
+                                            <th class="table_bg" scope="col">Overstocked</th>
+                                            <th class="table_bg" scope="col">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($products as $pro)
+                                            @php
+                                                $p_product = $gins->where('id', $pro->product_id)->first();
+                                            @endphp
+                                            <tr>
+                                                <td id='country-{{ $pro->id }}'>
+                                                    {{ $countries->flatten()->where('code', $p_product->country_code)->first()->name }}
+                                                </td>
+                                                <td id='distributor-{{ $pro->id }}'>
+                                                    {{ $distributors->where('id', $pro->user_id)->first()->name }}
+                                                </td>
+                                                <td id='GIN-{{ $pro->id }}'>{{ $p_product->GIN }}</td>
+                                                <td id='lot_no-{{ $pro->id }}'>{{ $pro->lot_number }}</td>
+                                                <td id='category-{{ $pro->id }}'>
+                                                    {{ $p_product->category }}
+                                                </td>
+                                                <td id='stock_on_hand-{{ $pro->id }}'>
+                                                    {{ number_format($pro->stock_on_hand, 0) }}</td>
+                                                <td id='overstocked-{{ $pro->id }}'>
+                                                    @if ($pro->overstocked)
+                                                        <b class="clr_grn me-2">Yes</b>
+                                                    @else
+                                                        <b class="clr_red me-2">No</b>
+                                                    @endif
+                                                </td>
+                                                <input type="hidden" id='disc-{{ $pro->id }}'
+                                                    value="{{ $p_product->description }}">
+                                                <input type="hidden" id='uom-{{ $pro->id }}'
+                                                    value="{{ $p_product->UOM }}">
+                                                <input type="hidden" id='goods_in_transit-{{ $pro->id }}'
+                                                    value="{{ number_format($pro->goods_in_transit, 0) }}">
+                                                <input type="hidden" id='stock_on_order-{{ $pro->id }}'
+                                                    value="{{ number_format($pro->stock_on_order, 0) }}">
+                                                <input type="hidden" id='avg_sales-{{ $pro->id }}'
+                                                    value="{{ number_format($pro->avg_sales, 2) }}">
+                                                <input type="hidden" id='date-{{ $pro->id }}'
+                                                    value="{{ $pro->created_at->format('d/m/Y') }}">
+                                                <td>
+                                                    <span>
+                                                        <a href="#" data-id={{ $pro->id }}
+                                                            class="btn btn-view modal-toggle">
+                                                            <i class="bi bi-binoculars"></i> Quick View</a>
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                                <!-- End Bordered Table -->
+                            @else
+                                <h4 class="text-center">No Result Found</h4>
+                            @endif
                         </div>
-
-                    @endif
-
-
+                    </div>
                 </div>
-            </div> --}}
-            <!-- End Left side columns -->
+
+            @endif
+
+
+        </div>
+        </div>
+        <!-- End Left side columns -->
         </div>
     </section>
 

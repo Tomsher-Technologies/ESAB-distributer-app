@@ -10,6 +10,9 @@ use Illuminate\Support\Facades\Session;
 class LoginController extends Controller
 {
 
+    protected $maxLoginAttempts = 3;
+    protected $lockoutTime = 300;
+
     public function __construct()
     {
         $this->middleware(['guest'])->except(['logout']);

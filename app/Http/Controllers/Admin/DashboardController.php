@@ -19,7 +19,7 @@ class DashboardController extends Controller
     {
         $countries = Country::all()->groupBy('region');
         $distributors = User::whereIs('distributor')->get();
-        $no_distributor = $distributors->count();
+        // $no_distributor = $distributors->count();
         $gins = Product::all();
 
         $products = null;
@@ -51,6 +51,10 @@ class DashboardController extends Controller
                 $query->whereRelation('product', 'category', $request->category);
             }
 
+            if ($request->lot_number) {
+                $query->where('lot_number', $request->lot_number);
+            }
+
             if ($request->overstock !== 'all') {
                 $query->where('overstocked', $request->overstock);
             }
@@ -67,20 +71,18 @@ class DashboardController extends Controller
 
             $products = $query->get();
 
-            $data['stock_on_hand'] = number_format($products->sum('stock_on_hand'), 0);
-            $data['goods_in_transit'] = number_format($products->sum('goods_in_transit'), 0);
-            $data['stock_on_order'] = number_format($products->sum('stock_on_order'), 0);
-            $data['no_distributor'] = number_format($products->unique('user_id')->count(), 0);
+            // $data['stock_on_hand'] = number_format($products->sum('stock_on_hand'), 0);
+            // $data['goods_in_transit'] = number_format($products->sum('goods_in_transit'), 0);
+            // $data['stock_on_order'] = number_format($products->sum('stock_on_order'), 0);
+            // $data['no_distributor'] = number_format($products->unique('user_id')->count(), 0);
         } else {
-            $query = DistributorProduct::select(DB::raw("SUM(stock_on_hand) as stock_on_hand"), DB::raw("SUM(goods_in_transit) as goods_in_transit"), DB::raw("SUM(stock_on_order) as stock_on_order"), DB::raw("COUNT(DISTINCT(`user_id`)) as no_distributor"))->get()->first();
+            // $query = DistributorProduct::select(DB::raw("SUM(stock_on_hand) as stock_on_hand"), DB::raw("SUM(goods_in_transit) as goods_in_transit"), DB::raw("SUM(stock_on_order) as stock_on_order"), DB::raw("COUNT(DISTINCT(`user_id`)) as no_distributor"))->get()->first();
 
-            $data['stock_on_hand'] = number_format($query->stock_on_hand, 0);
-            $data['goods_in_transit'] = number_format($query->goods_in_transit, 0);
-            $data['stock_on_order'] = number_format($query->stock_on_order, 0);
-            $data['no_distributor'] = number_format($query->no_distributor, 0);
+            // $data['stock_on_hand'] = number_format($query->stock_on_hand, 0);
+            // $data['goods_in_transit'] = number_format($query->goods_in_transit, 0);
+            // $data['stock_on_order'] = number_format($query->stock_on_order, 0);
+            // $data['no_distributor'] = number_format($query->no_distributor, 0);
         }
-
-
 
         return view('admin.dashboard')
             ->with([
@@ -89,14 +91,14 @@ class DashboardController extends Controller
                 'gins' => $gins,
                 'old_request' => $request,
                 'products' => $products,
-                'data' => $data,
+                // 'data' => $data,
             ]);
     }
 
     public function download(Request $request)
     {
 
-        // dd($request);
+        // dd($request->all());
 
         $d_country = explode(',', $request->d_country);
         $d_distributor = explode(',', $request->d_distributor);
@@ -115,12 +117,17 @@ class DashboardController extends Controller
             $query->whereIn('user_id', $d_distributor);
         }
 
-
         if (!in_array('all', $d_gin)) {
             // $query->whereRelation('product', 'id', $request->d_gin);
             $query->whereRelation('product', function ($q) use ($d_gin) {
                 return $q->whereIn('id', $d_gin);
             });
+        }
+
+        // dd($request->d_lot_number);
+
+        if ($request->d_lot_number) {
+            $query->where('lot_number', $request->d_lot_number);
         }
 
         if ($request->d_category !== 'all') {
