@@ -26,18 +26,16 @@ class ProductImport implements ToCollection, WithStartRow, WithBatchInserts
     }
 
     /* Rows
-        0 - Country
-        1 - Distributor
-        2 - GIN
-        3 - Lot
-        4 - Description
-        5 - UOM
-        6 - Stock on hand
-        7 - Goods in transit
-        8 - Stock on order
-        9 - AVg sales
-        10 - Category
-        11 - Overstock
+        0- GIN
+        1- Lot
+        2- Description
+        3- UOM
+        4- Stock on hand
+        5- Goods in transit
+        6- Stock on order
+        7- AVg sales
+        8 - Category
+        9 - Overstock
     */
 
     public function collection(Collection $rows)
@@ -61,6 +59,8 @@ class ProductImport implements ToCollection, WithStartRow, WithBatchInserts
                     $product_id = $product->id;
                 }
             }
+
+            // dd($product_id);
 
             if (!isset($row[4])) {
                 $errors[] = $this->missing('Stock on Hand', $r_count);
@@ -132,11 +132,13 @@ class ProductImport implements ToCollection, WithStartRow, WithBatchInserts
 
                 DistributorProduct::updateOrCreate([
                     'user_id' => $this->user->id,
+                    'product_id' => $product_id,
+                    'lot_number' => $row[1]
                 ], [
-                    'stock_on_hand' => $row[6],
-                    'goods_in_transit' => $row[7],
-                    'stock_on_order' => $row[8],
-                    'avg_sales' => $row[9],
+                    'stock_on_hand' => $row[4],
+                    'goods_in_transit' => $row[5],
+                    'stock_on_order' => $row[6],
+                    'avg_sales' => $row[7],
                     'overstocked' => $oversocked,
                 ]);
             }

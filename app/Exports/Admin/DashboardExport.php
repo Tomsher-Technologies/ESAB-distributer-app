@@ -38,7 +38,7 @@ class DashboardExport implements FromCollection, WithHeadings, WithMapping
             $product->distributor->name,
             $product->product->country->name,
             $product->product->GIN,
-            $product->product->lot_no,
+            $product->lot_number,
             $product->product->category,
             $product->product->UOM,
             $product->stock_on_hand,
