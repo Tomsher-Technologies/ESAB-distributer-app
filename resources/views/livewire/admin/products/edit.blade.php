@@ -37,7 +37,7 @@
                                 <div class="col-sm-6">
                                     <label for="#">Category</label>
                                     <div wire:ignore>
-                                        <select wire:model="product.category"
+                                        <select id="category" wire:model="product.category"
                                             class="form-select form-control selectpicker" id="floatingSelect">
                                             <option value="0" disabled selected="">Select</option>
                                             <option value="FM">FM</option>
@@ -77,5 +77,9 @@
                 icon: 'success'
             });
         })
+
+        $('#category').on('change', function(e) {
+            @this.set('product.category', e.target.value);
+        });
     </script>
 </div>

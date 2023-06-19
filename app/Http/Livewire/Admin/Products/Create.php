@@ -14,7 +14,7 @@ class Create extends Component
     // public $lot_no;
     public $description;
     public $uom;
-    public $category = 0;
+    public $category = 'FM';
     // public $country = 'AE';
 
     // public $countries;
@@ -54,17 +54,15 @@ class Create extends Component
             'lot_no' => null,
             'description' => $this->description,
             'UOM' => $this->uom,
-            'country_code' => null,
+            'country_code' => 'AE',
             'category' => $this->category,
             'status' => 1,
         ]);
 
         $this->reset([
             'gin',
-            // 'lot_no',
             'description',
             'uom',
-            // 'country',
             'category',
         ]);
 
