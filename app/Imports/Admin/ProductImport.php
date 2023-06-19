@@ -27,6 +27,14 @@ class ProductImport implements ToCollection, WithStartRow, WithBatchInserts, Wit
     public function collection(Collection $rows)
     {
         $r_count = 2;
+
+        // dd($rows->count());
+
+        if ($rows->count() <= 1) {
+            $this->errors[] = array('The file seems to be empty');
+            return 0;
+        }
+
         foreach ($rows as $row) {
             $errors = array();
 

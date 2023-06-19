@@ -44,6 +44,11 @@ class ProductImport implements ToCollection, WithStartRow, WithBatchInserts
         $product_id = 0;
         $oversocked = 0;
 
+        if ($rows->count() <= 1) {
+            $this->errors[] = array('The file seems to be empty');
+            return 0;
+        }
+
         foreach ($rows as $row) {
             $errors = array();
 
