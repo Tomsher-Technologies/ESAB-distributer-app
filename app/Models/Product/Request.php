@@ -17,6 +17,7 @@ class Request extends Model
         'to_distributor',
         'gin_no',
         'quantity',
+        'lot_number',
         'status',
     ];
 

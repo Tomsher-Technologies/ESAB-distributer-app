@@ -76,6 +76,7 @@ class DistributorDashboardController extends Controller
             'from_distributor' => Auth::user()->id,
             'to_distributor' => $request->to,
             'gin_no' => $request->id,
+            'lot_number' => $request->lot_number,
             'quantity' => $request->quantity,
             'status' => 1,
         ]);
@@ -86,7 +87,10 @@ class DistributorDashboardController extends Controller
 
         $manager =  User::find(Auth::user()->distributor->manager_id);
 
-        Mail::to($manager->email)
+
+
+        Mail::to(env('ADMIN_EMAIL', 'admin@esab.com'))
+            ->cc($manager->email)
             ->send(new NewRequest($request));
 
         return back()->with([

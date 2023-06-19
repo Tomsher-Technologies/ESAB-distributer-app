@@ -110,7 +110,7 @@
                                         <td>{{ $request->fromDistributor->name }}</td>
                                         <td>{{ $request->toDistributor->name }}</td>
                                         <td>{{ $request->product->GIN }}</td>
-                                        <td>{{ $request->product->lot_no }}</td>
+                                        <td>{{ $request->lot_number }}</td>
                                         <td>{{ $request->quantity }}</td>
                                         <td>{{ $request->tracking_number }}</td>
                                         <td>{{ $request->created_at->format('d-m-Y') }}</td>
