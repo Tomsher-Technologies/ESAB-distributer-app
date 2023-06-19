@@ -13,16 +13,25 @@
                             From distributor: {{ $request->fromDistributor->name }}
                         </p>
                         <p>
+                            From distributor code: {{ $request->fromDistributor->distributer_code }}
+                        </p>
+                        <p>
                             GIN: {{ $request->product->GIN }}
                         </p>
                         <p>
-                            Lot no: {{ $request->product->lot_no }}
+                            Lot no: {{ $request->lot_number }}
                         </p>
                         <p>
                             Requested quantity: {{ $request->quantity }}
                         </p>
                         <p>
                             To distributor: {{ $request->toDistributor->name }}
+                        </p>
+                        <p>
+                            To distributor code: {{ $request->toDistributor->distributer_code }}
+                        </p>
+                        <p>
+                            Tracking Number: {{ $request->tracking_number }}
                         </p>
                     </div>
                 </td>

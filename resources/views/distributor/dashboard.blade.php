@@ -148,6 +148,7 @@
                                                     action="{{ route('distributor.product.request') }}" method="POST">
                                                     @csrf
                                                     <input type="hidden" name="id" value="{{ $pro->product->id }}">
+                                                    <input type="hidden" name="lot_number" value="{{ $pro->lot_number }}">
                                                     <input type="hidden" name="to" value="{{ $pro->user_id }}">
                                                     <div class="row">
                                                         <div class="col-9">
