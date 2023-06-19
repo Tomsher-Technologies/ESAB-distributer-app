@@ -15,7 +15,7 @@
                                     <select wire:model="selected_gin" class="form-select form-control select2Picker2"
                                         data-model="selected_gin" multiple>
                                         <option value="all" selected="0">All</option>
-                                        @foreach ($gins as $gin)
+                                        @foreach ($gins->unique('product.GIN') as $gin)
                                             <option value="{{ $gin->product->id }}">{{ $gin->product->GIN }}</option>
                                         @endforeach
                                     </select>
@@ -58,7 +58,7 @@
                                             Clear Search
                                         </button>
                                     @endif
-                                    <a class="btn btn-secondary align-self-end" href="#"> <i
+                                    <a wire:click.prevent="download" class="btn btn-secondary align-self-end" href="#"> <i
                                             class="bi bi-download"></i> Download</a>
                                 </div>
                             </div>
@@ -137,11 +137,9 @@
                 @this.set(model, data);
             }).on('change', function() {
                 var count = $(this).select2('data').length
-                console.log(count);
                 if (count == 0) {
                     $(this).val('all').change();
                 }
-
                 var model = $(this).data('model')
                 var data = $(this).select2("val");
                 @this.set(model, data);
@@ -151,6 +149,12 @@
         window.livewire.on('loadContactDeviceSelect2', () => {
             loadContactDeviceSelect2();
         });
+
+        window.addEventListener('clear_select', event => {
+            $(".select2Picker2").val('').trigger('change')
+            // $("#selected_gin").val('').trigger('change')
+            // $("#selected_gin").val('').trigger('change')
+        })
     </script>
 
 </div>

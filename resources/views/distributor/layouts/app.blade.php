@@ -34,7 +34,8 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     @livewireStyles
-
+    @livewireScripts
+    
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
 </head>
@@ -57,7 +58,7 @@
         <i class="bi bi-arrow-up-short"></i>
     </a>
 
-    @livewireScripts
+    
 
     <!-- Vendor JS Files -->
     <script src="{{ adminAsset('vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
