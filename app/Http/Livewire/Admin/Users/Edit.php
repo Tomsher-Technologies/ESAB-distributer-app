@@ -20,6 +20,9 @@ class Edit extends Component
 
     public function mount(User $user)
     {
+        if (Bouncer::cannot('manage-users')) {
+            abort(404);
+        }
         $this->user = $user;
         $this->roles = Role::where('name', '!=', 'distributor')->get();
         $this->user_role = $user->getRoles();

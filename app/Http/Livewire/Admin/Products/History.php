@@ -6,6 +6,7 @@ use App\Models\Upload;
 use Carbon\Carbon;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Bouncer;
 
 class History extends Component
 {
@@ -18,6 +19,12 @@ class History extends Component
     public $end_date = "";
 
     protected $paginationTheme = 'bootstrap';
+
+    public function mount(){
+        if (Bouncer::cannot('view-upload-history')) {
+            abort(404);
+        }
+    }
 
     protected function rules()
     {

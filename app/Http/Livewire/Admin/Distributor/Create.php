@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use Livewire\Component;
+use Bouncer;
 
 class Create extends Component
 {
@@ -32,6 +33,10 @@ class Create extends Component
         $this->countries = Country::all();
         // $this->country = $this->countries->first()->id;
         $this->users = User::WhereIsNot('distributor')->get();
+
+        if (Bouncer::cannot('create-distributor')) {
+            abort(404);
+        }
     }
 
     protected function rules()

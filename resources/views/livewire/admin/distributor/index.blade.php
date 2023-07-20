@@ -52,19 +52,27 @@
                                         <td>{{ $distributor->distributor->distributer_code }}</td>
                                         <td>{{ $distributor->distributor->manager->name }}</td>
                                         <td>
-                                            <span>
-                                                <a href="{{ route('admin.distributor.edit', $distributor->id) }}"
-                                                    class="btn btn-view">
-                                                    <i class="bi bi-pencil-square"></i>
-                                                </a>
-                                            </span>
-                                            <span>
-                                                <a href="#" data-id="{{ $distributor->id }}"
-                                                    data-bs-toggle="modal" data-bs-target="#exampleModal"
-                                                    class="btn btn-delete">
-                                                    <i class="bi bi-trash3-fill"></i>
-                                                </a>
-                                            </span>
+
+                                            @can('edit-distributor')
+                                                <span>
+                                                    <a href="{{ route('admin.distributor.edit', $distributor->id) }}"
+                                                        class="btn btn-view">
+                                                        <i class="bi bi-pencil-square"></i>
+                                                    </a>
+                                                </span>
+                                            @endcan
+
+                                            @can('delete-distributor')
+                                                <span>
+                                                    <a href="#" data-id="{{ $distributor->id }}"
+                                                        data-bs-toggle="modal" data-bs-target="#exampleModal"
+                                                        class="btn btn-delete">
+                                                        <i class="bi bi-trash3-fill"></i>
+                                                    </a>
+                                                </span>
+                                            @endcan
+
+
                                         </td>
                                     </tr>
                                 @endforeach

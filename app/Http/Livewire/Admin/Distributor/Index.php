@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Admin\Distributor;
 use App\Models\User;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Bouncer;
 
 class Index extends Component
 {
@@ -20,6 +21,13 @@ class Index extends Component
         return [
             'deleteid' => 'required',
         ];
+    }
+
+    public function mount()
+    {
+        if (Bouncer::cannot('manage-distributor') && Bouncer::cannot('view-distributor')) {
+            abort(404);
+        }
     }
 
     public function deleteRecord()
@@ -54,12 +62,12 @@ class Index extends Component
         }
 
         $distributors = $query
-        ->whereIs('distributor')
-        ->with([
-            'distributor',
-            'distributor.country',
-            'distributor.manager'
-        ])->paginate(10);
+            ->whereIs('distributor')
+            ->with([
+                'distributor',
+                'distributor.country',
+                'distributor.manager'
+            ])->paginate(10);
 
         return view('livewire.admin.distributor.index')->with([
             'distributors' => $distributors

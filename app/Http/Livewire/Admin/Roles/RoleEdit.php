@@ -35,6 +35,11 @@ class RoleEdit extends Component
 
     public function mount(Role $role)
     {
+
+        if (Bouncer::cannot('manage-roles')) {
+            abort(404);
+        }
+
         $this->permissions = Ability::where('title', '!=', 'All simple abilities')->get();
         $this->role = $role;
         $this->selectpermission = $this->role->abilities->pluck('name')->toArray();

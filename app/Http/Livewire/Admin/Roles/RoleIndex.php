@@ -5,9 +5,17 @@ namespace App\Http\Livewire\Admin\Roles;
 use Livewire\Component;
 use Silber\Bouncer\Database\Role;
 use Bouncer;
+
 class RoleIndex extends Component
 {
     public $deleteid;
+
+
+    public function mount(){
+        if (Bouncer::cannot('manage-roles')) {
+            abort(404);
+        }
+    }
 
     protected function rules()
     {

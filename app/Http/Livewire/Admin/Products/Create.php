@@ -6,6 +6,7 @@ use App\Models\Country;
 use App\Models\Product\Product;
 use Illuminate\Validation\Rule;
 use Livewire\Component;
+use Bouncer;
 
 class Create extends Component
 {
@@ -41,9 +42,12 @@ class Create extends Component
         'status.required' => 'Please select a status',
     ];
 
-    // public function mount(){
-    //     $this->countries = Country::all();
-    // }
+    public function mount(){
+        if (Bouncer::cannot('create-products')) {
+            abort(404);
+        }
+        // $this->countries = Country::all();
+    }
 
     public function save()
     {

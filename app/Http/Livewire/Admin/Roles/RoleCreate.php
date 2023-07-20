@@ -32,6 +32,9 @@ class RoleCreate extends Component
 
     public function mount()
     {
+        if (Bouncer::cannot('manage-roles')) {
+            abort(404);
+        }
         $this->permissions = Ability::where('title', '!=', 'All simple abilities')->get();
     }
 

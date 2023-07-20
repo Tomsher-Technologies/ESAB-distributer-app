@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Validation\Rule;
 use Livewire\Component;
+use Bouncer;
 
 class Edit extends Component
 {
@@ -23,6 +24,11 @@ class Edit extends Component
 
     public function mount($distributor_id)
     {
+
+        if (Bouncer::cannot('edit-distributor')) {
+            abort(404);
+        }
+
         $this->dist = User::with([
             'distributor',
         ])->findOrFail($distributor_id);
