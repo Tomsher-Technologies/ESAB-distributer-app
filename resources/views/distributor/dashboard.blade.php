@@ -151,11 +151,11 @@
                                                     <input type="hidden" name="lot_number" value="{{ $pro->lot_number }}">
                                                     <input type="hidden" name="to" value="{{ $pro->user_id }}">
                                                     <div class="row">
-                                                        <div class="col-9">
+                                                        <div class="col-8">
                                                             <input type="number" required max="{{ $pro->stock_on_hand }}"
                                                                 class="form-control" name="quantity" placeholder="Quantity">
                                                         </div>
-                                                        <div class="col-3">
+                                                        <div class="col-4">
                                                             <button type="submit" class="btn btn-view h-100 w-100">
                                                                 Request
                                                             </button>

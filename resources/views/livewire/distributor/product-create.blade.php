@@ -24,16 +24,21 @@
                             @foreach ($inputs as $key => $input)
                                 {{-- @php
                                     // $cur = $cur_a = $lot_a = null;
-                                @endphp --}}
+                                @endphp 
+                                wire:model="inputs.{{ $key }}.gin"
+                                --}}
 
                                 <div class="loopitem" data-repeater-list="group-a">
                                     <div data-repeater-item=""
                                         class="row mb-2 g-2 justify-content-center align-items-center">
-                                        <div class="col">
+                                        <div class="col" wire:ignore>
                                             <label for="#">GIN Number</label>
-                                            <select wire:change="changeLot({{ $key }},$event.target.value)"
-                                                wire:model="inputs.{{ $key }}.gin" name="gin"
-                                                class="form-select form-control <x-form.error-class name='inputs.{{ $key }}.gin' />">
+                                            <select 
+                                                data-var="inputs.{{ $key }}.gin"
+                                                data-model="{{ $key }}"
+                                                wire:change="changeLot({{ $key }},$event.target.value)"
+                                                 name="gin"
+                                                class="form-select form-control select2Picker2 <x-form.error-class name='inputs.{{ $key }}.gin' />">
                                                 <option selected disabled value="0">Select</option>
                                                 @foreach ($gins as $gin)
                                                     <option value="{{ $gin->id }}">{{ $gin->GIN }}</option>
@@ -45,21 +50,8 @@
                                             <input type="text"
                                                 class="form-control <x-form.error-class name='inputs.{{ $key }}.lot' />"
                                                 placeholder="Enter Lot Number"
-                                                wire:model="inputs.{{ $key }}.lot" name="lot"
+                                                wire:model.defer="inputs.{{ $key }}.lot" name="lot"
                                                 value="{{ $this->getValue($key, 'description') }}">
-                                            {{-- <select wire:change="changeLot({{ $key }},$event.target.value)"
-                                                wire:model="inputs.{{ $key }}.lot" name="lot"
-                                                class="form-select form-control <x-form.error-class name='inputs.{{ $key }}.lot' />">
-
-                                                @if (array_key_exists($key, $lots))
-                                                    @foreach ($lots[$key] as $lot)
-                                                        <option value="{{ $lot['id'] }}">{{ $lot['lot_no'] }}
-                                                        </option>
-                                                    @endforeach
-                                                @else
-                                                    <option selected value="0">Select</option>
-                                                @endif
-                                            </select> --}}
                                         </div>
                                         <div class="col">
                                             <label for="#">Description</label>
@@ -79,33 +71,33 @@
                                         </div>
                                         <div class="col-md-1">
                                             <label for="#">Stock on Hand</label>
-                                            <input wire:model="inputs.{{ $key }}.stock_hand" type="number"
+                                            <input wire:model.defer="inputs.{{ $key }}.stock_hand" type="number"
                                                 class="form-control <x-form.error-class name='inputs.{{ $key }}.stock_hand' />"
                                                 placeholder="Enter Stock on Hand">
 
                                         </div>
                                         <div class="col-md-1">
                                             <label for="#">Goods in Transit</label>
-                                            <input wire:model="inputs.{{ $key }}.stock_transit" type="number"
+                                            <input wire:model.defer="inputs.{{ $key }}.stock_transit" type="number"
                                                 class="form-control <x-form.error-class name='inputs.{{ $key }}.stock_transit' />"
                                                 placeholder="Enter Goods in Transit">
                                         </div>
                                         <div class="col-md-1">
                                             <label for="#">Stock on Order</label>
-                                            <input wire:model="inputs.{{ $key }}.stock_order" type="number"
+                                            <input wire:model.defer="inputs.{{ $key }}.stock_order" type="number"
                                                 class="form-control <x-form.error-class name='inputs.{{ $key }}.stock_order' />"
                                                 placeholder="Enter Stock on Order">
                                         </div>
                                         <div class="col">
                                             <label for="#">Avg sales/month </label>
-                                            <input wire:model="inputs.{{ $key }}.avg_sale" type="number"
+                                            <input wire:model.defer="inputs.{{ $key }}.avg_sale" type="number"
                                                 step=".01"
                                                 class="form-control <x-form.error-class name='inputs.{{ $key }}.avg_sale' />"
                                                 placeholder="Enter Average Sales per Month">
                                         </div>
                                         <div class="col-md-1">
                                             <label for="#">Over Stock</label>
-                                            <select wire:model="inputs.{{ $key }}.over_stock"
+                                            <select wire:model.defer="inputs.{{ $key }}.over_stock"
                                                 class="form-select form-control <x-form.error-class name='inputs.{{ $key }}.over_stock' />"
                                                 id="">
                                                 <option selected disabled value="3">Select</option>
@@ -142,6 +134,43 @@
                 title: 'Products added successfully!',
                 icon: 'success'
             });
+        })
+    </script>
+
+    <script>
+        loadContactDeviceSelect2 = () => {
+            $('.select2Picker2').select2({
+                placeholder: 'Select an option',
+                disabled: $(this).data('disabled') ?? false,
+                maximumSelectionLength: $(this).data('max') ?? 0,
+            }).on('select2:select', function(e) {
+
+                var model = $(this).data('model')
+                var data = $(this).select2("val");
+
+                @this.changeLot(model, data)
+
+                var l_v = $(this).data('var')
+
+                // ({{ $key }},$event.target.value)
+                @this.set(l_v, data);
+            }).on('change', function() {
+                var model = $(this).data('model')
+                var l_v = $(this).data('var')
+                var data = $(this).select2("val");
+
+                @this.changeLot(model, data)
+                @this.set(l_v, data);
+            });
+        }
+        loadContactDeviceSelect2();
+
+        window.livewire.on('added_new_row', () => {
+            loadContactDeviceSelect2();
+        });
+
+        window.addEventListener('clear_select', event => {
+            $(".select2Picker2").val('').trigger('change')
         })
     </script>
 

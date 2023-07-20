@@ -78,6 +78,8 @@ class ProductCreate extends Component
             'stock_hand' => null,
             'stock_order' => null,
         ]);
+
+        $this->emit('added_new_row');
     }
 
     public function removeInput($key)
