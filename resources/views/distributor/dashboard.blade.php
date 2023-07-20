@@ -100,18 +100,16 @@
                             <tbody>
                                 @foreach ($products as $pro)
                                     <tr>
-
                                         @php
                                             $show_form = 1;
                                             $status = '';
-                                            $request = $pro->product->request->where('from_distributor', auth()->user()->id)->last();
+                                            $request = $pro->request->where('from_distributor', auth()->user()->id)->last();
                                             if ($request) {
                                                 if ($request->status == 1) {
                                                     $show_form = 0;
                                                 }
                                             }
                                         @endphp
-
                                         <td>{{ $pro->product->country->name }}</td>
                                         <td>{{ $pro->product->GIN }}</td>
                                         <td>{{ $pro->lot_number }}</td>
@@ -147,15 +145,14 @@
                                                 <form class="form-inline"
                                                     action="{{ route('distributor.product.request') }}" method="POST">
                                                     @csrf
-                                                    <input type="hidden" name="id" value="{{ $pro->product->id }}">
-                                                    <input type="hidden" name="lot_number" value="{{ $pro->lot_number }}">
+                                                    <input type="hidden" name="id" value="{{ $pro->id }}">
                                                     <input type="hidden" name="to" value="{{ $pro->user_id }}">
                                                     <div class="row">
-                                                        <div class="col-8">
+                                                        <div class="col-xl-8">
                                                             <input type="number" required max="{{ $pro->stock_on_hand }}"
                                                                 class="form-control" name="quantity" placeholder="Quantity">
                                                         </div>
-                                                        <div class="col-4">
+                                                        <div class="col-xl-4 mt-sm-2">
                                                             <button type="submit" class="btn btn-view h-100 w-100">
                                                                 Request
                                                             </button>

@@ -37,7 +37,7 @@ class Edit extends Component
         // $this->dist_manager = $this->dist->distributor->manager;
 
         $this->countries = Country::all();
-        $this->users = User::WhereIsNot('distributor')->get();
+        $this->users = User::WhereIsNot('distributor')->WhereIsNot('admin')->get();
     }
 
     protected function rules()

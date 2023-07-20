@@ -109,15 +109,12 @@
                                         <th scope="row">{{ $loop->iteration }}</th>
                                         <td>{{ $request->fromDistributor->name }}</td>
                                         <td>{{ $request->toDistributor->name }}</td>
-                                        <td>{{ $request->product->GIN }}</td>
-                                        <td>{{ $request->lot_number }}</td>
+                                        <td>{{ $request->product->product->GIN }}</td>
+                                        <td>{{ $request->product->lot_number }}</td>
                                         <td>{{ $request->quantity }}</td>
                                         <td>{{ $request->tracking_number }}</td>
                                         <td>{{ $request->created_at->format('d-m-Y') }}</td>
                                         <td>
-
-
-
                                             @if ($request->status == 1)
                                                 @if (Bouncer::can('manage-request'))
                                                     @if (in_array($request->fromDistributor->id, $distributor_id) ||

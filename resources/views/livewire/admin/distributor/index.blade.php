@@ -64,8 +64,9 @@
 
                                             @can('delete-distributor')
                                                 <span>
-                                                    <a href="#" data-id="{{ $distributor->id }}"
-                                                        data-bs-toggle="modal" data-bs-target="#exampleModal"
+                                                    <a href="#"
+                                                        onclick="confirm('Are you sure you want to remove the user from this group?') || event.stopImmediatePropagation()"
+                                                        wire:click="deleteRecord({{ $distributor->id }})"
                                                         class="btn btn-delete">
                                                         <i class="bi bi-trash3-fill"></i>
                                                     </a>
@@ -99,11 +100,12 @@
                     <p>Distributor will be deleted!</p>
                 </div>
                 <div class="modal-footer">
-                    <form wire:submit.prevent="deleteRecord" id="deleteRecord">
-                        <button type="submit" class="btn btn-secondary">
-                            Delete
-                        </button>
-                    </form>
+                    {{-- <form wire:submit.prevent="deleteRecord" id="deleteRecord"> --}}
+                    {{-- <input type="hidden" value="0" name="deleteId" wire:model="deleteid" id="deleteId"> --}}
+                    <button type="button" id="dtl_Btn" class="btn btn-secondary">
+                        Delete
+                    </button>
+                    {{-- </form> --}}
                     <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cancel</button>
                 </div>
             </div>
@@ -113,18 +115,33 @@
     <script>
         window.addEventListener('deleted', event => {
             $('#exampleModal').modal('hide');
+            // @this.set('deleteid', 0);
             Swal.fire({
                 title: 'Distributor deleted successfully!',
                 icon: 'success'
             });
         })
+
+        window.addEventListener('deletedFailed', event => {
+            $('#exampleModal').modal('hide');
+            // @this.set('deleteid', 0);
+            Swal.fire({
+                title: 'Delete failed',
+                icon: 'danger'
+            });
+        })
     </script>
 
     <script>
+        $('#dtl_Btn').on('click', function() {
+            console.log($(this).data('id'));
+        });
+
         $('#exampleModal').on('shown.bs.modal', function(event) {
             var reference_tag = $(event.relatedTarget);
             var id = reference_tag.data('id');
-            @this.set('deleteid', id);
+            // @this.set('deleteid', id);
+            $('#dtl_Btn').data('id')
         })
     </script>
 

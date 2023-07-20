@@ -104,7 +104,7 @@ class AdminRequest extends Component
 
         if (!in_array('all', $this->gin)) {
             $gin = $this->gin;
-            $query->whereHas('product', function ($q) use ($gin) {
+            $query->whereHas('product.product', function ($q) use ($gin) {
                 return $q->where('id', $gin);
             });
             $this->showReset = 1;
@@ -119,8 +119,11 @@ class AdminRequest extends Component
             'fromDistributor',
             'toDistributor',
             'product',
+            'product.product',
         ])->paginate(15);
 
+
+        // dd($requests);
 
         return view('livewire.admin.admin-request')
             ->extends('admin.layouts.app', ['body_class' => ''])

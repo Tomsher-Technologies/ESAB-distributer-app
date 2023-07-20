@@ -33,11 +33,10 @@
                                         class="row mb-2 g-2 justify-content-center align-items-center">
                                         <div class="col" wire:ignore>
                                             <label for="#">GIN Number</label>
-                                            <select 
-                                                data-var="inputs.{{ $key }}.gin"
+                                            <select data-var="inputs.{{ $key }}.gin"
                                                 data-model="{{ $key }}"
                                                 wire:change="changeLot({{ $key }},$event.target.value)"
-                                                 name="gin"
+                                                name="gin"
                                                 class="form-select form-control select2Picker2 <x-form.error-class name='inputs.{{ $key }}.gin' />">
                                                 <option selected disabled value="0">Select</option>
                                                 @foreach ($gins as $gin)
@@ -71,27 +70,30 @@
                                         </div>
                                         <div class="col-md-1">
                                             <label for="#">Stock on Hand</label>
-                                            <input wire:model.defer="inputs.{{ $key }}.stock_hand" type="number"
+                                            <input wire:model.defer="inputs.{{ $key }}.stock_hand"
+                                                type="number"
                                                 class="form-control <x-form.error-class name='inputs.{{ $key }}.stock_hand' />"
                                                 placeholder="Enter Stock on Hand">
 
                                         </div>
                                         <div class="col-md-1">
                                             <label for="#">Goods in Transit</label>
-                                            <input wire:model.defer="inputs.{{ $key }}.stock_transit" type="number"
+                                            <input wire:model.defer="inputs.{{ $key }}.stock_transit"
+                                                type="number"
                                                 class="form-control <x-form.error-class name='inputs.{{ $key }}.stock_transit' />"
                                                 placeholder="Enter Goods in Transit">
                                         </div>
                                         <div class="col-md-1">
                                             <label for="#">Stock on Order</label>
-                                            <input wire:model.defer="inputs.{{ $key }}.stock_order" type="number"
+                                            <input wire:model.defer="inputs.{{ $key }}.stock_order"
+                                                type="number"
                                                 class="form-control <x-form.error-class name='inputs.{{ $key }}.stock_order' />"
                                                 placeholder="Enter Stock on Order">
                                         </div>
                                         <div class="col">
                                             <label for="#">Avg sales/month </label>
-                                            <input wire:model.defer="inputs.{{ $key }}.avg_sale" type="number"
-                                                step=".01"
+                                            <input wire:model.defer="inputs.{{ $key }}.avg_sale"
+                                                type="number" step=".01"
                                                 class="form-control <x-form.error-class name='inputs.{{ $key }}.avg_sale' />"
                                                 placeholder="Enter Average Sales per Month">
                                         </div>
@@ -135,6 +137,12 @@
                 icon: 'success'
             });
         })
+        window.addEventListener('empty', event => {
+            Swal.fire({
+                title: 'Please add a product first',
+                icon: 'warning'
+            });
+        })
     </script>
 
     <script>
@@ -152,7 +160,6 @@
 
                 var l_v = $(this).data('var')
 
-                // ({{ $key }},$event.target.value)
                 @this.set(l_v, data);
             }).on('change', function() {
                 var model = $(this).data('model')
