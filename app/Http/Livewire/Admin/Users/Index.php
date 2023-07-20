@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Admin\Users;
 use App\Models\User;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Bouncer;
 
 class Index extends Component
 {
@@ -15,6 +16,12 @@ class Index extends Component
     public $deleteid;
 
     protected $paginationTheme = 'bootstrap';
+
+    public function mount(){
+        if (Bouncer::cannot('manage-users')) {
+            abort(404);
+        }
+    }
 
     protected function rules()
     {

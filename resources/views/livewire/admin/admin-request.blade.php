@@ -115,15 +115,24 @@
                                         <td>{{ $request->tracking_number }}</td>
                                         <td>{{ $request->created_at->format('d-m-Y') }}</td>
                                         <td>
+
+
+
                                             @if ($request->status == 1)
-                                                <button class="btn btn-view"
-                                                    wire:click="markCompleted({{ $request->id }})">
-                                                    <i class="bi bi-check-all"></i> Mark as Completed
-                                                </button>
-                                                <button class="btn btn-delete"
-                                                    wire:click="markRejected({{ $request->id }})">
-                                                    Reject
-                                                </button>
+                                                @if (Bouncer::can('manage-request'))
+                                                    @if (in_array($request->fromDistributor->id, $distributor_id) ||
+                                                            auth()->user()->isAn('admin'))
+                                                        <button class="btn btn-view"
+                                                            wire:click="markCompleted({{ $request->id }})">
+                                                            <i class="bi bi-check-all"></i> Mark as Completed
+                                                        </button>
+                                                    @endif
+
+                                                    <button class="btn btn-delete"
+                                                        wire:click="markRejected({{ $request->id }})">
+                                                        Reject
+                                                    </button>
+                                                @endif
                                             @else
                                                 @if ($request->status == 2)
                                                     <b class="clr_grn">Completed</b>
@@ -136,6 +145,7 @@
                                 @endforeach
                             </tbody>
                         </table>
+                        {{ $requests->links() }}
                         <!-- End Bordered Table -->
                     </div>
                 </div>

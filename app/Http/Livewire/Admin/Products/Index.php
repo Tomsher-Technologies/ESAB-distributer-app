@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Admin\Products;
 use App\Models\Product\Product;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Bouncer;
 
 class Index extends Component
 {
@@ -14,6 +15,13 @@ class Index extends Component
     public $deleteid;
 
     protected $paginationTheme = 'bootstrap';
+
+    public function mount()
+    {
+        if (Bouncer::cannot('view-products')) {
+            abort(404);
+        }
+    }
 
     protected function rules()
     {

@@ -42,6 +42,9 @@ class Create extends Component
 
     public function mount()
     {
+        if (Bouncer::cannot('manage-users')) {
+            abort(404);
+        }
         $this->roles = Role::where('name', '!=', 'distributor')->get();
         $this->role = $this->roles->first()->name;
     }

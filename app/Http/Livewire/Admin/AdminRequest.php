@@ -2,15 +2,24 @@
 
 namespace App\Http\Livewire\Admin;
 
+use App\Models\Distributor\Distributor;
 use App\Models\Product\Product;
 use App\Models\Product\Request;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
+use Bouncer;
+use Illuminate\Support\Facades\DB;
+use Livewire\WithPagination;
 
 class AdminRequest extends Component
 {
+
+    use WithPagination;
+
+    protected $paginationTheme = 'bootstrap';
+
     public $gins;
     public $distributors;
 
@@ -25,6 +34,10 @@ class AdminRequest extends Component
 
     public function mount()
     {
+        if (Bouncer::cannot('view-request')) {
+            abort(404);
+        }
+
         $this->gins = Product::select(['id', 'GIN'])->get();
         $this->distributors = User::whereIs('distributor')->select(['id', 'name'])->get();
     }
@@ -43,12 +56,26 @@ class AdminRequest extends Component
 
     public function render()
     {
+        DB::enableQueryLog();
+
         $query = Request::latest();
 
+        $distributor_id = [];
+
         if (!Auth::user()->isAn('admin')) {
-            $query->whereHas('fromDistributor.distributor', function ($q) {
-                return $q->where('manager_id', Auth::user()->id);
-            });
+            // $query->whereHas('fromDistributor.distributor', function ($q) {
+            //     return $q->where('manager_id', Auth::user()->id);
+            // });
+
+            $distributors = Distributor::where('manager_id', Auth::user()->id)->select('user_id')->get();
+
+            if ($distributors) {
+                foreach ($distributors as $distributor) {
+                    $distributor_id[] = $distributor->user_id;
+                }
+            }
+
+            $query->whereIn('from_distributor', $distributor_id)->orWhereIn('to_distributor', $distributor_id);
         }
 
         if ($this->date !== '' && $this->date !== null) {
@@ -98,7 +125,8 @@ class AdminRequest extends Component
         return view('livewire.admin.admin-request')
             ->extends('admin.layouts.app', ['body_class' => ''])
             ->with([
-                'requests' => $requests
+                'requests' => $requests,
+                'distributor_id' => $distributor_id,
             ]);
     }
 

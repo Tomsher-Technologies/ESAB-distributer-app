@@ -6,6 +6,7 @@ use App\Models\Country;
 use App\Models\Product\Product;
 use Illuminate\Validation\Rule;
 use Livewire\Component;
+use Bouncer;
 
 class Edit extends Component
 {
@@ -15,6 +16,9 @@ class Edit extends Component
 
     public function mount(Product $product)
     {
+        if (Bouncer::cannot('edit-products')) {
+            abort(404);
+        }
         $this->product = $product;
         // $this->countries = Country::all();
     }

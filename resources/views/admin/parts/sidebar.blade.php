@@ -82,7 +82,7 @@
             </li>
         @endif
         <!-- End Forms Nav -->
-        @if (auth()->user()->can('manage-request'))
+        @if (auth()->user()->can('manage-request') || auth()->user()->can('view-request'))
             <li class="nav-item">
                 <a class="nav-link {{ isActiveRoute('admin.requests*') }} collapsed"
                     href="{{ route('admin.requests') }}">
