@@ -33,7 +33,7 @@ class Request extends Model
 
     public function product()
     {
-        return $this->belongsTo(Product::class, 'gin_no');
+        return $this->belongsTo(DistributorProduct::class, 'gin_no');
     }
 
     protected $casts = [

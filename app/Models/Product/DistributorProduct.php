@@ -30,4 +30,9 @@ class DistributorProduct extends Model
     {
         return $this->belongsTo(Product::class);
     }
+
+    public function request()
+    {
+        return $this->hasMany(Request::class, 'gin_no');
+    }
 }

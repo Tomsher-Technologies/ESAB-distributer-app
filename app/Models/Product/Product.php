@@ -34,8 +34,8 @@ class Product extends Model
         return $this->belongsTo(Country::class, 'country_code', 'code');
     }
 
-    public function request()
-    {
-        return $this->hasMany(Request::class, 'gin_no');
-    }
+    // public function request()
+    // {
+    //     return $this->hasMany(Request::class, 'gin_no');
+    // }
 }

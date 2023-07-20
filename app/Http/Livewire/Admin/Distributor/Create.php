@@ -32,7 +32,7 @@ class Create extends Component
     {
         $this->countries = Country::all();
         // $this->country = $this->countries->first()->id;
-        $this->users = User::WhereIsNot('distributor')->get();
+        $this->users = User::WhereIsNot('distributor')->WhereIsNot('admin')->get();
 
         if (Bouncer::cannot('create-distributor')) {
             abort(404);

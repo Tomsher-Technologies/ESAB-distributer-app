@@ -6,6 +6,7 @@ use App\Models\User;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Bouncer;
+use Illuminate\Support\Facades\DB;
 
 class Index extends Component
 {
@@ -30,16 +31,14 @@ class Index extends Component
         }
     }
 
-    public function deleteRecord()
+    public function deleteRecord($id)
     {
-        $this->validate();
-        if ($this->deleteid !== 0 || $this->deleteid !== "0") {
-            $user =  User::whereIs('distributor')->where('id', $this->deleteid)->get()->first();
-            // $user->distributor()->delete();
+        $user =  User::where('id', $id)->get()->first();
+        if ($user) {
+            $user->distributor()->delete();
             $user->delete();
-            $this->dispatchBrowserEvent('deleted');
         }
-        $this->reset('deleteid');
+        $this->dispatchBrowserEvent('deleted');
     }
 
     public function render()

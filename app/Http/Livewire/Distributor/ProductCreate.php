@@ -93,40 +93,44 @@ class ProductCreate extends Component
 
         $user_id = Auth()->user()->id;
 
-        foreach ($this->inputs as $inputs) {
-            DistributorProduct::updateOrCreate([
-                'user_id' => $user_id,
-                'lot_number' => $inputs['lot'],
-                'product_id' => $inputs['gin'],
-            ], [
-                'stock_on_hand' => $inputs['stock_hand'],
-                'goods_in_transit' => $inputs['stock_transit'],
-                'stock_on_order' => $inputs['stock_order'],
-                'avg_sales' => $inputs['avg_sale'],
-                'overstocked' => $inputs['over_stock'],
+        if (count($this->inputs)) {
+            foreach ($this->inputs as $inputs) {
+                DistributorProduct::updateOrCreate([
+                    'user_id' => $user_id,
+                    'lot_number' => $inputs['lot'],
+                    'product_id' => $inputs['gin'],
+                ], [
+                    'stock_on_hand' => $inputs['stock_hand'],
+                    'goods_in_transit' => $inputs['stock_transit'],
+                    'stock_on_order' => $inputs['stock_order'],
+                    'avg_sales' => $inputs['avg_sale'],
+                    'overstocked' => $inputs['over_stock'],
+                ]);
+            }
+
+            // $this->reset(['lots', 'cur_lot']);
+            foreach ($this->inputs as $key => $inputs) {
+                $this->removeInput($key);
+            }
+
+            $this->fill([
+                'inputs' => collect([
+                    [
+                        'gin' => 0,
+                        'lot' => null,
+                        'avg_sale' => null,
+                        'over_stock' => 3,
+                        'stock_transit' => null,
+                        'stock_hand' => null,
+                        'stock_order' => null,
+                    ]
+                ]),
             ]);
+
+            $this->dispatchBrowserEvent('created');
+        } else {
+            $this->dispatchBrowserEvent('empty');
         }
-
-        // $this->reset(['lots', 'cur_lot']);
-        foreach ($this->inputs as $key => $inputs) {
-            $this->removeInput($key);
-        }
-
-        $this->fill([
-            'inputs' => collect([
-                [
-                    'gin' => 0,
-                    'lot' => null,
-                    'avg_sale' => null,
-                    'over_stock' => 3,
-                    'stock_transit' => null,
-                    'stock_hand' => null,
-                    'stock_order' => null,
-                ]
-            ]),
-        ]);
-
-        $this->dispatchBrowserEvent('created');
     }
 
     public function render()

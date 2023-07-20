@@ -22,8 +22,6 @@ class DistributorDashboardController extends Controller
 
         $old_lots = array();
 
-        // dd($request);
-
         if ($request->search) {
             if ($request->category !== 'all') {
                 $query->whereRelation('product', 'category', $request->category);
@@ -33,23 +31,16 @@ class DistributorDashboardController extends Controller
                 $query->whereHas('product', function ($q) use ($country) {
                     return $q->where('country_code', $country);
                 });
-                // $query->whereRelation('product', 'country_code', $request->country);
             }
             if (!in_array('all', $request->gin)) {
                 $gin =  $request->gin;
                 $query->whereHas('product', function ($q) use ($gin) {
                     return $q->where('id', $gin);
                 });
-                // $query->whereRelation('product', 'GIN', $request->gin);
             }
 
             if (!in_array('all', $request->lot)) {
                 $query->whereIn('id', $request->lot);
-                // $lot =  $request->lot;
-                // $query->whereHas('product', function ($q) use ($lot) {
-                //     return $q->where('id', $lot);
-                // });
-                // $query->whereRelation('product', 'GIN', $request->gin);
             }
 
             $gins = Product::whereStatus(true)->select('GIN')->whereIn('id', $request->gin)->get();
@@ -58,12 +49,11 @@ class DistributorDashboardController extends Controller
             }
 
             $old_lots = DistributorProduct::whereIn('product_id', $request->gin)->where('lot_number', '!=', '')->select('id', 'lot_number as lot_no')->get();
-            // $old_lots = Product::whereIn('GIN', $r_gins)->select('id', 'lot_no')->get()->toArray();
         }
 
         $countries = Country::all()->groupBy('region');
-        // dd($countries);
-        $products = $query->with(['product', 'product.country', 'product.request'])->get();
+
+        $products = $query->with(['product', 'product.country', 'request'])->get();
 
         $gins = Product::whereStatus(true)->select('id', 'GIN')->latest()->get();
 
@@ -76,7 +66,7 @@ class DistributorDashboardController extends Controller
             'from_distributor' => Auth::user()->id,
             'to_distributor' => $request->to,
             'gin_no' => $request->id,
-            'lot_number' => $request->lot_number,
+            'lot_number' => "",
             'quantity' => $request->quantity,
             'status' => 1,
         ]);
