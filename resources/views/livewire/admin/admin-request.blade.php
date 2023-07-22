@@ -123,12 +123,12 @@
                                                             wire:click="markCompleted({{ $request->id }})">
                                                             <i class="bi bi-check-all"></i> Mark as Completed
                                                         </button>
-                                                    @endif
 
-                                                    <button class="btn btn-delete"
-                                                        wire:click="markRejected({{ $request->id }})">
-                                                        Reject
-                                                    </button>
+                                                        <button class="btn btn-delete"
+                                                            wire:click="markRejected({{ $request->id }})">
+                                                            Reject
+                                                        </button>
+                                                    @endif
                                                 @endif
                                             @else
                                                 @if ($request->status == 2)
