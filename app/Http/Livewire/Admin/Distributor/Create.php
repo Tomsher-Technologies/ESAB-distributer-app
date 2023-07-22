@@ -8,6 +8,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use Livewire\Component;
 use Bouncer;
+use Illuminate\Validation\Rule;
 
 class Create extends Component
 {
@@ -32,7 +33,9 @@ class Create extends Component
     {
         $this->countries = Country::all();
         // $this->country = $this->countries->first()->id;
-        $this->users = User::WhereIsNot('distributor')->WhereIsNot('admin')->get();
+        $this->users = User::WhereIsNot('distributor')->WhereIsNot('admin')->whereStatus(1)->get();
+
+        $this->manager = $this->users->first()->id;
 
         if (Bouncer::cannot('create-distributor')) {
             abort(404);
@@ -51,7 +54,7 @@ class Create extends Component
             'password' => ['required', 'min:8'],
             'password_confirmation' => ['required_with:password', 'same:password'],
             'status' => ['required'],
-            'manager' => ['required'],
+            'manager' => ['required', Rule::notIn(['0', 0])],
         ];
     }
 
