@@ -10,7 +10,6 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Bouncer;
-use Illuminate\Support\Facades\DB;
 use Livewire\WithPagination;
 
 class AdminRequest extends Component
@@ -38,7 +37,7 @@ class AdminRequest extends Component
             abort(404);
         }
 
-        $this->gins = Product::select(['id', 'GIN'])->get();
+        // $this->gins = Product::select(['id', 'GIN'])->get();
         $this->distributors = User::whereIs('distributor')->select(['id', 'name'])->get();
     }
 
@@ -56,8 +55,6 @@ class AdminRequest extends Component
 
     public function render()
     {
-        DB::enableQueryLog();
-
         $query = Request::latest();
 
         $distributor_id = [];
@@ -105,7 +102,7 @@ class AdminRequest extends Component
         if (!in_array('all', $this->gin)) {
             $gin = $this->gin;
             $query->whereHas('product.product', function ($q) use ($gin) {
-                return $q->where('id', $gin);
+                return $q->whereIn('id', $gin);
             });
             $this->showReset = 1;
         }
@@ -122,8 +119,6 @@ class AdminRequest extends Component
             'product.product',
         ])->paginate(15);
 
-
-        // dd($requests);
 
         return view('livewire.admin.admin-request')
             ->extends('admin.layouts.app', ['body_class' => ''])

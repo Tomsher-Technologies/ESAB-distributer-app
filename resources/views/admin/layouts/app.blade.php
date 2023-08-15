@@ -76,6 +76,43 @@
     <script>
         $(document).ready(function() {
 
+            if ($('.select2PickerGIN').length > 0) {
+                $('.select2PickerGIN').select2({
+                    placeholder: 'Select an GIN',
+                    disabled: $(this).data('disabled') ?? false,
+                    maximumSelectionLength: $(this).data('max') ?? 0,
+                    ajax: {
+                        url: '{{ route('gins') }}',
+                        dataType: 'json',
+                        delay: 250,
+                        minimumInputLength: 2,
+                        data: function(params) {
+                            console.log(params);
+                            var query = {
+                                search: params.term,
+                            }
+                            return query;
+                        }
+                    }
+                }).on('select2:select', function(e) {
+                    console.log("select2:select");
+                    var data = e.params.data;
+                    if (data.id == 'all') {
+                        $(this).val('all').change();
+                    } else {
+                        var wanted_option = $(this).find('option[value="all"]');
+                        wanted_option.prop('selected', false);
+                    }
+                    $(this).trigger('change.select2');
+                }).on('change', function() {
+                    console.log("change");
+                    var count = $(this).select2('data').length
+                    if (count == 0) {
+                        $(this).val('all').change();
+                    }
+                });
+            }
+
             if ($('.select2Picker').length > 0) {
                 $('.select2Picker').select2({
                     placeholder: 'Select an option',

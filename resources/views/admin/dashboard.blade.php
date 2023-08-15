@@ -38,20 +38,21 @@
                                         <option {{ optionSelected($old_request->distributor) }} value="all">All</option>
                                         @foreach ($distributors as $distributor)
                                             <option {{ optionSelected($old_request->distributor, $distributor->id) }}
-                                                value="{{ $distributor->id }}">{{ $distributor->distributor->company_name }}</option>
+                                                value="{{ $distributor->id }}">{{ $distributor->distributor->company_name }}
+                                            </option>
                                         @endforeach
                                     </select>
                                 </div>
 
                                 <div class="col-sm-3">
                                     <label for="#">GIN Number</label>
-                                    <select name="gin[]" class="form-select form-control select2Picker"
+                                    <select name="gin[]" class="form-select form-control select2PickerGIN"
                                         data-live-search="true" multiple>
-                                        <option {{ optionSelected($old_request->gin) }} value="all">All</option>
-                                        @foreach ($gins as $gin)
+                                        <option selected value="all">All</option>
+                                        {{-- @foreach ($gins as $gin)
                                             <option {{ optionSelected($old_request->gin, $gin->id) }}
                                                 value="{{ $gin->id }}">{{ $gin->GIN }}</option>
-                                        @endforeach
+                                        @endforeach --}}
                                     </select>
                                 </div>
                                 <div class="col-sm-3 align-self-end">
@@ -320,6 +321,35 @@
             $('#quick-view').modal('show');
         })
     </script>
+
+    @if ($old_request->gin)
+        <script>
+            function getData() {
+                $.ajax({
+                    url: '{{ route('selected_gins') }}',
+                    dataType: 'json',
+                    data: {
+                        "old_gin": "{{ implode($old_request->gin, ',') }}",
+                    }
+                }).done(function(data) {
+                    console.log(data);
+                    $('.select2PickerGIN').val(null);
+                    data.forEach(element => {
+                        var newOption = new Option(element.text, element.id, true, true);
+                        $('.select2PickerGIN').append(newOption);
+                    });
+
+                    $('.select2PickerGIN').trigger('change');
+
+                    $('.select2PickerGIN').trigger('change.select2');
+                });
+            }
+
+            $(document).ready(function() {
+                getData()
+            })
+        </script>
+    @endif
 
     {{-- <script>
         // $(document).ready(function() {

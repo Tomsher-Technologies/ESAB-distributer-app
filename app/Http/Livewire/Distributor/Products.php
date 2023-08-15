@@ -35,19 +35,16 @@ class Products extends Component
 
     public function render()
     {
-        $query = DistributorProduct::where('user_id', Auth()->user()->id)->latest();
+        $query = DistributorProduct::where('user_id', Auth()->user()->id);
 
         $this->show_clear = 0;
 
         if (!in_array('all', $this->selected_gin)) {
-            // dd($this->selected_gin);
-
             $selected_gin = $this->selected_gin;
             $query->whereHas('product', function ($q) use ($selected_gin) {
                 return $q->whereIn('id', $selected_gin);
             });
 
-            // $query->whereRelation('product', 'id', $this->selected_gin);
             $this->show_clear = 1;
         }
 
@@ -72,7 +69,7 @@ class Products extends Component
             $this->show_clear = 1;
         }
 
-        $this->products = $query->with('product')->paginate(15);
+        $this->products = $query->with('product')->paginate(25);
 
         return view('livewire.distributor.products')
             ->with([
