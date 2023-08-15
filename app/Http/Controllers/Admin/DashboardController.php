@@ -18,7 +18,7 @@ class DashboardController extends Controller
     public function index(Request $request)
     {
         $countries = Country::all()->groupBy('region');
-        $distributors = User::whereIs('distributor')->get();
+        $distributors = User::whereIs('distributor')->with('distributor')->get();
         // $no_distributor = $distributors->count();
         $gins = Product::all();
 
