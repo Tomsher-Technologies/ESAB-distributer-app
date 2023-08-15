@@ -38,7 +38,7 @@
                                         <option {{ optionSelected($old_request->distributor) }} value="all">All</option>
                                         @foreach ($distributors as $distributor)
                                             <option {{ optionSelected($old_request->distributor, $distributor->id) }}
-                                                value="{{ $distributor->id }}">{{ $distributor->name }}</option>
+                                                value="{{ $distributor->id }}">{{ $distributor->distributor->company_name }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -238,7 +238,7 @@
                                                     {{ $countries->flatten()->where('code', $p_product->country_code)->first()->name }}
                                                 </td>
                                                 <td id='distributor-{{ $pro->id }}'>
-                                                    {{ $distributors->where('id', $pro->user_id)->first()->name }}
+                                                    {{ $distributors->where('id', $pro->user_id)->first()->distributor->company_name }}
                                                 </td>
                                                 <td id='GIN-{{ $pro->id }}'>{{ $p_product->GIN }}</td>
                                                 <td id='lot_no-{{ $pro->id }}'>{{ $pro->lot_number }}</td>

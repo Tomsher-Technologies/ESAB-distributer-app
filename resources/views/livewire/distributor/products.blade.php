@@ -58,8 +58,8 @@
                                             Clear Search
                                         </button>
                                     @endif
-                                    <a wire:click.prevent="download" class="btn btn-secondary align-self-end" href="#"> <i
-                                            class="bi bi-download"></i> Download</a>
+                                    <a wire:click.prevent="download" class="btn btn-secondary align-self-end"
+                                        href="#"> <i class="bi bi-download"></i> Download</a>
                                 </div>
                             </div>
                         </div>
@@ -109,6 +109,7 @@
                                 @endforeach
                             </tbody>
                         </table>
+                        {{ $products->links() }}
                         <!-- End Bordered Table -->
                     </div>
                 </div>
