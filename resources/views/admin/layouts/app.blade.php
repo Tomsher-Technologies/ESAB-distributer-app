@@ -87,7 +87,6 @@
                         delay: 250,
                         minimumInputLength: 2,
                         data: function(params) {
-                            console.log(params);
                             var query = {
                                 search: params.term,
                             }

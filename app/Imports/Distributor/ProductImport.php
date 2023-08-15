@@ -67,19 +67,19 @@ class ProductImport implements ToCollection, WithStartRow, WithBatchInserts
 
             // dd($product_id);
 
-            if (!isset($row[4])) {
-                $errors[] = $this->missing('Stock on Hand', $r_count);
-            }
-            if (!isset($row[5])) {
+            // if (!isset($row[4])) {
+            //     $errors[] = $this->missing('Stock on Hand', $r_count);
+            // }
+            // if (!isset($row[5])) {
 
-                $errors[] = $this->missing('Goods in Transit', $r_count);
-            }
-            if (!isset($row[6])) {
-                $errors[] = $this->missing('Stock on Order', $r_count);
-            }
-            if (!isset($row[7])) {
-                $errors[] =  $this->missing('Average Sales per Month', $r_count);
-            }
+            //     $errors[] = $this->missing('Goods in Transit', $r_count);
+            // }
+            // if (!isset($row[6])) {
+            //     $errors[] = $this->missing('Stock on Order', $r_count);
+            // }
+            // if (!isset($row[7])) {
+            //     $errors[] =  $this->missing('Average Sales per Month', $r_count);
+            // }
             if (!isset($row[9])) {
                 $errors[] =  $this->missing('Overstocked', $r_count);
             } else {
@@ -140,10 +140,10 @@ class ProductImport implements ToCollection, WithStartRow, WithBatchInserts
                     'product_id' => $product_id,
                     'lot_number' => $row[1]
                 ], [
-                    'stock_on_hand' => $row[4],
-                    'goods_in_transit' => $row[5],
-                    'stock_on_order' => $row[6],
-                    'avg_sales' => $row[7],
+                    'stock_on_hand' => isset($row[4]) ? $row[4] : null,
+                    'goods_in_transit' => isset($row[5]) ? $row[5] : null,
+                    'stock_on_order' => isset($row[6]) ? $row[6] : null,
+                    'avg_sales' => isset($row[7]) ? $row[7] : null,
                     'overstocked' => $oversocked,
                 ]);
             }

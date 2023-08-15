@@ -30,13 +30,13 @@
                                 </div>
                                 <div class="col-sm-3">
                                     <label for="#">GIN Number</label>
-                                    <select name="gin[]" class="form-select form-control select2Picker" id="gin"
+                                    <select name="gin[]" class="form-select form-control select2PickerGIN" id="gin"
                                         multiple>
-                                        <option {{ optionSelected($request->gin, 'all') }} value="all">All</option>
-                                        @foreach ($gins as $gin)
+                                        <option selected value="all">All</option>
+                                        {{-- @foreach ($gins as $gin)
                                             <option {{ optionSelected($request->gin, $gin->id) }}
                                                 value="{{ $gin->id }}">{{ $gin->GIN }}</option>
-                                        @endforeach
+                                        @endforeach --}}
                                     </select>
                                 </div>
                                 <div class="col-sm-3">
@@ -183,38 +183,81 @@
 
 @push('footer')
     <script>
-        $('#gin').on('change', function() {
-            var gins = $(this).select2('data');
-            var selectedGins = [];
-            $.each(gins, function(key, value) {
-                selectedGins.push(value.id);
-            });
-            if (selectedGins.length > 1 && jQuery.inArray("All", selectedGins) !== -1) {
-                selectedGins.splice(selectedGins.indexOf('All'), 1);
-            }
-
-            appendDefault()
-
-            $.ajax({
-                url: "{{ route('distributor.product.getLot') }}",
-                type: 'GET',
-                data: {
-                    'selectedGins': selectedGins
-                },
-                dataType: 'json', // added data type
-                success: function(res) {
-                    if (res.length > 0) {
-                        $.each(res, function(key, value) {
-                            $('#lot')
-                                .append($("<option></option>")
-                                    .attr("value", value.id)
-                                    .text(value.lot_no));
-                        });
+        if ($('.select2PickerGIN').length > 0) {
+            $('.select2PickerGIN').select2({
+                placeholder: 'Select an GIN',
+                disabled: $(this).data('disabled') ?? false,
+                maximumSelectionLength: $(this).data('max') ?? 0,
+                ajax: {
+                    url: '{{ route('gins') }}',
+                    dataType: 'json',
+                    delay: 250,
+                    minimumInputLength: 2,
+                    data: function(params) {
+                        var query = {
+                            search: params.term,
+                        }
+                        return query;
                     }
                 }
-            });
+            }).on('select2:select', function(e) {
+                var data = e.params.data;
+                if (data.id == 'all') {
+                    $(this).val('all').change();
+                } else {
+                    var wanted_option = $(this).find('option[value="all"]');
+                    wanted_option.prop('selected', false);
+                }
+                $(this).trigger('change.select2');
+            }).on('change', function() {
+                var count = $(this).select2('data').length
+                if (count == 0) {
+                    $(this).val('all').change();
+                }
 
-        });
+
+                var gins = $(this).select2('data');
+                var selectedGins = [];
+                $.each(gins, function(key, value) {
+                    selectedGins.push(value.id);
+                });
+                if (selectedGins.length > 1 && jQuery.inArray("All", selectedGins) !== -1) {
+                    selectedGins.splice(selectedGins.indexOf('All'), 1);
+                }
+                appendDefault()
+                $.ajax({
+                    url: "{{ route('distributor.product.getLot') }}",
+                    type: 'GET',
+                    data: {
+                        'selectedGins': selectedGins
+                    },
+                    dataType: 'json', // added data type
+                    success: function(res) {
+                        if (res.length > 0) {
+                            $.each(res, function(key, value) {
+                                $('#lot')
+                                    .append($("<option></option>")
+                                        .attr("value", value.id)
+                                        .text(value.lot_no));
+                            });
+                        }
+                    }
+                });
+
+            });
+        }
+
+        // $('#gin').on('change', function() {
+
+
+
+        //     console.log(selectedGins);
+
+
+
+
+
+        // });
 
         function appendDefault() {
             $('#lot')

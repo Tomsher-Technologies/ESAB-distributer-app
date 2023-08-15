@@ -27,14 +27,14 @@ class ProductCreate extends Component
             // 'inputs.*.lot' => [
             //     Rule::notIn(['0'])
             // ],
-            'inputs.*.avg_sale' => 'required',
+            // 'inputs.*.avg_sale' => 'required',
             'inputs.*.over_stock' => [
                 'required',
                 Rule::notIn(['3'])
             ],
-            'inputs.*.stock_transit' => 'required',
-            'inputs.*.stock_hand' => 'required',
-            'inputs.*.stock_order' => 'required',
+            // 'inputs.*.stock_transit' => 'required',
+            // 'inputs.*.stock_hand' => 'required',
+            // 'inputs.*.stock_order' => 'required',
         ];
     }
 
@@ -50,7 +50,7 @@ class ProductCreate extends Component
 
     public function mount()
     {
-        $this->gins = Product::whereStatus(1)->get();
+        // $this->gins = Product::whereStatus(1)->limit(100)->get();
         // $this->add(0);
         $this->fill([
             'inputs' => collect([
@@ -164,7 +164,7 @@ class ProductCreate extends Component
 
     public function changeLot($key, $value)
     {
-        $cur = $this->gins->find($value);
+        $cur = Product::whereStatus(1)->whereId($value)->get()->first();
         $this->cur_lot[$key] = $cur;
     }
 

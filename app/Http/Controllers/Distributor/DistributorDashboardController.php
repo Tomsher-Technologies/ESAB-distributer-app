@@ -55,9 +55,9 @@ class DistributorDashboardController extends Controller
 
         $products = $query->with(['product', 'product.country', 'request'])->get();
 
-        $gins = Product::whereStatus(true)->select('id', 'GIN')->latest()->get();
+        // $gins = Product::whereStatus(true)->select('id', 'GIN')->latest()->get();
 
-        return view('distributor.dashboard', compact('countries', 'gins', 'products', 'request', 'old_lots'));
+        return view('distributor.dashboard', compact('countries', 'products', 'request', 'old_lots'));
     }
 
     public function request(Request $request)
