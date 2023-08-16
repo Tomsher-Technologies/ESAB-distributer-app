@@ -231,20 +231,17 @@
                                     </thead>
                                     <tbody>
                                         @foreach ($products as $pro)
-                                            @php
-                                                $p_product = $gins->where('id', $pro->product_id)->first();
-                                            @endphp
                                             <tr>
                                                 <td id='country-{{ $pro->id }}'>
-                                                    {{ $countries->flatten()->where('code', $p_product->country_code)->first()->name }}
+                                                    {{ $countries->flatten()->where('code', $pro->product->country_code)->first()->name }}
                                                 </td>
                                                 <td id='distributor-{{ $pro->id }}'>
                                                     {{ $distributors->where('id', $pro->user_id)->first()->distributor->company_name }}
                                                 </td>
-                                                <td id='GIN-{{ $pro->id }}'>{{ $p_product->GIN }}</td>
+                                                <td id='GIN-{{ $pro->id }}'>{{ $pro->product->GIN }}</td>
                                                 <td id='lot_no-{{ $pro->id }}'>{{ $pro->lot_number }}</td>
                                                 <td id='category-{{ $pro->id }}'>
-                                                    {{ $p_product->category }}
+                                                    {{ $pro->product->category }}
                                                 </td>
                                                 <td id='stock_on_hand-{{ $pro->id }}'>
                                                     {{ number_format($pro->stock_on_hand, 0) }}</td>
@@ -256,9 +253,9 @@
                                                     @endif
                                                 </td>
                                                 <input type="hidden" id='disc-{{ $pro->id }}'
-                                                    value="{{ $p_product->description }}">
+                                                    value="{{ $pro->product->description }}">
                                                 <input type="hidden" id='uom-{{ $pro->id }}'
-                                                    value="{{ $p_product->UOM }}">
+                                                    value="{{ $pro->product->UOM }}">
                                                 <input type="hidden" id='goods_in_transit-{{ $pro->id }}'
                                                     value="{{ number_format($pro->goods_in_transit, 0) }}">
                                                 <input type="hidden" id='stock_on_order-{{ $pro->id }}'
