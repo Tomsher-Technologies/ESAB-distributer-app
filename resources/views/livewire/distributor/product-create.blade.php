@@ -173,11 +173,11 @@
                 placeholder: 'Select an option',
                 disabled: $(this).data('disabled') ?? false,
                 maximumSelectionLength: $(this).data('max') ?? 0,
+                minimumInputLength: 2,
                 ajax: {
                     url: '{{ route('gins') }}',
                     dataType: 'json',
                     delay: 250,
-                    minimumInputLength: 2,
                     data: function(params) {
                         var query = {
                             search: params.term,

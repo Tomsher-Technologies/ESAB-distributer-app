@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Distributor;
 
+use App\Models\Distributor\ManualHistory;
 use App\Models\Product\DistributorProduct;
 use App\Models\Product\Product;
 use Illuminate\Support\Collection;
@@ -105,6 +106,17 @@ class ProductCreate extends Component
                     'stock_on_order' => $inputs['stock_order'],
                     'avg_sales' => $inputs['avg_sale'],
                     'overstocked' => $inputs['over_stock'],
+                ]);
+
+                ManualHistory::create([
+                    'user_id' => $user_id,
+                    'product_id' => $inputs['gin'],
+                    'lot_no' => $inputs['lot'],
+                    'stock_on_hand' => $inputs['stock_hand'],
+                    'goods_in_transit' => $inputs['stock_transit'],
+                    'stock_on_order' => $inputs['stock_order'],
+                    'avg_sales_month' => $inputs['avg_sale'],
+                    'over_stock' => $inputs['over_stock'],
                 ]);
             }
 

@@ -2,13 +2,14 @@
 
 namespace App\Http\Livewire\Admin\Products;
 
-use App\Models\Upload;
+use App\Models\Distributor\ManualHistory as DistributorManualHistory;
 use Carbon\Carbon;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Bouncer;
+use Illuminate\Support\Facades\Auth;
 
-class History extends Component
+class ManualHistory extends Component
 {
     use WithPagination;
 
@@ -19,12 +20,6 @@ class History extends Component
     public $end_date = "";
 
     protected $paginationTheme = 'bootstrap';
-
-    public function mount(){
-        if (Bouncer::cannot('view-upload-history')) {
-            abort(404);
-        }
-    }
 
     protected function rules()
     {
@@ -47,18 +42,23 @@ class History extends Component
         $this->end_date = Carbon::parse($this->form_end_date)->endOfDay();
     }
 
+
     public function render()
     {
-        $query = Upload::latest();
+        $query = DistributorManualHistory::where([
+            'user_id' => Auth::user()->id
+        ])->latest();
 
         if ($this->start_date !== "") {
             $query->whereBetween('created_at', [$this->start_date, $this->end_date]);
         }
 
-        $uploads = $query->with(['user'])->paginate(30);
+        $uploads = $query->with(['product'])->paginate(30);
 
-        return view('livewire.admin.products.history')
-            ->with([
+        return view('livewire.admin.products.manual-history')
+            ->extends('distributor.layouts.app', [
+                'body_class' => ""
+            ])->with([
                 'uploads' => $uploads
             ]);
     }

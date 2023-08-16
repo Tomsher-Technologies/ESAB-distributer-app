@@ -49,6 +49,8 @@ class ProductImport implements ToCollection, WithStartRow, WithBatchInserts
             return 0;
         }
 
+        // dd($rows);
+
         foreach ($rows as $row) {
             $errors = array();
 
@@ -87,23 +89,23 @@ class ProductImport implements ToCollection, WithStartRow, WithBatchInserts
                 if ($over == 'yes') {
                     $oversocked = 1;
                 } elseif ($over == 'no') {
-                    $oversocked = 1;
+                    $oversocked = 0;
                 } else {
                     $errors[] = 'Invalid Overstocked "' .  $row[9] . '" in row ' . $r_count;
                 }
             }
 
-            if (!isset($row[8])) {
-                $errors[] =  $this->missing('Category', $r_count);
-            } else {
-                $cat = strtolower($row[8]);
+            // if (!isset($row[8])) {
+            //     $errors[] =  $this->missing('Category', $r_count);
+            // } else {
+            //     $cat = strtolower($row[8]);
 
-                if ($cat !== 'fm' && $cat !== 'non-fm') {
-                    $errors[] = 'Invalid Category "' .  $row[8] . '" in row ' . $r_count;
-                }
+            //     if ($cat !== 'fm' && $cat !== 'non-fm') {
+            //         $errors[] = 'Invalid Category "' .  $row[8] . '" in row ' . $r_count;
+            //     }
 
-                $cat = ($cat == 'fm') ? "FM" : "Non-FM";
-            }
+            //     $cat = ($cat == 'fm') ? "FM" : "Non-FM";
+            // }
 
             if (count($errors)) {
                 $this->errors[] = $errors;
