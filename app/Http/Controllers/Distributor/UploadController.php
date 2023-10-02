@@ -47,12 +47,10 @@ class  UploadController extends Controller
             $import = new ProductImport(Auth()->user());
             Excel::import($import, $request->product_file);
 
-            // dd($import->errors);
-
-            if ($import->errors) {
+            if ($import->sheets->errors) {
                 return back()->with([
                     'error_msg' => "There was errors in the excel, please see below.",
-                    'err_array' => $import->errors
+                    'err_array' => $import->sheets->errors
                 ]);
             }
 

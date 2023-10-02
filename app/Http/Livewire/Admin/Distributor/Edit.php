@@ -71,7 +71,7 @@ class Edit extends Component
     {
         $this->validate();
 
-        if ($this->password !== "") {
+        if ($this->password !== "" && $this->password !== null) {
             $this->dist->password = $this->password;
             $this->reset([
                 'password_confirmation',

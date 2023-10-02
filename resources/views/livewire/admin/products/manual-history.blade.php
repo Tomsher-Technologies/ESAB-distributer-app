@@ -38,6 +38,7 @@
                                     <th class="table_bg" scope="col">Avg Sales/Month</th>
                                     <th class="table_bg" scope="col">Overstock</th>
                                     <th class="table_bg" scope="col">Created At</th>
+                                    <th class="table_bg" scope="col">Last Updated At</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -54,7 +55,8 @@
                                         @else
                                             <td><b class="clr_red me-2">No </b></td>
                                         @endif
-                                        <td>{{ $upload->created_at->format('d-m-Y - h-i A') }}</td>
+                                        <td>{{ $upload->created_at->format('d-m-Y - h:i A') }}</td>
+                                        <td>{{ $upload->updated_at->format('d-m-Y - h:i A') }}</td>
                                     </tr>
                                 @endforeach
                             </tbody>

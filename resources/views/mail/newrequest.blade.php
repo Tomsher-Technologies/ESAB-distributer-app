@@ -6,11 +6,11 @@
                 <td>
                     <div class="text" style="padding: 0 2.5em">
                         <h4 class="heading">
-                            {{ $request->fromDistributor->name }} has submitted a request for GIN :
+                            {{ $request->fromDistributor->distributor->company_name }} has submitted a request for GIN :
                             {{ $request->product->product->GIN }}
                         </h4>
                         <p>
-                            From distributor: {{ $request->fromDistributor->name }}
+                            From distributor: {{ $request->fromDistributor->distributor->company_name }}
                         </p>
                         <p>
                             From distributor code: {{ $request->fromDistributor->distributor->distributer_code }}
@@ -25,7 +25,7 @@
                             Requested quantity: {{ $request->quantity }}
                         </p>
                         <p>
-                            To distributor: {{ $request->toDistributor->name }}
+                            To distributor: {{ $request->toDistributor->distributor->company_name }}
                         </p>
                         <p>
                             To distributor code: {{ $request->toDistributor->distributor->distributer_code }}

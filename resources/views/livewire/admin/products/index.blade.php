@@ -30,6 +30,8 @@
                                     <th class="table_bg" scope="col">Description</th>
                                     <th class="table_bg" scope="col">UOM</th>
                                     <th class="table_bg" scope="col">Category</th>
+                                    <th class="table_bg" scope="col">Created At</th>
+                                    <th class="table_bg" scope="col">Last Updated</th>
                                     <th class="table_bg" scope="col">Action</th>
                                 </tr>
                             </thead>
@@ -42,6 +44,8 @@
                                         <td>{{ $product->description }}</td>
                                         <td>{{ $product->UOM }}</td>
                                         <td>{{ $product->category }}</td>
+                                        <td>{{ $product->created_at->format('d/m/Y h:i:s A') }}</td>
+                                        <td>{{ $product->updated_at->format('d/m/Y h:i:s A') }}</td>
                                         <td>
                                             <span>
                                                 <a href="{{ route('admin.products.edit', $product->id) }}"
