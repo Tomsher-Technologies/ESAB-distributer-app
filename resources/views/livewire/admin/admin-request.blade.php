@@ -46,12 +46,12 @@
                                     <label for="#">GIN Number</label>
                                     <div wire:ignore>
                                         <select wire:model="gin" data-model="gin"
-                                            class="form-select form-control select2Picker2" data-live-search="true"
+                                            class="form-select form-control select2PickerGIN2" data-live-search="true"
                                             multiple>
                                             <option selected="" value="all">All</option>
-                                            @foreach ($gins as $products)
+                                            {{-- @foreach ($gins as $products)
                                                 <option value="{{ $products->id }}">{{ $products->GIN }}</option>
-                                            @endforeach
+                                            @endforeach --}}
                                         </select>
                                     </div>
                                 </div>
@@ -187,6 +187,55 @@
 
                 var model = $(this).data('model')
                 var data = $(this).select2("val");
+                @this.set(model, data);
+            });
+
+            $('.select2PickerGIN2').select2({
+                placeholder: 'Select an GIN',
+                disabled: $(this).data('disabled') ?? false,
+                maximumSelectionLength: $(this).data('max') ?? 0,
+                ajax: {
+                    url: '{{ route('gins') }}',
+                    dataType: 'json',
+                    delay: 250,
+                    minimumInputLength: 2,
+                    data: function(params) {
+                        console.log(params);
+                        var query = {
+                            search: params.term,
+                        }
+                        return query;
+                    }
+                }
+            }).on('select2:select', function(e) {
+                var data = e.params.data;
+                if (data.id == 'all') {
+                    $(this).val('all').change();
+                } else {
+                    var wanted_option = $(this).find('option[value="all"]');
+                    wanted_option.prop('selected', false);
+                    $(this).trigger('change.select2');
+                }
+
+                var model = $(this).data('model')
+                var data = $(this).select2("val");
+                console.log("data");
+                console.log(data);
+                @this.set(model, data);
+            }).on('change', function() {
+
+                var count = $(this).select2('data').length
+                console.log(count);
+                if (count == 0) {
+                    $(this).val('all').change();
+                }
+
+                var model = $(this).data('model')
+                var data = $(this).select2("val");
+
+                console.log("data1");
+                console.log(data);
+
                 @this.set(model, data);
             });
         }

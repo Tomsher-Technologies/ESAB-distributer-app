@@ -21,7 +21,7 @@ class NewRequest extends Mailable implements ShouldQueue
     public function __construct($request)
     {
         $this->request = $request;
-        $this->request->load(['fromDistributor', 'toDistributor', 'product']);
+        $this->request->load(['fromDistributor.distributor', 'toDistributor.distributor', 'product.product']);
     }
 
     /**

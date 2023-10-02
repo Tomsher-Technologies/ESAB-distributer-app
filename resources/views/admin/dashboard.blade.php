@@ -38,20 +38,21 @@
                                         <option {{ optionSelected($old_request->distributor) }} value="all">All</option>
                                         @foreach ($distributors as $distributor)
                                             <option {{ optionSelected($old_request->distributor, $distributor->id) }}
-                                                value="{{ $distributor->id }}">{{ $distributor->distributor->company_name }}</option>
+                                                value="{{ $distributor->id }}">{{ $distributor->distributor->company_name }}
+                                            </option>
                                         @endforeach
                                     </select>
                                 </div>
 
                                 <div class="col-sm-3">
                                     <label for="#">GIN Number</label>
-                                    <select name="gin[]" class="form-select form-control select2Picker"
+                                    <select name="gin[]" class="form-select form-control select2PickerGIN"
                                         data-live-search="true" multiple>
-                                        <option {{ optionSelected($old_request->gin) }} value="all">All</option>
-                                        @foreach ($gins as $gin)
+                                        <option selected value="all">All</option>
+                                        {{-- @foreach ($gins as $gin)
                                             <option {{ optionSelected($old_request->gin, $gin->id) }}
                                                 value="{{ $gin->id }}">{{ $gin->GIN }}</option>
-                                        @endforeach
+                                        @endforeach --}}
                                     </select>
                                 </div>
                                 <div class="col-sm-3 align-self-end">
@@ -230,20 +231,17 @@
                                     </thead>
                                     <tbody>
                                         @foreach ($products as $pro)
-                                            @php
-                                                $p_product = $gins->where('id', $pro->product_id)->first();
-                                            @endphp
                                             <tr>
                                                 <td id='country-{{ $pro->id }}'>
-                                                    {{ $countries->flatten()->where('code', $p_product->country_code)->first()->name }}
+                                                    {{ $countries->flatten()->where('code', $pro->product->country_code)->first()->name }}
                                                 </td>
                                                 <td id='distributor-{{ $pro->id }}'>
                                                     {{ $distributors->where('id', $pro->user_id)->first()->distributor->company_name }}
                                                 </td>
-                                                <td id='GIN-{{ $pro->id }}'>{{ $p_product->GIN }}</td>
+                                                <td id='GIN-{{ $pro->id }}'>{{ $pro->product->GIN }}</td>
                                                 <td id='lot_no-{{ $pro->id }}'>{{ $pro->lot_number }}</td>
                                                 <td id='category-{{ $pro->id }}'>
-                                                    {{ $p_product->category }}
+                                                    {{ $pro->product->category }}
                                                 </td>
                                                 <td id='stock_on_hand-{{ $pro->id }}'>
                                                     {{ number_format($pro->stock_on_hand, 0) }}</td>
@@ -255,9 +253,9 @@
                                                     @endif
                                                 </td>
                                                 <input type="hidden" id='disc-{{ $pro->id }}'
-                                                    value="{{ $p_product->description }}">
+                                                    value="{{ $pro->product->description }}">
                                                 <input type="hidden" id='uom-{{ $pro->id }}'
-                                                    value="{{ $p_product->UOM }}">
+                                                    value="{{ $pro->product->UOM }}">
                                                 <input type="hidden" id='goods_in_transit-{{ $pro->id }}'
                                                     value="{{ number_format($pro->goods_in_transit, 0) }}">
                                                 <input type="hidden" id='stock_on_order-{{ $pro->id }}'
@@ -320,6 +318,35 @@
             $('#quick-view').modal('show');
         })
     </script>
+
+    @if ($old_request->gin)
+        <script>
+            function getData() {
+                $.ajax({
+                    url: '{{ route('selected_gins') }}',
+                    dataType: 'json',
+                    data: {
+                        "old_gin": "{{ implode($old_request->gin, ',') }}",
+                    }
+                }).done(function(data) {
+                    console.log(data);
+                    $('.select2PickerGIN').val(null);
+                    data.forEach(element => {
+                        var newOption = new Option(element.text, element.id, true, true);
+                        $('.select2PickerGIN').append(newOption);
+                    });
+
+                    $('.select2PickerGIN').trigger('change');
+
+                    $('.select2PickerGIN').trigger('change.select2');
+                });
+            }
+
+            $(document).ready(function() {
+                getData()
+            })
+        </script>
+    @endif
 
     {{-- <script>
         // $(document).ready(function() {

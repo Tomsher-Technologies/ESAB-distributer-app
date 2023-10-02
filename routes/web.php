@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\ProfileController;
+use App\Http\Controllers\AjaxController;
 use App\Http\Controllers\Auth\LoginController;
 use Illuminate\Support\Facades\Route;
 
@@ -33,6 +34,9 @@ Route::middleware(['auth', 'auth.session'])->group(function () {
         Route::post('/password', [ProfileController::class, 'password'])->name('password');
     });
 });
+
+Route::get('/gins', [AjaxController::class, 'index'])->name('gins');
+Route::get('/selected-gins', [AjaxController::class, 'selected_gins'])->name('selected_gins');
 
 require_once 'distributor.php';
 require_once 'admin.php';

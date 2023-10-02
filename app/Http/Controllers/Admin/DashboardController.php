@@ -20,7 +20,7 @@ class DashboardController extends Controller
         $countries = Country::all()->groupBy('region');
         $distributors = User::whereIs('distributor')->with('distributor')->get();
         // $no_distributor = $distributors->count();
-        $gins = Product::all();
+        // $gins = Product::all();
 
         $products = null;
 
@@ -69,7 +69,7 @@ class DashboardController extends Controller
                 $query->whereBetween('created_at', [$request->from_date, $request->to_date]);
             }
 
-            $products = $query->get();
+            $products = $query->with('product')->get();
 
             // $data['stock_on_hand'] = number_format($products->sum('stock_on_hand'), 0);
             // $data['goods_in_transit'] = number_format($products->sum('goods_in_transit'), 0);
@@ -88,7 +88,7 @@ class DashboardController extends Controller
             ->with([
                 'distributors' => $distributors,
                 'countries' => $countries,
-                'gins' => $gins,
+                // 'gins' => $gins,
                 'old_request' => $request,
                 'products' => $products,
                 // 'data' => $data,

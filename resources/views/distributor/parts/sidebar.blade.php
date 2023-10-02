@@ -44,6 +44,11 @@
                         <i class="bi bi-circle"></i><span>Upload History</span>
                     </a>
                 </li>
+                <li>
+                    <a href="{{ route('distributor.uploads.manual_history') }}">
+                        <i class="bi bi-circle"></i><span>Upload History (Manual)</span>
+                    </a>
+                </li>
             </ul>
         </li>
 

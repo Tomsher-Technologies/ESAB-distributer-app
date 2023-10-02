@@ -3,6 +3,7 @@
 use App\Http\Controllers\Distributor\DistributorDashboardController;
 use App\Http\Controllers\Distributor\ProductsController;
 use App\Http\Controllers\Distributor\UploadController;
+use App\Http\Livewire\Admin\Products\ManualHistory;
 use App\Http\Livewire\Distributor\ProductHistory;
 use App\Http\Livewire\Distributor\Products;
 use App\Models\Product\Request;
@@ -43,5 +44,6 @@ Route::group(['prefix' => 'distributor', 'as' => 'distributor.'], function () {
         Route::post('upload/excel', [UploadController::class, 'excelUpload']);
 
         Route::get('upload/history', ProductHistory::class)->name('uploads.history');
+        Route::get('upload/manual-history', ManualHistory::class)->name('uploads.manual_history');
     });
 });

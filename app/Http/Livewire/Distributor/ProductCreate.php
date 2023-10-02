@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Distributor;
 
+use App\Models\Distributor\ManualHistory;
 use App\Models\Product\DistributorProduct;
 use App\Models\Product\Product;
 use Illuminate\Support\Collection;
@@ -27,14 +28,14 @@ class ProductCreate extends Component
             // 'inputs.*.lot' => [
             //     Rule::notIn(['0'])
             // ],
-            'inputs.*.avg_sale' => 'required',
+            // 'inputs.*.avg_sale' => 'required',
             'inputs.*.over_stock' => [
                 'required',
                 Rule::notIn(['3'])
             ],
-            'inputs.*.stock_transit' => 'required',
-            'inputs.*.stock_hand' => 'required',
-            'inputs.*.stock_order' => 'required',
+            // 'inputs.*.stock_transit' => 'required',
+            // 'inputs.*.stock_hand' => 'required',
+            // 'inputs.*.stock_order' => 'required',
         ];
     }
 
@@ -50,7 +51,7 @@ class ProductCreate extends Component
 
     public function mount()
     {
-        $this->gins = Product::whereStatus(1)->get();
+        // $this->gins = Product::whereStatus(1)->limit(100)->get();
         // $this->add(0);
         $this->fill([
             'inputs' => collect([
@@ -105,6 +106,17 @@ class ProductCreate extends Component
                     'stock_on_order' => $inputs['stock_order'],
                     'avg_sales' => $inputs['avg_sale'],
                     'overstocked' => $inputs['over_stock'],
+                ]);
+
+                ManualHistory::create([
+                    'user_id' => $user_id,
+                    'product_id' => $inputs['gin'],
+                    'lot_no' => $inputs['lot'],
+                    'stock_on_hand' => $inputs['stock_hand'],
+                    'goods_in_transit' => $inputs['stock_transit'],
+                    'stock_on_order' => $inputs['stock_order'],
+                    'avg_sales_month' => $inputs['avg_sale'],
+                    'over_stock' => $inputs['over_stock'],
                 ]);
             }
 
@@ -164,7 +176,7 @@ class ProductCreate extends Component
 
     public function changeLot($key, $value)
     {
-        $cur = $this->gins->find($value);
+        $cur = Product::whereStatus(1)->whereId($value)->get()->first();
         $this->cur_lot[$key] = $cur;
     }
 

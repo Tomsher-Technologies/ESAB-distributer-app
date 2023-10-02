@@ -37,11 +37,8 @@
                                                 data-model="{{ $key }}"
                                                 wire:change="changeLot({{ $key }},$event.target.value)"
                                                 name="gin"
-                                                class="form-select form-control select2Picker2 <x-form.error-class name='inputs.{{ $key }}.gin' />">
+                                                class="form-select form-control select2PickerGIN2 <x-form.error-class name='inputs.{{ $key }}.gin' />">
                                                 <option selected disabled value="0">Select</option>
-                                                @foreach ($gins as $gin)
-                                                    <option value="{{ $gin->id }}">{{ $gin->GIN }}</option>
-                                                @endforeach
                                             </select>
                                         </div>
                                         <div class="col-md-1">
@@ -135,6 +132,8 @@
             Swal.fire({
                 title: 'Products added successfully!',
                 icon: 'success'
+            }).then(function() {
+                location.reload();
             });
         })
         window.addEventListener('empty', event => {
@@ -151,6 +150,41 @@
                 placeholder: 'Select an option',
                 disabled: $(this).data('disabled') ?? false,
                 maximumSelectionLength: $(this).data('max') ?? 0,
+            }).on('select2:select', function(e) {
+
+                var model = $(this).data('model')
+                var data = $(this).select2("val");
+
+                @this.changeLot(model, data)
+
+                var l_v = $(this).data('var')
+
+                @this.set(l_v, data);
+            }).on('change', function() {
+                var model = $(this).data('model')
+                var l_v = $(this).data('var')
+                var data = $(this).select2("val");
+
+                @this.changeLot(model, data)
+                @this.set(l_v, data);
+            });
+
+            $('.select2PickerGIN2').select2({
+                placeholder: 'Select an option',
+                disabled: $(this).data('disabled') ?? false,
+                maximumSelectionLength: $(this).data('max') ?? 0,
+                minimumInputLength: 2,
+                ajax: {
+                    url: '{{ route('gins') }}',
+                    dataType: 'json',
+                    delay: 250,
+                    data: function(params) {
+                        var query = {
+                            search: params.term,
+                        }
+                        return query;
+                    }
+                }
             }).on('select2:select', function(e) {
 
                 var model = $(this).data('model')
