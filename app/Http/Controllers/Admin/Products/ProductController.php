@@ -131,13 +131,15 @@ class ProductController extends Controller
 
             if ($import->errors) {
                 return back()->with([
+                    'completed' => $import->completed,
                     'error_msg' => "There was errors in the excel, please see below.",
                     'err_array' => $import->errors
                 ]);
             }
 
             return back()->with([
-                'status' => "File Imported"
+                'status' => "File Imported",
+                'completed' => $import->completed,
             ]);
         }
         return back()->withErrors([

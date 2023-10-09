@@ -50,12 +50,14 @@ class  UploadController extends Controller
             if ($import->sheets->errors) {
                 return back()->with([
                     'error_msg' => "There was errors in the excel, please see below.",
-                    'err_array' => $import->sheets->errors
+                    'err_array' => $import->sheets->errors,
+                    'completed' => $import->sheets->completed,
                 ]);
             }
 
             return back()->with([
-                'status' => "File Imported"
+                'status' => "File Imported",
+                'completed' => $import->sheets->completed,
             ]);
         }
 

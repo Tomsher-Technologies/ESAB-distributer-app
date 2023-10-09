@@ -22,6 +22,7 @@ class FirstSheetImport implements ToCollection, WithStartRow, WithBatchInserts
 
     public $user;
     public $errors;
+    public $completed;
 
     public function  __construct($user)
     {
@@ -82,6 +83,24 @@ class FirstSheetImport implements ToCollection, WithStartRow, WithBatchInserts
                 }
             }
 
+            $stock_on_hand = isset($row[4]) ? $row[4] : null;
+            $goods_in_transit = isset($row[5]) ? $row[5] : null;
+            $stock_on_order = isset($row[6]) ? $row[6] : null;
+            $avg_sales = isset($row[7]) ? $row[7] : null;
+
+            if ($stock_on_hand !== null && !is_numeric($stock_on_hand)) {
+                $errors[] = "Invalid data '$stock_on_hand' for Stock on Hand in row " . $r_count;
+            }
+            if ($goods_in_transit !== null &&  !is_numeric($goods_in_transit)) {
+                $errors[] = "Invalid data '$goods_in_transit' for Goods in Transit in row " . $r_count;
+            }
+            if ($stock_on_order !== null &&  !is_numeric($stock_on_order)) {
+                $errors[] = "Invalid data '$stock_on_order' for Stock on Order in row " . $r_count;
+            }
+            if ($avg_sales !== null &&  !is_numeric($avg_sales)) {
+                $errors[] = "Invalid data '$avg_sales' for Average Sales per Month in row " . $r_count;
+            }
+
             if (count($errors)) {
                 $this->errors[] = $errors;
             }
@@ -98,6 +117,8 @@ class FirstSheetImport implements ToCollection, WithStartRow, WithBatchInserts
                     'avg_sales' => isset($row[7]) ? $row[7] : null,
                     'overstocked' => $oversocked,
                 ]);
+
+                $this->completed[] = $r_count;
             }
 
             $r_count++;

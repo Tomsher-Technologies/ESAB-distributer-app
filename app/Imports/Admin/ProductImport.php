@@ -18,6 +18,7 @@ class ProductImport implements ToCollection, WithStartRow, WithBatchInserts, Wit
     public $user;
     public $countries;
     public $errors;
+    public $completed;
 
     public function  __construct($user)
     {
@@ -28,7 +29,7 @@ class ProductImport implements ToCollection, WithStartRow, WithBatchInserts, Wit
     {
         $r_count = 2;
 
-        // dd($rows->count());
+        dd($rows->count());
 
         if ($rows->count() <= 1) {
             $this->errors[] = array('The file seems to be empty');
@@ -75,6 +76,7 @@ class ProductImport implements ToCollection, WithStartRow, WithBatchInserts, Wit
                     'created_by' => $this->user->id,
                     'updated_by' => $this->user->id,
                 ]);
+                $this->completed[] = $r_count;
             }
 
             $r_count++;
