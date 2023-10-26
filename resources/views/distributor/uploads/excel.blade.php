@@ -30,6 +30,14 @@
                             <x-form.error name="error" />
                             <x-form.success />
 
+                            @if (session('completed'))
+                                <div class="alert alert-success">
+                                    <p class="mb-0">
+                                        Rows successfully imported: {{ implode(',', session('completed')) }}
+                                    </p>
+                                </div>
+                            @endif
+
                             @if (session('error_msg'))
                                 <div class="alert alert-danger">
                                     {{ session('error_msg') }}

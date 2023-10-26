@@ -7,6 +7,8 @@ use Carbon\Carbon;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Bouncer;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class History extends Component
 {
@@ -18,9 +20,12 @@ class History extends Component
     public $start_date = "";
     public $end_date = "";
 
+    public $deleteid;
+
     protected $paginationTheme = 'bootstrap';
 
-    public function mount(){
+    public function mount()
+    {
         if (Bouncer::cannot('view-upload-history')) {
             abort(404);
         }
@@ -71,5 +76,20 @@ class History extends Component
     public function updatedFormStartDate()
     {
         $this->form_end_date = $this->form_end_date !== "" ? $this->form_end_date : $this->form_start_date;
+    }
+
+    public function deleteRecord()
+    {
+        if ($this->deleteid !== 0 || $this->deleteid !== "0" || $this->deleteid !== null) {
+            $upload = Upload::find($this->deleteid);
+            $file = Str::replace('storage', 'public', $upload->path);
+            if (Storage::exists($file)) {
+                Storage::delete($file);
+            }
+            $upload->delete();
+            $this->dispatchBrowserEvent('deleted');
+            $this->render();
+        }
+        $this->reset('deleteid');
     }
 }

@@ -41,7 +41,7 @@
                                     <tr>
                                         <th scope="row">{{ $loop->iteration }}</th>
                                         <td>{{ $upload->name }}</td>
-                                        <td>{{ $upload->created_at->format('d-m-Y - h-i A') }}</td>
+                                        <td>{{ $upload->created_at->format('d-m-Y - h:i A') }}</td>
                                         <td>
                                             <a href="{{ URL::to($upload->path) }}" download="{{ $upload->name }}"
                                                 class="btn btn-view">
