@@ -16,6 +16,8 @@ class ManualHistory extends Component
     public $form_start_date = "";
     public $form_end_date = "";
 
+    public $deleteid;
+
     public $start_date = "";
     public $end_date = "";
 
@@ -61,6 +63,17 @@ class ManualHistory extends Component
             ])->with([
                 'uploads' => $uploads
             ]);
+    }
+
+    public function deleteRecord()
+    {
+        if ($this->deleteid !== 0 || $this->deleteid !== "0" || $this->deleteid !== null) {
+            $upload = DistributorManualHistory::find($this->deleteid);
+            $upload->delete();
+            $this->dispatchBrowserEvent('deleted');
+            $this->render();
+        }
+        $this->reset('deleteid');
     }
 
     public function updated($propertyName)
