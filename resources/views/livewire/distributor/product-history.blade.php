@@ -15,7 +15,8 @@
                             </div>
                             <div class="col-sm-6">
                                 <label for="#">To</label>
-                                <input wire:model="form_end_date" min="{{ $form_start_date }}" type="date" class="form-control border-0">
+                                <input wire:model="form_end_date" min="{{ $form_start_date }}" type="date"
+                                    class="form-control border-0">
                             </div>
                         </div>
                     </div>
@@ -48,6 +49,10 @@
                                                 <i class="bi bi-download"></i>
                                                 Download
                                             </a>
+                                            <a href="#" data-id="{{ $upload->id }}" data-bs-toggle="modal"
+                                                data-bs-target="#exampleModal" class="btn btn-delete">
+                                                <i class="bi bi-trash3-fill"></i> Delete
+                                            </a>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -60,4 +65,54 @@
             </div>
         </div>
     </section>
+
+    <div wire:ignore class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header border-0">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <span class="bi bi-x-circle close_icon"></span>
+                    <h4>Are You Sure?</h4>
+                    <p>History will be deleted!</p>
+                </div>
+                <div class="modal-footer">
+                    <form wire:submit.prevent="deleteRecord" id="deleteRecord">
+                        <button type="submit" class="btn btn-secondary">
+                            Delete
+                        </button>
+                    </form>
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        window.addEventListener('deleted', event => {
+            $('#exampleModal').modal('hide');
+            Swal.fire({
+                title: 'History deleted successfully!',
+                icon: 'success'
+            });
+        })
+    </script>
+
+    <script>
+        $('#exampleModal').on('shown.bs.modal', function(event) {
+            var reference_tag = $(event.relatedTarget);
+            var id = reference_tag.data('id');
+            @this.set('deleteid', id);
+        })
+    </script>
+
+    <style>
+        .bi.close_icon {
+            color: red;
+            font-size: 100px;
+        }
+    </style>
+
 </div>

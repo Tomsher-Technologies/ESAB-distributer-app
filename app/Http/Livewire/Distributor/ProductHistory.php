@@ -4,7 +4,8 @@ namespace App\Http\Livewire\Distributor;
 
 use App\Models\Upload;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -18,6 +19,8 @@ class ProductHistory extends Component
 
     public $start_date = "";
     public $end_date = "";
+
+    public $deleteid;
 
     public $user_id;
 
@@ -66,6 +69,21 @@ class ProductHistory extends Component
             ->extends('distributor.layouts.app', ['body_class' => '']);
 
         // return view('');
+    }
+
+    public function deleteRecord()
+    {
+        if ($this->deleteid !== 0 || $this->deleteid !== "0" || $this->deleteid !== null) {
+            $upload = Upload::find($this->deleteid);
+            $file = Str::replace('storage', 'public', $upload->path);
+            if (Storage::exists($file)) {
+                Storage::delete($file);
+            }
+            $upload->delete();
+            $this->dispatchBrowserEvent('deleted');
+            $this->render();
+        }
+        $this->reset('deleteid');
     }
 
     public function updated($propertyName)
